@@ -1,0 +1,3221 @@
+{
+  "generated": "2026-10-12",
+  "games": [
+    {
+      "id": "overcooked-2",
+      "title": "Overcooked! 2",
+      "steamAppId": 728880,
+      "cheapsharkGameId": "188278",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": 2,
+          "max": 4
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": {
+          "min": 2,
+          "max": 4
+        },
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": 2,
+          "max": 4
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": {
+          "min": 2,
+          "max": 4
+        },
+        "versusPlayers": null,
+        "notes": "For Steam players to play with players on GOG and Epic, manual activation of crossplay mode is required."
+      },
+      "crossplayNote": "For Steam players to play with players on GOG and Epic, manual activation of crossplay mode is required.",
+      "genres": [
+        "Action",
+        "Party game",
+        "Simulation",
+        "Time management"
+      ],
+      "themes": [
+        "Fantasy",
+        "Zombies"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/728880/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Overcooked!_2",
+          "retrieved": "2026-10-12"
+        },
+        {
+          "name": "Overcooked! 2 store listing (Xbox) (reviewed: local and online co-op for 2-4 players)",
+          "url": "https://www.xbox.com/en-CA/games/store/overcooked-2/9PGB72NFG5JN",
+          "retrieved": "2026-10-13"
+        }
+      ]
+    },
+    {
+      "id": "it-takes-two",
+      "title": "It Takes Two",
+      "steamAppId": 1426210,
+      "cheapsharkGameId": "223989",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": false,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 2
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 2
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Splitscreen. Joining a friend is possible without owning the game."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Platform",
+        "Puzzle"
+      ],
+      "themes": [
+        "Comedy",
+        "Contemporary"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1426210/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/It_Takes_Two",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "a-way-out",
+      "title": "A Way Out",
+      "steamAppId": 1222700,
+      "cheapsharkGameId": "176067",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": false,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 2
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Splitscreen"
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 2
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 2
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Splitscreen. Joining a friend is possible without owning the game."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Adventure",
+        "Shooter",
+        "Quick time events",
+        "Stealth",
+        "Survival"
+      ],
+      "themes": [
+        "Contemporary",
+        "North America",
+        "Detective/mystery"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1222700/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/A_Way_Out",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "deep-rock-galactic",
+      "title": "Deep Rock Galactic",
+      "steamAppId": 548430,
+      "cheapsharkGameId": "178632",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op]."
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": "Available in the Microsoft Store version only.",
+      "genres": [
+        "Action",
+        "FPS",
+        "Exploration"
+      ],
+      "themes": [
+        "Space",
+        "Sci-fi"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/548430/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Deep_Rock_Galactic",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "lethal-company",
+      "title": "Lethal Company",
+      "steamAppId": 1966720,
+      "cheapsharkGameId": "276648",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": false,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://thunderstore.io/c/lethal-company/p/Dev1A3/LobbyImprovements/ LobbyImprovements] mod for LAN improvements."
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://thunderstore.io/c/lethal-company/p/notnotnotswipez/MoreCompany/ MoreCompany] mod for more than 4 players. Use [https://thunderstore.io/c/lethal-company/p/mattymatty/LobbyControl/ LobbyControl] mod for joining games after they have already started."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Exploration",
+        "Roguelike"
+      ],
+      "themes": [
+        "Horror",
+        "Sci-fi"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1966720/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Lethal_Company",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "phasmophobia",
+      "title": "Phasmophobia",
+      "steamAppId": 739630,
+      "cheapsharkGameId": "220666",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Survival horror"
+      ],
+      "themes": [
+        "Detective/mystery",
+        "Horror",
+        "Supernatural",
+        "North America"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/739630/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Phasmophobia",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "content-warning",
+      "title": "Content Warning",
+      "steamAppId": 2881650,
+      "cheapsharkGameId": "284514",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": false,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "More can be hacked with mods such as [https://thunderstore.io/c/content-warning/p/MaxWasUnavailable/Virality/ Virality] for up to 16 players."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Exploration"
+      ],
+      "themes": [
+        "Horror"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2881650/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Content_Warning",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "repo",
+      "title": "R.E.P.O.",
+      "steamAppId": 3241660,
+      "cheapsharkGameId": "298392",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use the [https://thunderstore.io/c/repo/p/Zehs/LocalMultiplayer/ LocalMultiplayer mod]."
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 6
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "The max player cap can be changed with the [https://thunderstore.io/c/repo/p/zelofi/MorePlayers/ MorePlayers] mod."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Exploration",
+        "Roguelike"
+      ],
+      "themes": [
+        "Horror",
+        "Sci-fi"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3241660/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/R.E.P.O.",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "gtfo",
+      "title": "GTFO",
+      "steamAppId": 493520,
+      "cheapsharkGameId": "207941",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op]."
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Invite only. Matchmaking Alpha."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Survival horror",
+        "FPS"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/493520/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/GTFO",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "dying-light",
+      "title": "Dying Light",
+      "steamAppId": 239140,
+      "cheapsharkGameId": "128804",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op]."
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Option for LAN play available in Online menu."
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": {
+          "min": null,
+          "max": 4
+        },
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Open world",
+        "RPG",
+        "Survival horror"
+      ],
+      "themes": [
+        "Horror",
+        "Middle East",
+        "Zombies"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/239140/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Dying_Light",
+          "retrieved": "2026-10-12"
+        },
+        {
+          "name": "Co-Optimus: Techland pre-order announcement (reviewed: 4-player online co-op; Be the Zombie is a separate 1 vs 4 mode)",
+          "url": "https://www.co-optimus.com/article/12414/techland-outlines-dying-light-pre-order-promotion.html",
+          "retrieved": "2026-10-13"
+        }
+      ]
+    },
+    {
+      "id": "project-zomboid",
+      "title": "Project Zomboid",
+      "steamAppId": 108600,
+      "cheapsharkGameId": "102722",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 100
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 100
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Servers above 31 players display a warning and need to check \"Show Higher Player Count Servers\" in server browsers."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "RPG",
+        "Simulation",
+        "Survival",
+        "Shooter",
+        "Exploration",
+        "Open world"
+      ],
+      "themes": [
+        "North America",
+        "Post-apocalyptic",
+        "Zombies"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/108600/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Project_Zomboid",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "dead-by-daylight",
+      "title": "Dead by Daylight",
+      "steamAppId": 381210,
+      "cheapsharkGameId": "152058",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": false,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 5
+        },
+        "coop": null,
+        "versus": true,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Player vs. bot also available."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Survival horror"
+      ],
+      "themes": [
+        "Horror",
+        "Supernatural"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/381210/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Dead_by_Daylight",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "left-4-dead-2",
+      "title": "Left 4 Dead 2",
+      "steamAppId": 550,
+      "cheapsharkGameId": "43",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "See Local play."
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Co-op (4 players) or \"Versus\" mode (up to 4v4 Survivors vs. Infected)."
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": {
+          "min": null,
+          "max": 4
+        },
+        "versusPlayers": {
+          "min": null,
+          "max": 8
+        },
+        "notes": "Co-op (4 players) or \"Versus\" mode (up to 4v4 Survivors vs. Infected)."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "FPS",
+        "Shooter"
+      ],
+      "themes": [
+        "Horror",
+        "North America",
+        "Post-apocalyptic",
+        "Zombies"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/550/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Left_4_Dead_2",
+          "retrieved": "2026-10-12"
+        },
+        {
+          "name": "PCGamingWiki online play notes (reviewed: co-op is 4 players; versus is up to 4v4)",
+          "url": "https://www.pcgamingwiki.com/wiki/Left_4_Dead_2",
+          "retrieved": "2026-10-13"
+        }
+      ]
+    },
+    {
+      "id": "valheim",
+      "title": "Valheim",
+      "steamAppId": 892970,
+      "cheapsharkGameId": "225747",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 10
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "The game can be played over LAN using the dedicated server but the server itself requires internet access."
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 10
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": {
+          "min": null,
+          "max": 10
+        },
+        "versusPlayers": null,
+        "notes": "PVP can be turned on. Off by default"
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Simulation",
+        "Building",
+        "Survival",
+        "Open world"
+      ],
+      "themes": [
+        "Fantasy"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/892970/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Valheim",
+          "retrieved": "2026-10-12"
+        },
+        {
+          "name": "PCGamingWiki online play notes (reviewed: a 10-player server is co-op; PvP is an optional toggle)",
+          "url": "https://www.pcgamingwiki.com/wiki/Valheim",
+          "retrieved": "2026-10-13"
+        }
+      ]
+    },
+    {
+      "id": "portal-2",
+      "title": "Portal 2",
+      "steamAppId": 620,
+      "cheapsharkGameId": "36",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 2
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Split-screen."
+      },
+      "lan": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Requires using the and commands on the host and on the guest. Playable with up to 33 players with [https://github.com/Portal-2-Multiplayer-Mod/Portal-2-Multiplayer-Mod Portal 2: Multiplayer Mod]."
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 2
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Playable with up to 33 players with the [https://github.com/Portal-2-Multiplayer-Mod/Portal-2-Multiplayer-Mod Portal 2: Multiplayer Mod]."
+      },
+      "crossplayNote": "No longer officially supported, See https://github.com/InvoxiPlayGames/condenstation .",
+      "genres": [
+        "Platform",
+        "Puzzle"
+      ],
+      "themes": [
+        "Sci-fi",
+        "North America",
+        "Post-apocalyptic"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/620/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Portal_2",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "stardew-valley",
+      "title": "Stardew Valley",
+      "steamAppId": 413150,
+      "cheapsharkGameId": "150036",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Cross-play between GOG.com and Steam versions is supported."
+      },
+      "crossplayNote": "Added with patch 1.6.9",
+      "genres": [
+        "RPG",
+        "Building",
+        "Farming",
+        "Life sim"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/413150/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Stardew_Valley",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "terraria",
+      "title": "Terraria",
+      "steamAppId": 105600,
+      "cheapsharkGameId": "39",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op]."
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 255
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "8 max through Terraria.exe, 255 if using a dedicated server"
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Platform",
+        "Survival",
+        "Sandbox",
+        "Open world"
+      ],
+      "themes": [
+        "Fantasy"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/105600/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Terraria",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "dont-starve-together",
+      "title": "Don't Starve Together",
+      "steamAppId": 322330,
+      "cheapsharkGameId": "140618",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op]."
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 6
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 64
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Requires a Klei account. It is possible to use Steam groups."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Survival",
+        "Hunting",
+        "Farming",
+        "Sandbox"
+      ],
+      "themes": [
+        "Dark",
+        "Fantasy"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/322330/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Don't_Starve_Together",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "risk-of-rain-2",
+      "title": "Risk of Rain 2",
+      "steamAppId": 632360,
+      "cheapsharkGameId": "199815",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op]."
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Shooter",
+        "Roguelike"
+      ],
+      "themes": [
+        "Space",
+        "Sci-fi"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/632360/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Risk_of_Rain_2",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "borderlands-2",
+      "title": "Borderlands 2",
+      "steamAppId": 49520,
+      "cheapsharkGameId": "88304",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op]."
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Driving",
+        "RPG",
+        "Shooter"
+      ],
+      "themes": [
+        "Comedy",
+        "Post-apocalyptic",
+        "Sci-fi"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/49520/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Borderlands_2",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "monster-hunter-world",
+      "title": "Monster Hunter: World",
+      "steamAppId": 582010,
+      "cheapsharkGameId": "189379",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "ARPG",
+        "Hunting"
+      ],
+      "themes": [
+        "Fantasy"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/582010/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Monster_Hunter%3A_World",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "helldivers-2",
+      "title": "Helldivers 2",
+      "steamAppId": 553850,
+      "cheapsharkGameId": "268290",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": false,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "TPS"
+      ],
+      "themes": [
+        "Sci-fi"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/553850/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Helldivers_2",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "raft",
+      "title": "Raft",
+      "steamAppId": 648800,
+      "cheapsharkGameId": "187419",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op]."
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": null,
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Survival"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/648800/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Raft",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "grounded",
+      "title": "Grounded",
+      "steamAppId": 962130,
+      "cheapsharkGameId": "218718",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "ARPG",
+        "Survival"
+      ],
+      "themes": [
+        "Fantasy"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/962130/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Grounded",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "sea-of-thieves",
+      "title": "Sea of Thieves",
+      "steamAppId": 1172620,
+      "cheapsharkGameId": "320276",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": false,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 16
+        },
+        "coop": null,
+        "versus": true,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "4 crew members. In the server up to 16 (5 crews per server).{{refurl|url=https://twitter.com/SoT_Support/status/1484530730638225417|title=Sea of Thieves Info & Support"
+      },
+      "crossplayNote": "Players on console have the option to prefer to play with other console players who also use controller. This is not guaranteed, and the preference will be ignored when in a party with a PC player. PC players are not be able to join an existing party of console players who queued with this option enabled.",
+      "genres": [
+        "Action",
+        "MMORPG"
+      ],
+      "themes": [
+        "Piracy",
+        "Fantasy"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1172620/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Sea_of_Thieves",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "satisfactory",
+      "title": "Satisfactory",
+      "steamAppId": 526870,
+      "cheapsharkGameId": "199566",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": true,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Official support for up to 4 players. No actual limit."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Building",
+        "Open world"
+      ],
+      "themes": [
+        "Sci-fi"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/526870/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Satisfactory",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "remnant-2",
+      "title": "Remnant II",
+      "steamAppId": 1282100,
+      "cheapsharkGameId": "264210",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 3
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "RPG",
+        "Shooter"
+      ],
+      "themes": [
+        "Dark",
+        "Fantasy",
+        "Post-apocalyptic"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1282100/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Remnant_II",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "unrailed",
+      "title": "Unrailed!",
+      "steamAppId": 1016920,
+      "cheapsharkGameId": "204790",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": {
+          "min": null,
+          "max": 4
+        },
+        "versusPlayers": {
+          "min": 4,
+          "max": 4
+        },
+        "notes": "Up to 2 players can play on the same keyboard locally with split controls (one uses WASD and the other uses arrow keys)"
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": {
+          "min": null,
+          "max": 4
+        },
+        "versusPlayers": {
+          "min": 4,
+          "max": 4
+        },
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1016920/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Unrailed!",
+          "retrieved": "2026-10-12"
+        },
+        {
+          "name": "Unrailed! publisher description (PlayStation Store) (reviewed: co-op up to 4 in one team; versus is 2 vs 2)",
+          "url": "https://www.playstation.com/en-hk/games/unrailed/",
+          "retrieved": "2026-10-13"
+        }
+      ]
+    },
+    {
+      "id": "plateup",
+      "title": "PlateUp!",
+      "steamAppId": 1599600,
+      "cheapsharkGameId": "249340",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Simulation",
+        "Party game",
+        "Roguelike",
+        "Time management"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1599600/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/PlateUp!",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "moving-out",
+      "title": "Moving Out",
+      "steamAppId": 996770,
+      "cheapsharkGameId": "212038",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": null,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://parsecgaming.com/ Parsec]."
+      },
+      "crossplayNote": null,
+      "genres": [],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/996770/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Moving_Out",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "payday-2",
+      "title": "Payday 2",
+      "steamAppId": 218620,
+      "cheapsharkGameId": "97936",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op]."
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Shooter",
+        "Stealth"
+      ],
+      "themes": [
+        "Contemporary",
+        "North America"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/218620/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Payday_2",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "the-forest",
+      "title": "The Forest",
+      "steamAppId": 242760,
+      "cheapsharkGameId": "110672",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op]."
+      },
+      "lan": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Survival horror"
+      ],
+      "themes": [
+        "Contemporary",
+        "Horror",
+        "Zombies"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/242760/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/The_Forest",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "sons-of-the-forest",
+      "title": "Sons of the Forest",
+      "steamAppId": 1326470,
+      "cheapsharkGameId": "257621",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Building",
+        "Sandbox",
+        "Survival horror"
+      ],
+      "themes": [
+        "Contemporary",
+        "Horror",
+        "Zombies"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1326470/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Sons_of_the_Forest",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "keep-talking-and-nobody-explodes",
+      "title": "Keep Talking and Nobody Explodes",
+      "steamAppId": 341800,
+      "cheapsharkGameId": "146431",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": null,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 5
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Technically unlimited players, but the recommended max being around 4-5."
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Puzzle",
+        "Party game"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/341800/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Keep_Talking_and_Nobody_Explodes",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "pico-park",
+      "title": "Pico Park",
+      "steamAppId": 1509960,
+      "cheapsharkGameId": "229510",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": false,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "platform",
+        "puzzle"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1509960/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Pico_Park",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "human-fall-flat",
+      "title": "Human: Fall Flat",
+      "steamAppId": 477160,
+      "cheapsharkGameId": "154760",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 2
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Hold Start at the main menu for Player 2 to join. Side-by-side split screen."
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": "Microsoft Store version only.",
+      "genres": [
+        "Platform"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/477160/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Human%3A_Fall_Flat",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "cuphead",
+      "title": "Cuphead",
+      "steamAppId": 268910,
+      "cheapsharkGameId": "172548",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 2
+        },
+        "coop": true,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://parsecgaming.com/ Parsec]."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Platform",
+        "Shooter"
+      ],
+      "themes": [
+        "Fantasy"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/268910/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Cuphead",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "ultimate-chicken-horse",
+      "title": "Ultimate Chicken Horse",
+      "steamAppId": 386940,
+      "cheapsharkGameId": "150746",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": false,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Party game",
+        "Platform"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/386940/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Ultimate_Chicken_Horse",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "among-us",
+      "title": "Among Us",
+      "steamAppId": 945360,
+      "cheapsharkGameId": "195104",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": false,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Split screen, or multi-monitor local play is possible with [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op] for up to 10 players"
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 15
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 15
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Public games or join via room code."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Party game",
+        "Simulation",
+        "Stealth"
+      ],
+      "themes": [
+        "Sci-fi",
+        "Space"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/945360/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Among_Us",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "goose-goose-duck",
+      "title": "Goose Goose Duck",
+      "steamAppId": 1568590,
+      "cheapsharkGameId": null,
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "free-to-play",
+      "singleplayer": false,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 16
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Public games or join via room code."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Party game"
+      ],
+      "themes": [
+        "Sci-fi",
+        "Space"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1568590/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Goose_Goose_Duck",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "fall-guys",
+      "title": "Fall Guys",
+      "steamAppId": 1097150,
+      "cheapsharkGameId": null,
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "free-to-play",
+      "singleplayer": false,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 32
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Free for All Season 3's Sunken Secrets Update on Febuary 21, 2023 reduced Solo Show match sizes from 60 to 40 to allow faster matchmaking. The launch of Season 4 (Creative Construction) reduced Duos and Squads match sizes from 60 to 40 too as of May 2023. The Fall Forever Update changed all mode player counts 40 to 32 players."
+      },
+      "crossplayNote": "Crossplay with PlayStation consoles was introduced in Ultimate Knockout season 4.5,, and was extended to Xbox One/Series and Nintendo Switch in Free for All season 1. Android/iOS added in 11.1.4 Update",
+      "genres": [
+        "Battle royale",
+        "Platform"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1097150/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Fall_Guys",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "golf-with-your-friends",
+      "title": "Golf with Your Friends",
+      "steamAppId": 431240,
+      "cheapsharkGameId": "153060",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 12
+        },
+        "coop": null,
+        "versus": true,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 12
+        },
+        "coop": null,
+        "versus": true,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Sports"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/431240/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Golf_with_Your_Friends",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "gang-beasts",
+      "title": "Gang Beasts",
+      "steamAppId": 285900,
+      "cheapsharkGameId": "125131",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": false,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": null,
+        "versus": true,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "New update causes severe connection issues sometimes"
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Platform",
+        "Mini-games"
+      ],
+      "themes": [
+        "North America"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/285900/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Gang_Beasts",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "party-animals",
+      "title": "Party Animals",
+      "steamAppId": 1260320,
+      "cheapsharkGameId": "287558",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": null,
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 12
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "All Mode: 8 Players Space Crisis, Winter Cabin & Infection: 12 Players"
+      },
+      "crossplayNote": "PlayStation 5 support was added in the 1.10.0.0 update.Due to non-concurrent updates between platform, crossplay might not always function correctly.",
+      "genres": [
+        "Action"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1260320/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Party_Animals",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "lethal-league-blaze",
+      "title": "Lethal League Blaze",
+      "steamAppId": 553310,
+      "cheapsharkGameId": "193873",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": null,
+        "versus": true,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 4
+        },
+        "coop": null,
+        "versus": true,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Fighting"
+      ],
+      "themes": [
+        "Fantasy"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/553310/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Lethal_League_Blaze",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "tabletop-simulator",
+      "title": "Tabletop Simulator",
+      "steamAppId": 286160,
+      "cheapsharkGameId": "108494",
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "paid",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 10
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Steam P2P doesn't support Lan."
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 10
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Varies from game to game."
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Simulation",
+        "Board"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/286160/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Tabletop_Simulator",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "counter-strike-2",
+      "title": "Counter-Strike 2",
+      "steamAppId": 730,
+      "cheapsharkGameId": null,
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "free-to-play",
+      "singleplayer": false,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use Offline with bots mode and set sv_lan 1 in the console."
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 32
+        },
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "10 players in competitive mode32 players in Community servers and outside competitive mode"
+      },
+      "crossplayNote": null,
+      "genres": [
+        "FPS"
+      ],
+      "themes": [
+        "Contemporary"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/730/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Counter-Strike_2",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "team-fortress-2",
+      "title": "Team Fortress 2",
+      "steamAppId": 440,
+      "cheapsharkGameId": null,
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "free-to-play",
+      "singleplayer": false,
+      "local": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Use [https://github.com/SplitScreen-Me/splitscreenme-nucleus/releases Nucleus Co-op]."
+      },
+      "lan": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 32
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 32
+        },
+        "coop": true,
+        "versus": true,
+        "sharedRange": true,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "FPS",
+        "Shooter"
+      ],
+      "themes": [
+        "North America",
+        "Sci-fi",
+        "Comedy"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/440/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Team_Fortress_2",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "brawlhalla",
+      "title": "Brawlhalla",
+      "steamAppId": 291550,
+      "cheapsharkGameId": null,
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "free-to-play",
+      "singleplayer": true,
+      "local": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": null,
+        "versus": true,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": null,
+        "players": null,
+        "coop": null,
+        "versus": null,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": null,
+          "max": 8
+        },
+        "coop": null,
+        "versus": true,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "crossplayNote": null,
+      "genres": [
+        "Action",
+        "Fighting",
+        "Platform"
+      ],
+      "themes": [],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/291550/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Brawlhalla",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    },
+    {
+      "id": "apex-legends",
+      "title": "Apex Legends",
+      "steamAppId": 1172470,
+      "cheapsharkGameId": null,
+      "platforms": [
+        "pc"
+      ],
+      "monetization": "free-to-play",
+      "singleplayer": false,
+      "local": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "lan": {
+        "supported": false,
+        "players": null,
+        "coop": false,
+        "versus": false,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": null
+      },
+      "online": {
+        "supported": true,
+        "players": {
+          "min": 30,
+          "max": 60
+        },
+        "coop": null,
+        "versus": true,
+        "sharedRange": false,
+        "coopPlayers": null,
+        "versusPlayers": null,
+        "notes": "Core Royale: 60 - Players Wildcard Mode: 30 - Players20 squads of 3 or 30 squads of 2 against each other."
+      },
+      "crossplayNote": "{{Refurl|url=https://help.ea.com/en/help/apex-legends/apex-legends/apex-legends-cross-play/|title=Apex",
+      "genres": [
+        "Action",
+        "Battle royale",
+        "FPS"
+      ],
+      "themes": [
+        "Sci-fi"
+      ],
+      "description": null,
+      "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/1172470/header.jpg",
+      "sources": [
+        {
+          "name": "PCGamingWiki",
+          "url": "https://www.pcgamingwiki.com/wiki/Apex_Legends",
+          "retrieved": "2026-10-12"
+        }
+      ]
+    }
+  ]
+}

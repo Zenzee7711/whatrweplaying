@@ -1,0 +1,29 @@
+{
+  "left-4-dead-2": {
+    "online": { "coopPlayers": { "min": null, "max": 4 }, "versusPlayers": { "min": null, "max": 8 } },
+    "source": { "name": "PCGamingWiki online play notes", "url": "https://www.pcgamingwiki.com/wiki/Left_4_Dead_2", "retrieved": "2026-10-13" },
+    "note": "co-op is 4 players; versus is up to 4v4"
+  },
+  "valheim": {
+    "online": { "coopPlayers": { "min": null, "max": 10 } },
+    "source": { "name": "PCGamingWiki online play notes", "url": "https://www.pcgamingwiki.com/wiki/Valheim", "retrieved": "2026-10-13" },
+    "note": "a 10-player server is co-op; PvP is an optional toggle"
+  },
+  "overcooked-2": {
+    "local": { "coopPlayers": { "min": 2, "max": 4 } },
+    "online": { "coopPlayers": { "min": 2, "max": 4 } },
+    "source": { "name": "Overcooked! 2 store listing (Xbox)", "url": "https://www.xbox.com/en-CA/games/store/overcooked-2/9PGB72NFG5JN", "retrieved": "2026-10-13" },
+    "note": "local and online co-op for 2-4 players"
+  },
+  "unrailed": {
+    "local": { "coopPlayers": { "min": null, "max": 4 }, "versusPlayers": { "min": 4, "max": 4 } },
+    "online": { "coopPlayers": { "min": null, "max": 4 }, "versusPlayers": { "min": 4, "max": 4 } },
+    "source": { "name": "Unrailed! publisher description (PlayStation Store)", "url": "https://www.playstation.com/en-hk/games/unrailed/", "retrieved": "2026-10-13" },
+    "note": "co-op up to 4 in one team; versus is 2 vs 2"
+  },
+  "dying-light": {
+    "online": { "coopPlayers": { "min": null, "max": 4 } },
+    "source": { "name": "Co-Optimus: Techland pre-order announcement", "url": "https://www.co-optimus.com/article/12414/techland-outlines-dying-light-pre-order-promotion.html", "retrieved": "2026-10-13" },
+    "note": "4-player online co-op; Be the Zombie is a separate 1 vs 4 mode"
+  }
+}

@@ -1,0 +1,293 @@
+"use client";
+
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { site } from "@/config/site";
+import { useShortlist } from "@/hooks/useShortlist";
+import { catalogueDate, games, getGame } from "@/lib/catalogue";
+import type { Game } from "@/lib/catalogue/schema";
+import { cachedOffers, saveOffers } from "@/lib/offers/cache";
+import { BATCH_SIZE, fetchOffers, RateLimitedError } from "@/lib/offers/cheapshark";
+import type { OfferMap, OfferState } from "@/lib/offers/types";
+import { defaultFilters, filtersSchema, type Filters } from "@/lib/search/filters";
+import { search, type Constraint, type Result } from "@/lib/search/search";
+import { filtersToParams } from "@/lib/search/url";
+import ActiveFilters from "./ActiveFilters";
+import AssistBar, { type AssistStatus } from "./AssistBar";
+import FilterPanel from "./FilterPanel";
+import GameCard from "./GameCard";
+import GameDrawer from "./GameDrawer";
+
+type Turn = { role: "user" | "assistant"; text: string };
+
+const CONSTRAINT_FIXES: Record<Constraint, { label: string; apply: (f: Filters) => Filters }> = {
+  mode: { label: "Remove the player count and play mode", apply: (f) => ({ ...f, groupSize: null, modes: [] }) },
+  exclude: { label: "Remove your exclusions", apply: (f) => ({ ...f, exclude: [] }) },
+  pricing: { label: "Show free and paid games", apply: (f) => ({ ...f, pricing: "any" }) },
+  budget: { label: "Remove the budget", apply: (f) => ({ ...f, maxPrice: null }) },
+  store: { label: "Allow any store", apply: (f) => ({ ...f, store: null }) },
+};
+
+const isKnown = (id: string) => getGame(id) !== undefined;
+
+export default function Explorer({ initialFilters, sharedList }: { initialFilters: Filters; sharedList: string[] }) {
+  const [filters, setFilters] = useState<Filters>(initialFilters);
+  const [offers, setOffers] = useState<OfferMap>({});
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [assist, setAssist] = useState<AssistStatus>({ pending: false });
+  const [history, setHistory] = useState<Turn[]>([]);
+  const [copied, setCopied] = useState(false);
+  const shortlist = useShortlist(isKnown);
+  const sheet = useRef<HTMLDialogElement>(null);
+
+  // Keep the URL in step with the filters, so any search can be shared as a link.
+  useEffect(() => {
+    const query = filtersToParams(filters).toString();
+    window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
+  }, [filters]);
+
+  // Games whose prices matter: anything that could appear if the price filters were ignored,
+  // plus saved and shared games. Free-to-play games need no lookup.
+  const candidates = useMemo(() => {
+    const loose = search(games as Game[], { ...filters, maxPrice: null, store: null }, {});
+    const ids = new Set([...loose.matches, ...loose.unverified].map((r) => r.game.id));
+    for (const id of [...shortlist.ids, ...sharedList]) ids.add(id);
+    return [...ids].map(getGame).filter((g): g is Game => !!g && g.monetization !== "free-to-play");
+  }, [filters, shortlist.ids, sharedList]);
+  const missingKey = candidates.filter((g) => offers[g.id] === undefined).map((g) => g.id).join(",");
+
+  // Fetch missing offers in batches of 25, using the 10-minute cache first.
+  useEffect(() => {
+    if (!missingKey) return;
+    const controller = new AbortController();
+    const missing = missingKey.split(",").map(getGame).filter((g): g is Game => !!g);
+    (async () => {
+      const cached = cachedOffers(missing.map((g) => g.id));
+      const toFetch = missing.filter((g) => !cached[g.id]);
+      const batch = toFetch.slice(0, BATCH_SIZE);
+      let states: Record<string, OfferState> = { ...cached };
+      if (batch.length > 0) {
+        try {
+          const fetched = await fetchOffers(batch, controller.signal);
+          saveOffers(fetched);
+          states = { ...states, ...fetched };
+        } catch (error) {
+          if (controller.signal.aborted) return;
+          const reason =
+            error instanceof RateLimitedError
+              ? `price checks are paused for ${error.retryAfterSeconds}s`
+              : "the price service didn't respond";
+          for (const game of batch) states[game.id] = { status: "unavailable", reason };
+        }
+      }
+      if (!controller.signal.aborted) setOffers((previous) => ({ ...previous, ...states }));
+    })();
+    return () => controller.abort();
+  }, [missingKey]);
+
+  const outcome = useMemo(() => search(games as Game[], filters, offers), [filters, offers]);
+  const checking = candidates.filter((g) => offers[g.id] === undefined).length;
+  const unavailable = candidates.filter((g) => offers[g.id]?.status === "unavailable").length;
+
+  const retryPrices = () =>
+    setOffers((previous) => Object.fromEntries(Object.entries(previous).filter(([, s]) => s?.status !== "unavailable")));
+
+  const ask = useCallback(
+    async (message: string) => {
+      setAssist({ pending: true });
+      try {
+        const response = await fetch("/api/assist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message, filters, history: history.slice(-6) }),
+        });
+        const data = await response.json().catch(() => null);
+        const next = filtersSchema.safeParse(data?.filters);
+        if (!response.ok || !next.success) {
+          setAssist({ pending: false, error: (data?.error as string) ?? "AI search didn't work this time. Your filters still do." });
+          return;
+        }
+        setFilters(next.data);
+        const reply = (data.clarification ?? data.summary ?? "") as string;
+        setHistory((h) => [...h, { role: "user" as const, text: message }, ...(reply ? [{ role: "assistant" as const, text: reply.slice(0, 300) }] : [])].slice(-6));
+        setAssist({ pending: false, mode: data.mode, summary: data.summary, notice: data.notice, clarification: data.clarification });
+      } catch {
+        setAssist({ pending: false, error: "Couldn't reach AI search. Your filters still work." });
+      }
+    },
+    [filters, history],
+  );
+
+  async function copyShortlist() {
+    const url = `${window.location.origin}/?list=${shortlist.ids.join(",")}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.prompt("Copy this link", url);
+    }
+  }
+
+  const openGame = openId ? getGame(openId) ?? null : null;
+  const card = (result: Result) => (
+    <GameCard
+      key={result.game.id}
+      result={result}
+      offerState={offers[result.game.id]}
+      saved={shortlist.ids.includes(result.game.id)}
+      onOpen={() => setOpenId(result.game.id)}
+      onToggleSave={() => shortlist.toggle(result.game.id)}
+    />
+  );
+  const grid = (results: Result[]) => <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{results.map(card)}</div>;
+  const savedResults = (ids: string[]) =>
+    ids.map(getGame).filter((g): g is Game => !!g).map((game) => search([game], defaultFilters, offers).matches[0] ?? search([game], defaultFilters, offers).unverified[0]).filter(Boolean);
+
+  return (
+    <div className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
+      <header className="flex items-center justify-between gap-4 py-5">
+        <Link href="/" className="font-display text-xl font-bold tracking-tight">
+          {site.name}
+          <span className="text-accent">?</span>
+        </Link>
+        <a href="#shortlist" className="rounded-full border border-line px-3.5 py-1.5 text-sm hover:border-muted/60">
+          Shortlist <span className="text-accent tabular-nums">{shortlist.ids.length}</span>
+        </a>
+      </header>
+
+      <h1 className="sr-only">{site.tagline}</h1>
+      <AssistBar status={assist} onAsk={ask} />
+
+      <div className="mt-6 grid gap-8 lg:grid-cols-[280px_1fr]">
+        <aside aria-label="Filters" className="hidden lg:block">
+          <div className="sticky top-6 max-h-[calc(100dvh-3rem)] overflow-y-auto pr-2">
+            <FilterPanel filters={filters} onChange={setFilters} />
+          </div>
+        </aside>
+
+        <main className="min-w-0">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <ActiveFilters filters={filters} onChange={setFilters} />
+            <button
+              type="button"
+              onClick={() => sheet.current?.showModal()}
+              className="rounded-full border border-line px-4 py-2 text-sm font-medium lg:hidden"
+            >
+              Filters
+            </button>
+          </div>
+
+          <p aria-live="polite" className="mt-4 text-sm text-muted">
+            {outcome.matches.length} {outcome.matches.length === 1 ? "game fits" : "games fit"}
+            {checking > 0 && ` · checking prices for ${checking} games…`}
+            {unavailable > 0 && (
+              <>
+                {` · prices unavailable for ${unavailable} games `}
+                <button type="button" onClick={retryPrices} className="underline underline-offset-4 hover:text-foreground">
+                  Retry
+                </button>
+              </>
+            )}
+          </p>
+
+          {sharedList.length > 0 && (
+            <section aria-labelledby="shared-heading" className="mt-6 rounded-2xl border border-accent/40 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 id="shared-heading" className="font-display text-lg font-semibold">A friend shared this shortlist</h2>
+                <button type="button" onClick={() => shortlist.replace([...new Set([...shortlist.ids, ...sharedList])])} className="rounded-full border border-line px-3.5 py-1.5 text-sm hover:border-accent">
+                  Save to my shortlist
+                </button>
+              </div>
+              <div className="mt-4">{grid(savedResults(sharedList))}</div>
+            </section>
+          )}
+
+          <section aria-label="Matching games" className="mt-6">
+            {outcome.matches.length > 0 ? (
+              grid(outcome.matches)
+            ) : (
+              <div className="rounded-2xl border border-line bg-surface p-6">
+                <h2 className="font-display text-xl font-semibold">No game fits all of these filters.</h2>
+                {outcome.blocking.length > 0 ? (
+                  <>
+                    <p className="mt-1 text-muted">This is what&apos;s limiting the results. Nothing changes unless you choose it:</p>
+                    <ul className="mt-4 flex flex-wrap gap-2">
+                      {outcome.blocking.map(({ constraint, wouldShow }) => (
+                        <li key={constraint}>
+                          <button type="button" onClick={() => setFilters(CONSTRAINT_FIXES[constraint].apply(filters))} className="rounded-full border border-line px-3.5 py-2 text-sm hover:border-accent">
+                            {CONSTRAINT_FIXES[constraint].label} <span className="text-muted">({wouldShow} {wouldShow === 1 ? "game" : "games"})</span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
+                  <p className="mt-1 text-muted">Try fewer filters. The catalogue is a curated list of {games.length} PC games.</p>
+                )}
+              </div>
+            )}
+          </section>
+
+          {outcome.priceUnconfirmed.length > 0 && (
+            <details className="group mt-10">
+              <summary className="font-display text-lg font-semibold">
+                Price not confirmed <span className="text-muted">({outcome.priceUnconfirmed.length})</span>
+              </summary>
+              <p className="mt-1 mb-4 text-sm text-muted">These fit everything else, but no current offer within your budget or store was found yet.</p>
+              {grid(outcome.priceUnconfirmed)}
+            </details>
+          )}
+
+          {outcome.unverified.length > 0 && (
+            <details className="group mt-10">
+              <summary className="font-display text-lg font-semibold">
+                Compatibility unverified <span className="text-muted">({outcome.unverified.length})</span>
+              </summary>
+              <p className="mt-1 mb-4 text-sm text-muted">
+                These might work for your group, but we couldn&apos;t confirm the player count for the way you want to play.
+              </p>
+              {grid(outcome.unverified)}
+            </details>
+          )}
+
+          <section id="shortlist" aria-labelledby="shortlist-heading" className="mt-14 scroll-mt-6 border-t border-line pt-8">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 id="shortlist-heading" className="font-display text-xl font-semibold">Your shortlist</h2>
+              {shortlist.ids.length > 0 && (
+                <button type="button" onClick={copyShortlist} className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground hover:brightness-110">
+                  {copied ? "Link copied" : "Copy share link"}
+                </button>
+              )}
+            </div>
+            {shortlist.ids.length === 0 ? (
+              <p className="mt-2 text-sm text-muted">Save games with the bookmark button to compare them or send them to your friends.</p>
+            ) : (
+              <div className="mt-4">{grid(savedResults(shortlist.ids))}</div>
+            )}
+          </section>
+        </main>
+      </div>
+
+      <footer className="mt-16 border-t border-line pt-6 text-xs leading-relaxed text-muted">
+        <p>
+          Prices from{" "}
+          <a href="https://www.cheapshark.com" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">CheapShark</a>, in US dollars,
+          checked live and not converted to local currency. Multiplayer details from{" "}
+          <a href="https://www.pcgamingwiki.com" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">PCGamingWiki</a>{" "}
+          (<a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">CC BY-NC-SA 3.0</a>), catalogue checked {catalogueDate}. Game artwork © its
+          publishers, via Steam. {site.name} recommends games and links to stores; it doesn&apos;t sell anything.
+        </p>
+      </footer>
+
+      <dialog ref={sheet} aria-label="Filters" className="m-0 mt-auto max-h-[85dvh] w-full max-w-none overflow-y-auto rounded-t-3xl border-t border-line bg-surface p-6 text-foreground lg:hidden">
+        <FilterPanel filters={filters} onChange={setFilters} />
+        <button type="button" onClick={() => sheet.current?.close()} className="sticky bottom-0 mt-8 w-full rounded-xl bg-accent py-3 font-semibold text-accent-foreground">
+          Show {outcome.matches.length} {outcome.matches.length === 1 ? "game" : "games"}
+        </button>
+      </dialog>
+
+      <GameDrawer game={openGame} offerState={openGame ? offers[openGame.id] : undefined} store={filters.store} onClose={() => setOpenId(null)} />
+    </div>
+  );
+}
