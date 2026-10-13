@@ -57,10 +57,13 @@ async function steamHeader(steamAppId: number): Promise<string> {
   }
 }
 
+// steamAppId is null for games that aren't on Steam; the reviewed page title is then the only
+// mapping, and the reviewed launcher link is where people get the game.
 const seed = JSON.parse(readFileSync("data/seed.json", "utf8")) as {
   id: string;
-  steamAppId: number;
+  steamAppId: number | null;
   pcgwPage: string;
+  launcher?: { name: string; url: string };
 }[];
 // Hand-reviewed corrections, each with the source it was checked against.
 type Override = {
@@ -93,20 +96,26 @@ const overrides = JSON.parse(readFileSync("data/overrides.json", "utf8")) as Rec
 const games: Game[] = [];
 const issues: string[] = [];
 
-for (const { id, steamAppId, pcgwPage: seedPage } of seed) {
+for (const { id, steamAppId, pcgwPage: seedPage, launcher } of seed) {
   try {
     const { title: page, wikitext } = await pcgwPage(seedPage);
     await pause(1200);
     const facts = parsePcgw(wikitext);
-    if (!facts.steamAppIds.includes(steamAppId)) {
+    if (steamAppId !== null && !facts.steamAppIds.includes(steamAppId)) {
       issues.push(`${id}: page "${page}" lists Steam IDs ${facts.steamAppIds.join(",") || "none"}, not ${steamAppId}; excluded`);
       continue;
     }
-    const cheapshark = await cheapsharkGameId(steamAppId);
-    await pause(1200);
-    if (cheapshark.issue) issues.push(`${id}: ${cheapshark.issue}`);
-    const image = await steamHeader(steamAppId);
-    await pause(1200);
+    let cheapshark: { id: string | null; issue?: string } = { id: null };
+    let image: string | null = null;
+    if (steamAppId !== null) {
+      cheapshark = await cheapsharkGameId(steamAppId);
+      await pause(1200);
+      if (cheapshark.issue) issues.push(`${id}: ${cheapshark.issue}`);
+      image = await steamHeader(steamAppId);
+      await pause(1200);
+    } else if (!launcher) {
+      issues.push(`${id}: not on Steam and no launcher link; people can't tell where to get it`);
+    }
 
     const override = overrides[id];
     applyOverride(facts.local, override?.local);
@@ -135,6 +144,7 @@ for (const { id, steamAppId, pcgwPage: seedPage } of seed) {
       themes: facts.themes,
       description: null,
       image,
+      launcher: launcher ?? null,
       sources: [
         { name: "PCGamingWiki", url: pageUrl, retrieved: today },
         ...(override?.sources ?? []).map((source) => ({ ...source, name: `${source.name} (reviewed: ${override!.note})` })),

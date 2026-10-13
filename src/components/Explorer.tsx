@@ -242,7 +242,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable }: Ex
                 <button
                   type="button"
                   onClick={() => setOpenId(outcome.matches[Math.floor(Math.random() * outcome.matches.length)].game.id)}
-                  className="rounded-full border border-accent/50 px-3.5 py-2 text-sm font-medium text-accent transition hover:bg-accent/10"
+                  className="rounded-full border border-line px-3.5 py-2 text-sm font-medium transition-colors hover:border-muted"
                 >
                   Can&apos;t decide? Pick one for us
                 </button>
@@ -279,7 +279,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable }: Ex
           {likeGame && (
             <section
               aria-labelledby="searched-heading"
-              className="mt-6 grid gap-4 rounded-2xl border border-accent/40 bg-accent/5 p-4 sm:grid-cols-[minmax(0,300px)_1fr] sm:items-center"
+              className="mt-6 grid gap-4 rounded-2xl bg-surface p-4 sm:grid-cols-[minmax(0,300px)_1fr] sm:items-center"
             >
               {card(likeResult ?? { game: likeGame, score: 0, modes: [], price: { kind: "unknown" }, reasons: [] })}
               <div>
@@ -307,7 +307,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable }: Ex
           )}
 
           {sharedList.length > 0 && (
-            <section aria-labelledby="shared-heading" className="mt-6 rounded-2xl border border-accent/40 p-4">
+            <section aria-labelledby="shared-heading" className="mt-6 rounded-2xl bg-surface p-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <h2 id="shared-heading" className="font-display text-lg font-semibold">A friend shared this shortlist</h2>
                 <button type="button" onClick={() => shortlist.replace([...new Set([...shortlist.ids, ...sharedList])])} className="rounded-full border border-line px-3.5 py-1.5 text-sm hover:border-accent">
@@ -346,7 +346,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable }: Ex
                     </ul>
                   </>
                 ) : (
-                  <p className="mt-1 text-muted">Try fewer filters. The catalogue is a curated list of {games.length} PC games.</p>
+                  <p className="mt-1 text-muted">Try fewer filters. We only list games whose group size we could check, {games.length} so far.</p>
                 )}
               </div>
             )}

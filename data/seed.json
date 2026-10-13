@@ -68,5 +68,15 @@
   {"id":"delta-force","steamAppId":2507950,"pcgwPage":"Delta Force (2024)"},
   {"id":"arc-raiders","steamAppId":1808500,"pcgwPage":"ARC Raiders"},
   {"id":"pubg","steamAppId":578080,"pcgwPage":"PUBG: Battlegrounds"},
-  {"id":"schedule-i","steamAppId":3164500,"pcgwPage":"Schedule I"}
+  {"id":"schedule-i","steamAppId":3164500,"pcgwPage":"Schedule I"},
+  {"id":"valorant","steamAppId":null,"pcgwPage":"Valorant","launcher":{"name":"Riot Client","url":"https://playvalorant.com/"}},
+  {"id":"league-of-legends","steamAppId":null,"pcgwPage":"League of Legends","launcher":{"name":"Riot Client","url":"https://www.leagueoflegends.com/"}},
+  {"id":"fortnite","steamAppId":null,"pcgwPage":"Fortnite","launcher":{"name":"Epic Games Store","url":"https://store.epicgames.com/p/fortnite"}},
+  {"id":"genshin-impact","steamAppId":null,"pcgwPage":"Genshin Impact","launcher":{"name":"HoYoverse","url":"https://genshin.hoyoverse.com/"}},
+  {"id":"minecraft","steamAppId":null,"pcgwPage":"Minecraft: Java Edition","launcher":{"name":"minecraft.net","url":"https://www.minecraft.net/"}},
+  {"id":"overwatch-2","steamAppId":2357570,"pcgwPage":"Overwatch 2"},
+  {"id":"rocket-league","steamAppId":252950,"pcgwPage":"Rocket League","launcher":{"name":"Epic Games Store","url":"https://store.epicgames.com/p/rocket-league"}},
+  {"id":"the-division-2","steamAppId":2221490,"pcgwPage":"Tom Clancy's The Division 2"},
+  {"id":"for-honor","steamAppId":304390,"pcgwPage":"For Honor"},
+  {"id":"the-crew-motorfest","steamAppId":2698940,"pcgwPage":"The Crew Motorfest"}
 ]

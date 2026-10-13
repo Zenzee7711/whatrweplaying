@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import type { Game } from "@/lib/catalogue/schema";
 import type { OfferState } from "@/lib/offers/types";
+import Artwork from "./Artwork";
 import { playLines } from "./labels";
 import OffersTable from "./OffersTable";
 
@@ -26,6 +26,20 @@ export default function GameDrawer({ game, offerState, store, onClose }: GameDra
   }, [game]);
 
   const lines = game ? playLines(game) : [];
+  // Where to get the game itself: its reviewed launcher, or its Steam page. Deals still go
+  // through CheapShark's redirect in the offers table.
+  const getIt = game?.launcher ?? (game?.steamAppId ? { name: "Steam", url: `https://store.steampowered.com/app/${game.steamAppId}/` } : null);
+  const getItLink = getIt && (
+    <a
+      href={getIt.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-3 inline-block rounded-full border border-line px-3.5 py-1.5 text-sm hover:border-accent hover:text-accent"
+    >
+      Get it on {getIt.name}
+      <span className="sr-only"> (opens in a new tab)</span>
+    </a>
+  );
 
   return (
     <dialog
@@ -37,7 +51,7 @@ export default function GameDrawer({ game, offerState, store, onClose }: GameDra
       {game && (
         <div className="motion-safe:animate-enter">
           <div className="relative aspect-[460/215] bg-raised">
-            <Image src={game.image} alt={`${game.title} artwork`} fill sizes="576px" className="object-cover" />
+            <Artwork title={game.title} image={game.image} sizes="576px" eager />
           </div>
           <div className="space-y-6 p-6">
             <div className="flex items-start justify-between gap-4">
@@ -93,10 +107,22 @@ export default function GameDrawer({ game, offerState, store, onClose }: GameDra
 
             <section aria-labelledby="offers-heading">
               <h3 id="offers-heading" className="text-sm font-semibold tracking-wide text-muted uppercase">
-                Offers
+                {game.monetization === "free-to-play" || (game.cheapsharkGameId === null && getIt) ? "Get the game" : "Offers"}
               </h3>
               {game.monetization === "free-to-play" ? (
-                <p className="mt-2 text-sm">Free-to-play. Download it from the game&apos;s store page.</p>
+                <>
+                  <p className="mt-2 text-sm">Free-to-play, so there&apos;s nothing to compare.</p>
+                  {getItLink}
+                </>
+              ) : game.cheapsharkGameId === null && getIt ? (
+                <>
+                  <p className="mt-2 text-sm text-muted">
+                    {game.launcher
+                      ? "Not sold at the stores we check, so we can't compare prices."
+                      : "We couldn't match this game to our price data, so there's nothing to compare."}
+                  </p>
+                  {getItLink}
+                </>
               ) : (
                 <OffersTable title={game.title} state={offerState} store={store} edition="Base game" />
               )}

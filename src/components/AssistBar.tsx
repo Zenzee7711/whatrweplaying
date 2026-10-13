@@ -205,7 +205,7 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
             }}
             onKeyDown={onKeyDown}
             placeholder={PLACEHOLDERS[tick % PLACEHOLDERS.length]}
-            className="min-w-0 flex-1 bg-transparent px-1 py-2.5 text-base placeholder:text-muted/60 focus:outline-none"
+            className="min-w-0 flex-1 bg-transparent px-1 py-2.5 text-base placeholder:text-muted focus:outline-none"
             autoComplete="off"
           />
           <button

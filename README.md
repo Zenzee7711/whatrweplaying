@@ -35,20 +35,24 @@ loosening your search. Games whose player count can't be verified go in a separa
 
 ## Data and coverage
 
-- **Catalogue:** 70 curated PC games, including current hits like Aion 2, WARDOGS, Battlefield 6,
-  Marvel Rivals and ARC Raiders (`data/catalogue.json`), built by `npm run sync:catalogue`
+- **Catalogue:** 80 hand-picked PC games (`data/catalogue.json`), from Steam and from other
+  launchers: Riot (Valorant, League of Legends), Epic (Fortnite, Rocket League), HoYoverse,
+  Minecraft, Blizzard, EA and Ubisoft. Built by `npm run sync:catalogue`
   from **[PCGamingWiki](https://www.pcgamingwiki.com)** (CC BY-NC-SA 3.0): local and online player
-  counts, co-op and versus, crossplay notes, free-to-play or paid, genres and themes. Each game is
-  matched by Steam app ID, and the wiki page must list that same ID.
+  counts, co-op and versus, crossplay notes, free-to-play or paid, genres and themes. A Steam
+  game is matched by its Steam app ID, and the wiki page must list that same ID. A game that
+  isn't on Steam is matched by its reviewed wiki page and links to its official launcher.
 - **Reviewed party sizes:** the wiki's online numbers are often whole-match sizes, so they are
   never shown as group sizes. `data/overrides.json` holds reviewed co-op team sizes and online
-  party or lobby sizes for 25 games, each with its sources and date (for example, Left 4 Dead 2's
+  party or lobby sizes for 33 games, each with its sources and date (for example, Left 4 Dead 2's
   co-op campaign is 4, Battlefield 6 squads are 4, Among Us private lobbies hold 15).
   Games without a reviewed size say "group size unverified" and go in a separate list.
 - **Prices:** live from **[CheapShark](https://www.cheapshark.com)**, requested from your browser
   for the games on screen (25 per request, cached for 10 minutes). Prices are **USD**, the
   lowest among the stores CheapShark checks, not your local or regional price. Only the base
   game's record (same Steam app ID) is used, so DLC and other editions aren't mixed in.
+  CheapShark doesn't track the EA app, Battle.net or Riot, so games sold only there have no
+  price comparison, just a link to get them.
 - **Descriptions:** `npm run sync:igdb` adds descriptions from **[IGDB](https://www.igdb.com)**.
   It needs Twitch credentials and **hasn't been run yet**, so the current catalogue has none.
 - Missing information stays unknown: no invented player counts, prices, crossplay or release
@@ -83,7 +87,7 @@ quota or returns something invalid, the keyword reader takes over and your filte
 
 ## Limitations
 
-- PC only, 70 catalogue games, and only the stores CheapShark tracks (no Xbox store). Some games
+- PC only, 80 catalogue games, and only the stores CheapShark tracks (no Xbox store). Some games
   have no CheapShark record matching their Steam app (CheapShark's Battlefield 6 record isn't
   linked to a Steam app), so they show no price rather than a guessed one.
 - USD prices; no regional pricing or currency conversion.

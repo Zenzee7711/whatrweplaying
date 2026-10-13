@@ -1,6 +1,6 @@
-import Image from "next/image";
 import type { OfferState } from "@/lib/offers/types";
 import type { Result } from "@/lib/search/search";
+import Artwork from "./Artwork";
 import { playLines, PriceTag } from "./labels";
 
 type GameCardProps = {
@@ -29,15 +29,13 @@ export default function GameCard({ result, eager = false, offerState, saved, onO
   const lines = playLines(game).slice(0, 2);
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition duration-200 hover:border-accent/40 motion-safe:animate-enter motion-safe:hover:-translate-y-1 hover:shadow-[0_12px_32px_-12px_rgb(255_138_61/0.25)]">
+    <article className="relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-colors hover:border-muted/50">
       <button type="button" onClick={onOpen} className="relative block aspect-[460/215] overflow-hidden bg-raised text-left">
-        <Image
-          src={game.image}
-          alt={`${game.title} artwork`}
-          fill
-          loading={eager ? "eager" : "lazy"}
+        <Artwork
+          title={game.title}
+          image={game.image}
+          eager={eager}
           sizes="(min-width: 1280px) 320px, (min-width: 640px) 45vw, 100vw"
-          className="object-cover transition duration-300 group-hover:scale-[1.03] motion-reduce:transition-none"
         />
         <span className="sr-only">Show details for {game.title}</span>
       </button>
@@ -47,8 +45,8 @@ export default function GameCard({ result, eager = false, offerState, saved, onO
         onClick={onToggleSave}
         aria-pressed={saved}
         aria-label={saved ? `Remove ${game.title} from shortlist` : `Add ${game.title} to shortlist`}
-        className={`absolute top-2.5 right-2.5 grid h-9 w-9 place-items-center rounded-full backdrop-blur-sm transition ${
-          saved ? "bg-accent text-accent-foreground" : "bg-background/80 text-foreground hover:bg-background"
+        className={`absolute top-2.5 right-2.5 grid h-9 w-9 place-items-center rounded-full border transition-colors ${
+          saved ? "border-accent bg-accent text-accent-foreground" : "border-line bg-background text-foreground hover:border-muted"
         }`}
       >
         <svg aria-hidden="true" viewBox="0 0 20 20" className="h-4 w-4">

@@ -36,7 +36,8 @@ export const sourceSchema = z.object({
 export const gameSchema = z.object({
   id: z.string().regex(/^[a-z0-9-]+$/),
   title: z.string().min(1),
-  steamAppId: z.number().int().positive(),
+  // Null for games that aren't sold on Steam (e.g. Riot's games); those carry a launcher instead.
+  steamAppId: z.number().int().positive().nullable(),
   // Reviewed mapping to CheapShark's base-game record, found by Steam app ID (never by title).
   cheapsharkGameId: z.string().regex(/^\d+$/).nullable(),
   platforms: z.array(z.literal("pc")).min(1),
@@ -49,7 +50,9 @@ export const gameSchema = z.object({
   genres: z.array(z.string()),
   themes: z.array(z.string()),
   description: z.string().nullable(),
-  image: z.url(),
+  image: z.url().nullable(),
+  // Reviewed official place to get a game the checked stores don't sell (Riot Client, Epic, ...).
+  launcher: z.object({ name: z.string().min(1), url: z.url() }).nullable(),
   sources: z.array(sourceSchema).min(1),
 });
 export type Game = z.infer<typeof gameSchema>;

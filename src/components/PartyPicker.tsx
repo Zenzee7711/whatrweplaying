@@ -34,7 +34,7 @@ export default function PartyPicker({ value, onChange }: { value: number | null;
               aria-checked={value === seat}
               aria-label={seat === 1 ? "Just me" : `${seat} players`}
               onClick={() => onChange(value === seat ? null : seat)}
-              className={`grid h-11 w-10 place-items-center rounded-lg transition duration-150 motion-safe:hover:-translate-y-0.5 ${
+              className={`grid h-11 w-10 place-items-center rounded-lg transition duration-150 ${
                 filled ? "text-accent" : "text-muted/50 hover:text-foreground"
               }`}
               style={{ transitionDelay: filled ? `${seat * 25}ms` : "0ms" }}

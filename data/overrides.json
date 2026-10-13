@@ -141,4 +141,50 @@
     "sources": [{ "name": "Samurai Gamers, game modes", "url": "https://samurai-gamers.com/playerunknowns-battlegrounds-pubg/game-modes/", "retrieved": "2026-10-13" }],
     "note": "squads of up to 4 in a 100-player match"
   }
+,
+  "valorant": {
+    "online": { "versusPlayers": { "min": null, "max": 5 } },
+    "sources": [{ "name": "Switchblade Gaming, 5-stack guide", "url": "https://www.switchbladegaming.com/valorant/5-stack-guide/", "retrieved": "2026-10-13" }],
+    "note": "5v5 matches; parties of up to 5"
+  },
+  "league-of-legends": {
+    "monetization": "free-to-play",
+    "online": { "versusPlayers": { "min": null, "max": 5 } },
+    "sources": [{ "name": "League of Legends Wiki, normal game", "url": "https://wiki.leagueoflegends.com/en-us/Normal_game", "retrieved": "2026-10-13" }],
+    "note": "free to play (the wiki field is malformed); 5v5 matches; normal queues accept parties of up to 5"
+  },
+  "fortnite": {
+    "monetization": "free-to-play",
+    "online": { "versusPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "Fortnite on the Epic Games Store", "url": "https://store.epicgames.com/p/fortnite", "retrieved": "2026-10-13" }, { "name": "Dot Esports, squad formation", "url": "https://dotesports.com/fortnite/news/how-to-make-a-large-party-in-fortnite-battle-royales-squad-formation-feature", "retrieved": "2026-10-13" }],
+    "note": "free to play (Epic store page); Battle Royale squads are up to 4; parties of up to 16 only in modes with bigger teams"
+  },
+  "genshin-impact": {
+    "online": { "coopPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "Dot Esports", "url": "https://dotesports.com/genshin-impact/guides/is-genshin-impact-multiplayer-co-op-and-crossplay-explained", "retrieved": "2026-10-13" }],
+    "note": "co-op for up to 4 in one world"
+  },
+  "overwatch-2": {
+    "online": { "versusPlayers": { "min": null, "max": 5 } },
+    "sources": [{ "name": "PCGamesN", "url": "https://www.pcgamesn.com/overwatch-2/5v5-role-lock", "retrieved": "2026-10-13" }],
+    "note": "5v5 matches; a team is 5 players"
+  },
+  "the-division-2": {
+    "online": { "coopPlayers": { "min": null, "max": 8 } },
+    "sources": [
+      { "name": "Stevivor", "url": "https://stevivor.com/news/division-2-8-player-raids-ubisoft-confirms/", "retrieved": "2026-10-13" },
+      { "name": "Co-Optimus", "url": "https://www.co-optimus.com/game/5167/xbox-one/tom-clancy-s-the-division-2.html", "retrieved": "2026-10-13" }
+    ],
+    "note": "groups of 4 for most activities; 8 for raids"
+  },
+  "for-honor": {
+    "online": { "versusPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "Stevivor", "url": "https://stevivor.com/news/honors-multiplayer-modes-playable-characters-detailed", "retrieved": "2026-10-13" }],
+    "note": "4v4 Dominion; a team is 4 players"
+  },
+  "the-crew-motorfest": {
+    "online": { "coopPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "Co-Optimus", "url": "https://www.co-optimus.com/game/14442/playstation-5/the-crew-motorfest.html", "retrieved": "2026-10-13" }],
+    "note": "crews of up to 4"
+  }
 }
