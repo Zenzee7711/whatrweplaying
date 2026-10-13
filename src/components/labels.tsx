@@ -12,7 +12,7 @@ function rangeText(players: Capacity | null): string | null {
 
 // One short line per way of playing, e.g. "Online co-op · up to 4 together". Counts are always
 // how many friends can play together (team, party or private lobby), never a whole match size.
-type PlayLine = { label: string; detail: string; together: string | null; verified: boolean };
+type PlayLine = { label: string; detail: string; together: string | null; verified: boolean; max: number | null };
 
 export function playLines(game: Game): PlayLine[] {
   const lines: PlayLine[] = [];
@@ -20,19 +20,31 @@ export function playLines(game: Game): PlayLine[] {
     if (connection.supported !== true) return;
     for (const kind of ["coop", "versus"] as const) {
       if (connection[kind] !== true) continue;
-      const range = rangeText(kindPlayers(connection, kind, where === "Online" ? "online" : "local"));
+      const players = kindPlayers(connection, kind, where === "Online" ? "online" : "local");
+      const range = rangeText(players);
       const name = `${where} ${kind === "coop" ? "co-op" : "versus"}`;
       lines.push({
         label: name,
         detail: range ? `${range} together` : "group size unverified",
         together: range,
         verified: range !== null,
+        max: range !== null ? players?.max ?? null : null,
       });
     }
   };
   add("Online", game.online);
   add("Local", game.local);
   return lines;
+}
+
+// The one line a card shows: the most friends who can play together in one party or lobby, in
+// whichever mode allows the most (e.g. Left 4 Dead 2: 8 in a versus lobby). Modes without a
+// checked size only show when nothing is checked.
+export function mainPlayLine(game: Game): PlayLine | null {
+  const lines = playLines(game);
+  const checked = lines.filter((l) => l.max !== null);
+  if (checked.length === 0) return lines[0] ?? null;
+  return checked.reduce((best, line) => (line.max! > best.max! ? line : best));
 }
 
 export function PriceTag({ price, state }: { price: PriceInfo; state: OfferState | undefined }) {

@@ -5,7 +5,7 @@ import type { Game } from "@/lib/catalogue/schema";
 import type { OtherGame } from "@/lib/igdb/map";
 import { searchStoreGames } from "@/lib/offers/cheapshark";
 import { findTitles } from "@/lib/search/titles";
-import { money, playLines } from "./labels";
+import { mainPlayLine, money } from "./labels";
 
 export type AssistStatus = {
   pending: boolean;
@@ -258,7 +258,7 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
           >
             {options.map((option, i) => {
               const first = i === 0 || options[i - 1].kind !== option.kind;
-              const line = option.kind === "catalogue" ? playLines(option.game)[0] : null;
+              const line = option.kind === "catalogue" ? mainPlayLine(option.game) : null;
               const image = option.game.image;
               return (
                 <div key={option.kind === "catalogue" ? option.game.id : option.game.key}>

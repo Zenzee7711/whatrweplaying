@@ -501,10 +501,13 @@
           "min": null,
           "max": 4
         },
-        "coop": null,
+        "coop": true,
         "versus": null,
         "sharedRange": false,
-        "coopPlayers": null,
+        "coopPlayers": {
+          "min": null,
+          "max": 4
+        },
         "versusPlayers": null,
         "notes": "More can be hacked with mods such as [https://thunderstore.io/c/content-warning/p/MaxWasUnavailable/Virality/ Virality] for up to 16 players."
       },
@@ -525,6 +528,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Content_Warning",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Gematsu (reviewed: four-player co-op)",
+          "url": "https://gematsu.com/2024/04/landfall-releases-four-player-co-op-horror-game-content-warning-for-pc",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",
@@ -796,10 +804,13 @@
           "min": null,
           "max": 100
         },
-        "coop": null,
+        "coop": true,
         "versus": null,
         "sharedRange": false,
-        "coopPlayers": null,
+        "coopPlayers": {
+          "min": null,
+          "max": 32
+        },
         "versusPlayers": null,
         "notes": "Servers above 31 players display a warning and need to check \"Show Higher Player Count Servers\" in server browsers."
       },
@@ -827,6 +838,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Project_Zomboid",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Project Zomboid server settings reference (reviewed: 32 on a default server)",
+          "url": "https://xgamingserver.com/docs/project-zomboid/server-ini-reference",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",
@@ -1273,10 +1289,13 @@
           "min": null,
           "max": 8
         },
-        "coop": null,
+        "coop": true,
         "versus": null,
         "sharedRange": false,
-        "coopPlayers": null,
+        "coopPlayers": {
+          "min": null,
+          "max": 8
+        },
         "versusPlayers": null,
         "notes": null
       },
@@ -1301,6 +1320,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Terraria",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Terraria Wiki, multiplayer (reviewed: 8 players in one world by default)",
+          "url": "https://terraria.wiki.gg/wiki/Multiplayer",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",
@@ -1351,7 +1375,10 @@
         "coop": true,
         "versus": true,
         "sharedRange": true,
-        "coopPlayers": null,
+        "coopPlayers": {
+          "min": null,
+          "max": 6
+        },
         "versusPlayers": null,
         "notes": "Requires a Klei account. It is possible to use Steam groups."
       },
@@ -1377,6 +1404,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Don't_Starve_Together",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Gamer Empire (reviewed: 6 when a player hosts; dedicated servers can hold more)",
+          "url": "https://gamerempire.net/dont-starve-together-maximum-number-of-players-at-once/",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",
@@ -1710,7 +1742,10 @@
         "coop": true,
         "versus": null,
         "sharedRange": false,
-        "coopPlayers": null,
+        "coopPlayers": {
+          "min": null,
+          "max": 8
+        },
         "versusPlayers": null,
         "notes": null
       },
@@ -1729,6 +1764,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Raft",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "GGRecon (reviewed: up to 8 in one world)",
+          "url": "https://ggrecon.com/guides/how-many-people-can-play-raft",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",
@@ -1842,10 +1882,13 @@
           "min": null,
           "max": 16
         },
-        "coop": null,
+        "coop": true,
         "versus": true,
         "sharedRange": false,
-        "coopPlayers": null,
+        "coopPlayers": {
+          "min": null,
+          "max": 4
+        },
         "versusPlayers": null,
         "notes": "4 crew members. In the server up to 16 (5 crews per server).{{refurl|url=https://twitter.com/SoT_Support/status/1484530730638225417|title=Sea of Thieves Info & Support"
       },
@@ -1868,6 +1911,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Sea_of_Thieves",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Seafarer wiki, ships (reviewed: a crew is up to 4 (galleon))",
+          "url": "https://seaofthieves.wiki.gg/wiki/Ships",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",
@@ -2771,10 +2819,13 @@
           "max": 4
         },
         "coop": null,
-        "versus": null,
+        "versus": true,
         "sharedRange": false,
         "coopPlayers": null,
-        "versusPlayers": null,
+        "versusPlayers": {
+          "min": null,
+          "max": 4
+        },
         "notes": null
       },
       "crossplayNote": null,
@@ -2794,6 +2845,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Ultimate_Chicken_Horse",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "PlayStation Store listing (reviewed: up to 4 players online)",
+          "url": "https://www.playstation.com/en-ca/games/ultimate-chicken-horse/",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",
@@ -3233,7 +3289,10 @@
         "versus": true,
         "sharedRange": true,
         "coopPlayers": null,
-        "versusPlayers": null,
+        "versusPlayers": {
+          "min": null,
+          "max": 8
+        },
         "notes": "All Mode: 8 Players Space Crisis, Winter Cabin & Infection: 12 Players"
       },
       "crossplayNote": "PlayStation 5 support was added in the 1.10.0.0 update.Due to non-concurrent updates between platform, crossplay might not always function correctly.",
@@ -3251,6 +3310,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Party_Animals",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "GINX (reviewed: a lobby holds 8)",
+          "url": "https://www.ginx.tv/en/max-number-of-players",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",
@@ -3448,10 +3512,13 @@
           "max": 32
         },
         "coop": null,
-        "versus": null,
+        "versus": true,
         "sharedRange": false,
         "coopPlayers": null,
-        "versusPlayers": null,
+        "versusPlayers": {
+          "min": null,
+          "max": 5
+        },
         "notes": "10 players in competitive mode32 players in Community servers and outside competitive mode"
       },
       "crossplayNote": null,
@@ -3471,6 +3538,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Counter-Strike_2",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "TesLAN, Counter-Strike 2 (reviewed: matchmaking parties of up to 5)",
+          "url": "https://lan.thor.edu/competitions/23/counter-strike-2",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",
@@ -4041,10 +4113,13 @@
           "min": null,
           "max": 300
         },
-        "coop": null,
+        "coop": true,
         "versus": null,
         "sharedRange": false,
-        "coopPlayers": null,
+        "coopPlayers": {
+          "min": null,
+          "max": 8
+        },
         "versusPlayers": null,
         "notes": null
       },
@@ -4064,6 +4139,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Rust",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Shockbyte, team size (reviewed: teams of up to 8 on default servers)",
+          "url": "https://shockbyte.com/help/knowledgebase/articles/how-to-configure-team-size-on-your-rust-server",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",
@@ -5567,10 +5647,13 @@
           "min": null,
           "max": 2147483647
         },
-        "coop": null,
+        "coop": true,
         "versus": null,
         "sharedRange": false,
-        "coopPlayers": null,
+        "coopPlayers": {
+          "min": null,
+          "max": 11
+        },
         "versusPlayers": null,
         "notes": "Max players is capped to the max integer size in Java."
       },
@@ -5595,6 +5678,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Minecraft%3A_Java_Edition",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Minecraft Realms (reviewed: a Java Realm holds you + 10 friends at once; your own server can hold more)",
+          "url": "https://www.minecraft.net/realms",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",

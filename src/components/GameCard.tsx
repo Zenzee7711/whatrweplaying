@@ -1,7 +1,7 @@
 import type { OfferState } from "@/lib/offers/types";
 import type { Result } from "@/lib/search/search";
 import Artwork from "./Artwork";
-import { People, playLines, PriceTag } from "./labels";
+import { mainPlayLine, People, PriceTag } from "./labels";
 
 type GameCardProps = {
   result: Result;
@@ -21,7 +21,8 @@ const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFracti
 export default function GameCard({ result, eager = false, offerState, saved, onOpen, onToggleSave, note, playingNow }: GameCardProps) {
   const { game, reasons, price } = result;
   // The ways of playing that matched the search come first; otherwise the game's own list.
-  const lines = playLines(game).slice(0, 2);
+  const main = mainPlayLine(game);
+  const lines = main ? [main] : [];
 
   return (
     <article className="relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-colors hover:border-muted/50">

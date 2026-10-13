@@ -191,5 +191,60 @@
     "online": { "coopPlayers": { "min": null, "max": 4 } },
     "sources": [{ "name": "HELLDIVERS 2 on Steam", "url": "https://store.steampowered.com/app/553850/HELLDIVERS_2/", "retrieved": "2026-10-14" }],
     "note": "squads of up to four"
+  },
+  "content-warning": {
+    "online": { "coopPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "Gematsu", "url": "https://gematsu.com/2024/04/landfall-releases-four-player-co-op-horror-game-content-warning-for-pc", "retrieved": "2026-10-14" }],
+    "note": "four-player co-op"
+  },
+  "terraria": {
+    "online": { "coopPlayers": { "min": null, "max": 8 } },
+    "sources": [{ "name": "Terraria Wiki, multiplayer", "url": "https://terraria.wiki.gg/wiki/Multiplayer", "retrieved": "2026-10-14" }],
+    "note": "8 players in one world by default"
+  },
+  "dont-starve-together": {
+    "online": { "coopPlayers": { "min": null, "max": 6 } },
+    "sources": [{ "name": "Gamer Empire", "url": "https://gamerempire.net/dont-starve-together-maximum-number-of-players-at-once/", "retrieved": "2026-10-14" }],
+    "note": "6 when a player hosts; dedicated servers can hold more"
+  },
+  "raft": {
+    "online": { "coopPlayers": { "min": null, "max": 8 } },
+    "sources": [{ "name": "GGRecon", "url": "https://ggrecon.com/guides/how-many-people-can-play-raft", "retrieved": "2026-10-14" }],
+    "note": "up to 8 in one world"
+  },
+  "sea-of-thieves": {
+    "online": { "coopPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "Seafarer wiki, ships", "url": "https://seaofthieves.wiki.gg/wiki/Ships", "retrieved": "2026-10-14" }],
+    "note": "a crew is up to 4 (galleon)"
+  },
+  "ultimate-chicken-horse": {
+    "online": { "versusPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "PlayStation Store listing", "url": "https://www.playstation.com/en-ca/games/ultimate-chicken-horse/", "retrieved": "2026-10-14" }],
+    "note": "up to 4 players online"
+  },
+  "party-animals": {
+    "online": { "versusPlayers": { "min": null, "max": 8 } },
+    "sources": [{ "name": "GINX", "url": "https://www.ginx.tv/en/max-number-of-players", "retrieved": "2026-10-14" }],
+    "note": "a lobby holds 8"
+  },
+  "counter-strike-2": {
+    "online": { "versusPlayers": { "min": null, "max": 5 } },
+    "sources": [{ "name": "TesLAN, Counter-Strike 2", "url": "https://lan.thor.edu/competitions/23/counter-strike-2", "retrieved": "2026-10-14" }],
+    "note": "matchmaking parties of up to 5"
+  },
+  "project-zomboid": {
+    "online": { "coopPlayers": { "min": null, "max": 32 } },
+    "sources": [{ "name": "Project Zomboid server settings reference", "url": "https://xgamingserver.com/docs/project-zomboid/server-ini-reference", "retrieved": "2026-10-14" }],
+    "note": "32 on a default server"
+  },
+  "rust": {
+    "online": { "coopPlayers": { "min": null, "max": 8 } },
+    "sources": [{ "name": "Shockbyte, team size", "url": "https://shockbyte.com/help/knowledgebase/articles/how-to-configure-team-size-on-your-rust-server", "retrieved": "2026-10-14" }],
+    "note": "teams of up to 8 on default servers"
+  },
+  "minecraft": {
+    "online": { "coopPlayers": { "min": null, "max": 11 } },
+    "sources": [{ "name": "Minecraft Realms", "url": "https://www.minecraft.net/realms", "retrieved": "2026-10-14" }],
+    "note": "a Java Realm holds you + 10 friends at once; your own server can hold more"
   }
 }
