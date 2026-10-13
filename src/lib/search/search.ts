@@ -42,7 +42,7 @@ function connectionFit(
   return capacityFit(kindPlayers(connection, kind, where), groupSize, kind);
 }
 
-export function modeFit(game: Game, mode: Mode, groupSize: number | null): Fit {
+function modeFit(game: Game, mode: Mode, groupSize: number | null): Fit {
   switch (mode) {
     case "solo":
       if (groupSize !== null && groupSize > 1) return "no";
@@ -66,18 +66,18 @@ function modesToCheck(filters: Filters): readonly Mode[] {
   return MODES.filter((mode) => mode !== "solo");
 }
 
-export function tagsOf(game: Game): string[] {
+function tagsOf(game: Game): string[] {
   return [...game.genres, ...game.themes].map((t) => t.toLowerCase());
 }
 
 // "horror" matches the theme "horror" and the genre "survival horror" (whole words only),
 // so "no horror" also removes survival horror games.
-export function hasTag(tags: string[], wanted: string): boolean {
+function hasTag(tags: string[], wanted: string): boolean {
   return tags.some((tag) => tag === wanted || tag.split(/[\s/-]+/).includes(wanted));
 }
 
 // The cheapest known offer that the group can use (at the chosen store, if one is set).
-export function bestOffer(offers: Offer[], store: string | null): Offer | null {
+function bestOffer(offers: Offer[], store: string | null): Offer | null {
   const usable = store ? offers.filter((offer) => offer.storeId === store) : offers;
   return usable.reduce<Offer | null>((best, offer) => (!best || offer.price < best.price ? offer : best), null);
 }
@@ -88,7 +88,7 @@ export type PriceInfo =
   | { kind: "no-offer" } // offers were checked and none were found (at the chosen store)
   | { kind: "unknown" }; // not checked yet, or the price service failed
 
-export function priceInfo(game: Game, offers: OfferMap, store: string | null): PriceInfo {
+function priceInfo(game: Game, offers: OfferMap, store: string | null): PriceInfo {
   if (game.monetization === "free-to-play") return { kind: "free-to-play" };
   const state = offers[game.id];
   if (!state || state.status !== "ok") return { kind: "unknown" };
@@ -106,7 +106,7 @@ export type Result = {
 
 export type Constraint = "mode" | "exclude" | "pricing" | "budget" | "store";
 
-export type SearchOutcome = {
+type SearchOutcome = {
   matches: Result[];
   unverified: Result[]; // would match, but the group's player count can't be verified
   priceUnconfirmed: Result[]; // would match, but there is no known offer within the budget/store
@@ -195,7 +195,7 @@ function evaluate(game: Game, filters: Filters, offers: OfferMap, skip: Constrai
 const NOT_SIMILARITY = new Set(["north america", "middle east", "contemporary"]);
 
 // How alike two games are: shared genres and themes, plus playing the same ways.
-export function similarity(a: Game, b: Game): { score: number; shared: string[] } {
+function similarity(a: Game, b: Game): { score: number; shared: string[] } {
   const ofA = new Set(tagsOf(a));
   const shared = tagsOf(b).filter((tag) => ofA.has(tag) && !NOT_SIMILARITY.has(tag));
   let score = shared.length;
@@ -217,7 +217,7 @@ function sortResults(results: Result[], sort: Filters["sort"]): Result[] {
   });
 }
 
-function run(games: Game[], filters: Filters, offers: OfferMap, skip: Constraint | null) {
+function run(games: readonly Game[], filters: Filters, offers: OfferMap, skip: Constraint | null) {
   // The named game is shown in its own panel, so it is left out of the lists.
   const likeGame = filters.like ? games.find((g) => g.id === filters.like) ?? null : null;
   const matches: Result[] = [];
@@ -244,7 +244,7 @@ function activeConstraints(filters: Filters): Constraint[] {
   return active;
 }
 
-export function search(games: Game[], filters: Filters, offers: OfferMap = {}): SearchOutcome {
+export function search(games: readonly Game[], filters: Filters, offers: OfferMap = {}): SearchOutcome {
   const { matches, unverified, priceUnconfirmed } = run(games, filters, offers, null);
 
   // Nothing matched: work out which single requirement is blocking, without changing the search.

@@ -21,7 +21,7 @@ import GameCard from "./GameCard";
 import GameDrawer from "./GameDrawer";
 import OtherGameCard from "./OtherGameCard";
 import PartyPicker from "./PartyPicker";
-import StoreGameDrawer from "./StoreGameDrawer";
+import OtherGameDrawer from "./OtherGameDrawer";
 
 type Turn = { role: "user" | "assistant"; text: string };
 
@@ -41,7 +41,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [offers, setOffers] = useState<OfferMap>({});
   const [openId, setOpenId] = useState<string | null>(null);
-  const [storeGame, setStoreGame] = useState<OtherGame | null>(null);
+  const [otherGame, setOtherGame] = useState<OtherGame | null>(null);
   const [searchMode, setSearchMode] = useState<SearchMode>(aiAvailable ? "ai" : "keyword");
   // Games the AI recommended for the last request, already checked to exist by the server.
   const [picks, setPicks] = useState<{ request: string; items: Pick[] } | null>(null);
@@ -64,7 +64,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
   // Games whose prices matter: anything that could appear if the price filters were ignored,
   // plus saved and shared games. Free-to-play games need no lookup.
   const candidates = useMemo(() => {
-    const loose = search(games as Game[], { ...filters, maxPrice: null, store: null }, {});
+    const loose = search(games, { ...filters, maxPrice: null, store: null }, {});
     const ids = new Set([...loose.matches, ...loose.unverified].map((r) => r.game.id));
     for (const id of [...shortlist.ids, ...sharedList]) ids.add(id);
     for (const pick of picks?.items ?? []) if (pick.kind === "catalogue") ids.add(pick.id);
@@ -101,7 +101,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
     return () => controller.abort();
   }, [missingKey]);
 
-  const outcome = useMemo(() => search(games as Game[], filters, offers), [filters, offers]);
+  const outcome = useMemo(() => search(games, filters, offers), [filters, offers]);
   const checking = candidates.filter((g) => offers[g.id] === undefined).length;
   const unavailable = candidates.filter((g) => offers[g.id]?.status === "unavailable").length;
 
@@ -115,7 +115,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
         const response = await fetch("/api/assist", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message, filters, history: history.slice(-6), mode: searchMode }),
+          body: JSON.stringify({ message, filters, history: history.slice(-6), mode: searchMode, answering: Boolean(assist.clarification) }),
         });
         const data = await response.json().catch(() => null);
         const next = filtersSchema.safeParse(data?.filters);
@@ -145,7 +145,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
         setAssist({ pending: false, error: "Couldn't reach search. Your filters still work." });
       }
     },
-    [filters, history, searchMode],
+    [filters, history, searchMode, assist.clarification],
   );
 
   // A game picked from the suggestions: show it, and rank the rest by how similar they are.
@@ -167,19 +167,23 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
 
   const openGame = openId ? getGame(openId) ?? null : null;
 
+  // One game on its own (a named game, an AI pick, a saved game), as a card-ready result.
+  // A game that doesn't fit the filters still gets a card, with no match reasons.
+  const resultFor = (game: Game, against: Filters = defaultFilters): Result => {
+    const one = search([game], { ...against, like: null }, offers);
+    return one.matches[0] ?? one.unverified[0] ?? one.priceUnconfirmed[0] ?? { game, score: 0, modes: [], price: { kind: "unknown" }, reasons: [] };
+  };
+
   // The game the user named: shown on its own, with whether it fits the current filters.
   const likeGame = filters.like ? getGame(filters.like) ?? null : null;
   const likeOutcome = likeGame ? search([likeGame], { ...filters, like: null }, offers) : null;
-  const likeResult = likeOutcome
-    ? likeOutcome.matches[0] ?? likeOutcome.unverified[0] ?? likeOutcome.priceUnconfirmed[0] ?? null
-    : null;
   const likeFit = likeOutcome?.matches.length
     ? "fits"
     : likeOutcome?.unverified.length || likeOutcome?.priceUnconfirmed.length
       ? "unverified"
       : "no";
   const groupLabel = filters.groupSize === null ? " to explore" : filters.groupSize === 1 ? " for one" : ` for ${filters.groupSize} players`;
-  const card = (result: Result, index = 99) => (
+  const card = (result: Result, index = 99, note?: string | null) => (
     <GameCard
       key={result.game.id}
       result={result}
@@ -188,6 +192,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
       saved={shortlist.ids.includes(result.game.id)}
       onOpen={() => setOpenId(result.game.id)}
       onToggleSave={() => shortlist.toggle(result.game.id)}
+      note={note}
     />
   );
   const grid = (results: Result[]) => <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{results.map((r, i) => card(r, i))}</div>;
@@ -203,29 +208,15 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
   };
   const shownPicks = picks ? picks.items.filter(pickFits) : [];
 
-  // A catalogue pick as a card, with its verified group sizes and the AI's reason.
+  // An AI pick as a card: ours with verified group sizes, or another game with its store links.
   const pickCard = (pick: Pick, index: number) => {
     if (pick.kind === "other") {
-      return <OtherGameCard key={pick.game.key} game={pick.game} note={pick.why} onOpen={() => setStoreGame(pick.game)} />;
+      return <OtherGameCard key={pick.game.key} game={pick.game} note={pick.why} onOpen={() => setOtherGame(pick.game)} />;
     }
     const game = getGame(pick.id);
-    if (!game) return null;
-    const result = search([game], defaultFilters, offers).matches[0] ?? { game, score: 0, modes: [], price: { kind: "unknown" as const }, reasons: [] };
-    return (
-      <GameCard
-        key={game.id}
-        result={result}
-        eager={index < 3}
-        offerState={offers[game.id]}
-        saved={shortlist.ids.includes(game.id)}
-        onOpen={() => setOpenId(game.id)}
-        onToggleSave={() => shortlist.toggle(game.id)}
-        note={pick.why}
-      />
-    );
+    return game ? card(resultFor(game), index, pick.why) : null;
   };
-  const savedResults = (ids: string[]) =>
-    ids.map(getGame).filter((g): g is Game => !!g).map((game) => search([game], defaultFilters, offers).matches[0] ?? search([game], defaultFilters, offers).unverified[0]).filter(Boolean);
+  const savedResults = (ids: string[]) => ids.map(getGame).filter((g): g is Game => !!g).map((game) => resultFor(game));
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
@@ -253,7 +244,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
           aiAvailable={aiAvailable}
           onModeChange={setSearchMode}
           onPickGame={pickGame}
-          onPickStoreGame={setStoreGame}
+          onPickOtherGame={setOtherGame}
           allGames={allGames}
         />
         <PartyPicker value={filters.groupSize} onChange={(groupSize) => setFilters({ ...filters, groupSize })} />
@@ -355,7 +346,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
               aria-labelledby="searched-heading"
               className="mt-6 grid gap-4 rounded-2xl bg-surface p-4 sm:grid-cols-[minmax(0,300px)_1fr] sm:items-center"
             >
-              {card(likeResult ?? { game: likeGame, score: 0, modes: [], price: { kind: "unknown" }, reasons: [] })}
+              {card(resultFor(likeGame, filters))}
               <div>
                 <h2 id="searched-heading" className="text-xs font-semibold tracking-wider text-muted uppercase">
                   You searched for
@@ -486,7 +477,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
       </dialog>
 
       <GameDrawer game={openGame} offerState={openGame ? offers[openGame.id] : undefined} store={filters.store} onClose={() => setOpenId(null)} />
-      <StoreGameDrawer game={storeGame} onClose={() => setStoreGame(null)} />
+      <OtherGameDrawer game={otherGame} onClose={() => setOtherGame(null)} />
     </div>
   );
 }

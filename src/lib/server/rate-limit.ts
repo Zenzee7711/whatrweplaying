@@ -3,7 +3,7 @@
 // Limitation: memory is per server instance, so on serverless hosting each instance keeps
 // its own count. That is fine for a demo; a shared store (e.g. Redis) would be needed at scale.
 
-export type Limiter = { check: (key: string, now?: number) => { allowed: boolean; retryAfterSeconds: number } };
+type Limiter = { check: (key: string, now?: number) => { allowed: boolean; retryAfterSeconds: number } };
 
 export function createLimiter(options: { perWindow: number; windowMs: number; perDay: number }): Limiter {
   const hits = new Map<string, number[]>();

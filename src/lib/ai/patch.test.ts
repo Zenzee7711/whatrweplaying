@@ -122,3 +122,13 @@ describe("names that look like other words", () => {
     expect(basicPatch("pubg like battleroyle", [...tags, "battle royale"], catalogue).unknownTitle).toBeNull();
   });
 });
+
+describe("basicPatch phrasing", () => {
+  it("reads 'on one PC' as playing locally", () => {
+    expect(basicPatch("something relaxed for two on one PC", []).set.modes).toContain("local-coop");
+  });
+
+  it("sorts by price for cheap, cheaper and cheapest", () => {
+    for (const word of ["cheap", "cheaper", "cheapest"]) expect(basicPatch(`${word} co-op games`, []).set.sort).toBe("price");
+  });
+});

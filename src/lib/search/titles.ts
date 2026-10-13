@@ -70,7 +70,7 @@ export function titleScore(query: string, title: string): number {
   return (total / q.length) * (0.75 + 0.25 * coverage);
 }
 
-export type TitleMatch<T> = { item: T; score: number };
+type TitleMatch<T> = { item: T; score: number };
 
 export function findTitles<T extends { title: string }>(query: string, items: readonly T[], minScore = 0.7): TitleMatch<T>[] {
   return items

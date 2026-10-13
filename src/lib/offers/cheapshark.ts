@@ -83,7 +83,7 @@ const titleSearchSchema = z.array(
 );
 
 // Thumbnails are only used from Steam's image server, which the page's security policy allows.
-export function safeThumb(url: string): string | null {
+function safeThumb(url: string): string | null {
   return url.startsWith("https://shared.fastly.steamstatic.com/") ? url : null;
 }
 

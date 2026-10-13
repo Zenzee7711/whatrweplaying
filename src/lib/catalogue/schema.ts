@@ -27,7 +27,7 @@ export const connectionSchema = z.object({
 });
 export type Connection = z.infer<typeof connectionSchema>;
 
-export const sourceSchema = z.object({
+const sourceSchema = z.object({
   name: z.string(),
   url: z.url(),
   retrieved: z.iso.date(),
@@ -64,4 +64,3 @@ export const catalogueSchema = z.object({
   generated: z.iso.date(),
   games: z.array(gameSchema),
 });
-export type Catalogue = z.infer<typeof catalogueSchema>;

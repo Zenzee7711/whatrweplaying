@@ -94,7 +94,7 @@ function taxonomy(wikitext: string, name: string): string[] {
   return [...new Set(items)];
 }
 
-export type PcgwFacts = {
+type PcgwFacts = {
   steamAppIds: number[];
   singleplayer: boolean | null;
   monetization: "free-to-play" | "paid" | "unknown";

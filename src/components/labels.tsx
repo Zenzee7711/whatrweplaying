@@ -4,7 +4,7 @@ import { kindPlayers, type PriceInfo } from "@/lib/search/search";
 
 export const money = (n: number) => `$${n.toFixed(2)}`;
 
-export function rangeText(players: Capacity | null): string | null {
+function rangeText(players: Capacity | null): string | null {
   if (!players || players.max === null) return null;
   if (players.min !== null && players.min !== players.max) return `${players.min}–${players.max}`;
   return players.min === players.max ? `${players.max}` : `up to ${players.max}`;
@@ -12,7 +12,7 @@ export function rangeText(players: Capacity | null): string | null {
 
 // One short line per way of playing, e.g. "Online co-op · up to 4 together". Counts are always
 // how many friends can play together (team, party or private lobby), never a whole match size.
-export type PlayLine = { label: string; detail: string; together: string | null; verified: boolean };
+type PlayLine = { label: string; detail: string; together: string | null; verified: boolean };
 
 export function playLines(game: Game): PlayLine[] {
   const lines: PlayLine[] = [];

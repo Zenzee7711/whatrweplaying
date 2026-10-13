@@ -18,5 +18,5 @@ function vocabulary(pick: (game: Game) => string[]): string[] {
   return [...new Set(games.flatMap((game) => pick(game).map((t) => t.toLowerCase())))].sort();
 }
 export const genreVocabulary = vocabulary((game) => game.genres);
-export const themeVocabulary = vocabulary((game) => game.themes);
+const themeVocabulary = vocabulary((game) => game.themes);
 export const tagVocabulary = [...new Set([...genreVocabulary, ...themeVocabulary])].sort();

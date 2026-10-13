@@ -7,7 +7,7 @@ import { defaultFilters, filtersSchema, MODES, PRICING, SORTS, type Filters } fr
 // It can also name games it recommends ("picks"); the server checks each one exists before
 // showing it, and never takes player counts or prices from the AI.
 
-export const CLEARABLE = ["groupSize", "modes", "maxPrice", "pricing", "genres", "themes", "exclude", "like"] as const;
+const CLEARABLE = ["groupSize", "modes", "maxPrice", "pricing", "genres", "themes", "exclude", "like"] as const;
 
 // One shape, two strictness levels: the tag and game fields are either free text (what the
 // model is asked for, so the schema sent with every request stays small) or limited to the

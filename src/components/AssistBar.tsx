@@ -21,17 +21,18 @@ export type AssistStatus = {
 
 export type SearchMode = "ai" | "keyword";
 
-// Rotating examples show the three things the box understands: a group, a mood, a game name.
+// Rotating examples show what the box understands: a group, a mood, a game name.
 const PLACEHOLDERS = [
   "Four of us, online co-op, preferably horror, under $15 each",
   "Monster Hunter",
   "Something relaxed for two on one PC",
   "Games like Valheim",
   "Free games for a big group",
+  "A solo game with a great story",
 ];
-const QUICK = ["Four of us, online co-op, under $15 each", "Something relaxed for two", "Games like Lethal Company"];
+const QUICK = ["Four of us, online co-op, under $15 each", "A solo game with a great story", "Games like Lethal Company"];
 
-type Option = { kind: "catalogue"; game: Game } | { kind: "store"; game: OtherGame };
+type Option = { kind: "catalogue"; game: Game } | { kind: "other"; game: OtherGame };
 
 // Any PC game by name: IGDB through our own server when it's set up, otherwise (or if it fails)
 // CheapShark's store data straight from the browser.
@@ -73,20 +74,20 @@ type AssistBarProps = {
   aiAvailable: boolean;
   onModeChange: (mode: SearchMode) => void;
   onPickGame: (id: string) => void;
-  onPickStoreGame: (game: OtherGame) => void;
+  onPickOtherGame: (game: OtherGame) => void;
   // Whether name search covers every PC game (IGDB) or only CheapShark's store data.
   allGames: boolean;
 };
 
 // The search box: plain words, a mood or a game name. Suggestions appear as you type, from our
-// catalogue (verified player counts) and from store data (any PC game, prices only).
-export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChange, onPickGame, onPickStoreGame, allGames }: AssistBarProps) {
+// catalogue (verified group sizes) and from every other PC game (group size not checked).
+export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChange, onPickGame, onPickOtherGame, allGames }: AssistBarProps) {
   const id = useId();
   const [text, setText] = useState("");
   const [tick, setTick] = useState(0);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
-  const [store, setStore] = useState<{ query: string; games: OtherGame[] }>({ query: "", games: [] });
+  const [others, setOthers] = useState<{ query: string; games: OtherGame[] }>({ query: "", games: [] });
   const wrapper = useRef<HTMLDivElement>(null);
 
   // Rotate the placeholder every few seconds while the box is empty.
@@ -106,7 +107,7 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
     const controller = new AbortController();
     const timer = setTimeout(() => {
       searchOtherGames(query, allGames, controller.signal)
-        .then((found) => setStore({ query, games: found }))
+        .then((found) => setOthers({ query, games: found }))
         .catch(() => {
           // Suggestions are optional: if the search is unavailable, the catalogue still answers.
         });
@@ -119,15 +120,15 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
 
   const catalogueMatches = query.length >= 2 ? findTitles(query, games, 0.6).slice(0, 5).map((m) => m.item) : [];
   // The search services' own ordering is loose, so rank results with the same title matcher.
-  const storeMatches =
-    looksLikeName && store.query === query
-      ? findTitles(query, store.games.filter((g) => !isKnown(g)).sort((a, b) => b.popularity - a.popularity), 0.6)
+  const otherMatches =
+    looksLikeName && others.query === query
+      ? findTitles(query, others.games.filter((g) => !isKnown(g)).sort((a, b) => b.popularity - a.popularity), 0.6)
           .slice(0, 5)
           .map((m) => m.item)
       : [];
   const options: Option[] = [
     ...catalogueMatches.map((game) => ({ kind: "catalogue" as const, game })),
-    ...storeMatches.map((game) => ({ kind: "store" as const, game })),
+    ...otherMatches.map((game) => ({ kind: "other" as const, game })),
   ];
   const showList = open && query.length >= 2 && options.length > 0;
   const optionId = (i: number) => `${id}-option-${i}`;
@@ -137,7 +138,7 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
     setActive(-1);
     setText("");
     if (option.kind === "catalogue") onPickGame(option.game.id);
-    else onPickStoreGame(option.game);
+    else onPickOtherGame(option.game);
   }
 
   function submit(message: string) {

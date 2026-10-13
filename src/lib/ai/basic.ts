@@ -57,7 +57,7 @@ function modes(text: string, size: number | null): Mode[] | null {
   const coop = /\b(co-?op|cooperative|together|team up)\b/.test(text);
   const versus = /\b(versus|vs|competitive|pvp|against each other)\b/.test(text);
   const online = /\b(online|internet|remote)\b/.test(text);
-  const local = /\b(local|couch|split-?screen|same (?:pc|screen|room))\b/.test(text);
+  const local = /\b(local|couch|split-?screen|same (?:pc|screen|room)|one (?:pc|computer|screen|keyboard))\b/.test(text);
   const picked: Mode[] = [];
   const where = online && !local ? ["online"] : local && !online ? ["local"] : ["online", "local"];
   if (coop) where.forEach((w) => picked.push(`${w}-coop` as Mode));
@@ -127,7 +127,7 @@ export function basicPatch(message: string, tags: readonly string[], games: read
   patch.set.modes = modes(text, size);
   patch.set.maxPrice = price(text);
   if (/\bfree(?:-to-play| to play)?\b/.test(text) && patch.set.maxPrice === null) patch.set.pricing = "free";
-  if (/\b(cheapest|lowest price)\b/.test(text)) patch.set.sort = "price";
+  if (/\b(cheap|cheaper|cheapest|lowest price)\b/.test(text)) patch.set.sort = "price";
 
   // "no horror", "not horror", "without horror", "nothing scary" exclude; plain mentions prefer.
   const negated = (word: string) => new RegExp(`\\b(?:no|not|without|nothing|avoid|skip)\\s+(?:more\\s+|too\\s+)?${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`).test(text);

@@ -25,6 +25,8 @@ const bodySchema = z.strictObject({
     .max(6),
   // The user's choice in the AI / Keywords toggle.
   mode: z.enum(["ai", "keyword"]).default("ai"),
+  // True when this message answers the AI's clarifying question, so it continues that request.
+  answering: z.boolean().default(false),
 });
 
 const json = (data: unknown, status = 200, headers: HeadersInit = {}) =>
@@ -61,35 +63,34 @@ export async function POST(request: Request) {
   // A follow-up ("actually no horror", "cheaper") adjusts the last search. Anything else is a new
   // request: it starts from fresh filters, and the AI doesn't see the old conversation, so
   // nothing from the last search can leak into it.
-  const scope: "new" | "refine" = input.history.length > 0 && looksLikeFollowUp(input.message) ? "refine" : "new";
+  const followsUp = input.answering || looksLikeFollowUp(input.message);
+  const scope: "new" | "refine" = input.history.length > 0 && followsUp ? "refine" : "new";
   const base = scope === "new" ? defaultFilters : input.filters;
   const history = scope === "new" ? [] : input.history;
 
-  let patch: Patch;
+  // The keyword reader always runs: it's the answer in Keywords mode and when the AI is
+  // unavailable, and a safety net for the AI's answer otherwise.
+  const keyword = basicPatch(input.message, tagVocabulary, titles);
+  let patch: Patch = keyword;
   let mode: "ai" | "basic" = "basic";
   let notice: string | null = null;
   const config = groqConfig();
-  if (input.mode === "keyword") {
-    patch = basicPatch(input.message, tagVocabulary, titles);
-  } else if (!config) {
-    patch = basicPatch(input.message, tagVocabulary, titles);
+  if (input.mode === "ai" && !config) {
     notice = "AI search isn't set up, so a simple keyword reader was used.";
-  } else {
+  } else if (input.mode === "ai" && config) {
     try {
-      patch = await groqPatch({ ...config, message: input.message, filters: base, history, tags: tagVocabulary, games: titles });
+      const ai = await groqPatch({ ...config, message: input.message, filters: base, history, tags: tagVocabulary, games: titles });
       mode = "ai";
-      // Safety net: the keyword reader reliably spots "no X". Its exclusions are always kept,
-      // so an AI reply that forgets one can't quietly undo "no horror".
-      const keyword = basicPatch(input.message, tagVocabulary, titles);
       patch = {
-        ...patch,
-        addExcluded: [...new Set([...patch.addExcluded, ...keyword.addExcluded])].slice(0, 6),
-        removePreferred: [...new Set([...patch.removePreferred, ...keyword.addExcluded])].slice(0, 6),
+        ...ai,
+        // The keyword reader reliably spots "no X": its exclusions are always kept, so an AI
+        // reply that forgets one can't quietly undo "no horror".
+        addExcluded: [...new Set([...ai.addExcluded, ...keyword.addExcluded])].slice(0, 6),
+        removePreferred: [...new Set([...ai.removePreferred, ...keyword.addExcluded])].slice(0, 6),
         // Moods like "immersive" or "cozy" should still rank our own list when the AI adds no tags.
-        addPreferred: patch.addPreferred.length ? patch.addPreferred : keyword.addPreferred,
+        addPreferred: ai.addPreferred.length ? ai.addPreferred : keyword.addPreferred,
       };
     } catch (error) {
-      patch = basicPatch(input.message, tagVocabulary, titles);
       const reason = error instanceof AiUnavailableError ? error.message : "The AI service failed.";
       notice = `${reason} A simple keyword reader was used instead.`;
     }

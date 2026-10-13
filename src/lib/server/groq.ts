@@ -9,12 +9,13 @@ import { fromWire, wirePatchSchema, type Patch } from "../ai/patch.ts";
 // names are checked by the server before they're shown, and their facts (group sizes, prices)
 // come from our data, never from the model.
 
-export type Turn = { role: "user" | "assistant"; text: string };
+type Turn = { role: "user" | "assistant"; text: string };
 
 export class AiUnavailableError extends Error {}
 
-// Groq's free tier limits tokens per minute per model, so when the configured model is busy the
-// request is retried once on the other free model with strict structured outputs.
+// Groq's free tier limits tokens per minute per model, so when the configured model is busy (or
+// its reply doesn't fit the schema) the request is retried once on the other free model with
+// strict structured outputs.
 const FAILOVER_MODELS = ["openai/gpt-oss-20b", "openai/gpt-oss-120b"];
 
 function systemPrompt(tags: readonly string[], games: readonly { id: string; title: string }[]): string {
@@ -26,7 +27,7 @@ function systemPrompt(tags: readonly string[], games: readonly { id: string; tit
     "- set.* fields: a value only for things this message asks for; otherwise null (null keeps the current value).",
     "- groupSize: how many people will play, including the user. 'solo', 'alone', 'just me' -> 1.",
     `- modes: any of ${MODES.join(", ")}. "co-op" without online/local means both online-coop and local-coop. Playing alone -> ["solo"].`,
-    "- maxPrice: budget per person in US dollars. pricing: 'free' only if they want free-to-play games.",
+    "- maxPrice: budget per person in US dollars. pricing: 'free' only if they want free-to-play games, 'paid' only if they say so; a budget alone keeps pricing null (free games fit any budget).",
     "- addPreferred / addExcluded: only tags from the allowed list. 'no X', 'not X', 'without X' means addExcluded X AND removePreferred X.",
     "- Moods map to tags (only those in the allowed list): relaxed/chill/cozy -> simulation, farming, life sim, puzzle, comedy; scary -> horror; funny/chaotic -> comedy, party game; story/immersive/narrative -> rpg, adventure, open world, exploration.",
     "- 'cheap', 'cheaper', 'cheapest' -> set.sort 'price'.",
@@ -91,9 +92,12 @@ export async function groqPatch(options: {
     } catch {
       throw new AiUnavailableError("The AI service did not answer in time.");
     }
-    if (response.status !== 429) break;
+    // 429: this model's quota is used up. 400: usually a reply that didn't fit the schema,
+    // which happens now and then. Either way, the other model gets one try.
+    if (response.status !== 429 && response.status !== 400) break;
   }
   if (!response || response.status === 429) throw new AiUnavailableError("The free AI quota is used up for now.");
+  if (response.status === 400) throw new AiUnavailableError("The AI couldn't answer that one.");
   if (!response.ok) throw new AiUnavailableError(`The AI service returned an error (${response.status}).`);
 
   const text = await response.text();

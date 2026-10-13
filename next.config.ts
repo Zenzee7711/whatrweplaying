@@ -13,7 +13,7 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  // Game artwork is loaded from Steam's image server only.
+  // Game artwork is loaded from Steam's and IGDB's image servers only.
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "shared.fastly.steamstatic.com", pathname: "/store_item_assets/steam/apps/**" },

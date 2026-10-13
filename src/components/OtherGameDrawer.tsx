@@ -8,7 +8,7 @@ import OffersTable from "./OffersTable";
 // Details for a game found by name that isn't in our catalogue: where to get it, live prices
 // when its store record can be matched exactly, and an honest note that we haven't checked how
 // many people can play it together.
-export default function StoreGameDrawer({ game, onClose }: { game: OtherGame | null; onClose: () => void }) {
+export default function OtherGameDrawer({ game, onClose }: { game: OtherGame | null; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   const [offers, setOffers] = useState<{ key: string; state: OfferState | null } | null>(null);
 
