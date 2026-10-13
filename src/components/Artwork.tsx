@@ -1,7 +1,8 @@
 import Image from "next/image";
+import { useState } from "react";
 
-// A game's header art, or its title set as type when we have no image we're allowed to use
-// (games that aren't on Steam).
+// A game's header art, or its title set as type when there's no image or it fails to load
+// (e.g. a newer Steam app whose header isn't at the classic path).
 export default function Artwork({
   title,
   image,
@@ -13,9 +14,18 @@ export default function Artwork({
   sizes: string;
   eager?: boolean;
 }) {
-  if (image) {
+  const [failed, setFailed] = useState<string | null>(null);
+  if (image && failed !== image) {
     return (
-      <Image src={image} alt={`${title} artwork`} fill loading={eager ? "eager" : "lazy"} sizes={sizes} className="object-cover" />
+      <Image
+        src={image}
+        alt={`${title} artwork`}
+        fill
+        loading={eager ? "eager" : "lazy"}
+        sizes={sizes}
+        className="object-cover"
+        onError={() => setFailed(image)}
+      />
     );
   }
   return (

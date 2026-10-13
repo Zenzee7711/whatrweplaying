@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest",
     "sync:catalogue": "node --no-warnings scripts/sync-catalogue.mts",
-    "sync:igdb": "node --no-warnings --env-file=.env.local scripts/sync-igdb.mts"
+    "sync:igdb": "node --no-warnings --env-file=.env.local scripts/sync-igdb.mts",
+    "sync": "npm run sync:catalogue && npm run sync:igdb"
   },
   "dependencies": {
     "next": "16.4.0",

@@ -59,8 +59,16 @@ describe("toStoreGames (search suggestions outside the catalogue)", () => {
       { gameID: "1", steamAppID: "2807960", cheapest: 69.99, external: "Battlefield 6", thumb: "https://shared.fastly.steamstatic.com/a.jpg" },
       { gameID: "2", steamAppID: null, cheapest: 9.99, external: "Some Game", thumb: "https://evil.example/x.jpg" },
     ]);
-    expect(games[0]).toEqual({ gameId: "1", steamAppId: 2807960, title: "Battlefield 6", cheapest: 69.99, thumb: "https://shared.fastly.steamstatic.com/a.jpg" });
-    expect(games[1].thumb).toBeNull();
+    expect(games[0]).toMatchObject({
+      cheapsharkGameId: "1",
+      steamAppId: 2807960,
+      title: "Battlefield 6",
+      cheapest: 69.99,
+      image: "https://shared.fastly.steamstatic.com/a.jpg",
+      links: [{ name: "Steam", url: "https://store.steampowered.com/app/2807960/" }],
+    });
+    expect(games[1].image).toBeNull();
     expect(games[1].steamAppId).toBeNull();
+    expect(games[1].links).toEqual([]);
   });
 });

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { Game } from "../catalogue/schema.ts";
+import type { OtherGame } from "../igdb/map.ts";
 import type { Offer, OfferState } from "./types.ts";
 
 // Live offers from CheapShark (https://apidocs.cheapshark.com). Called from the user's browser,
@@ -81,25 +82,32 @@ const titleSearchSchema = z.array(
   }),
 );
 
-// A game CheapShark knows about. We only know its name and prices, not how many can play together.
-export type StoreGame = { gameId: string; steamAppId: number | null; title: string; cheapest: number; thumb: string | null };
-
 // Thumbnails are only used from Steam's image server, which the page's security policy allows.
 export function safeThumb(url: string): string | null {
   return url.startsWith("https://shared.fastly.steamstatic.com/") ? url : null;
 }
 
-export function toStoreGames(rows: z.infer<typeof titleSearchSchema>): StoreGame[] {
-  return rows.map((row) => ({
-    gameId: row.gameID,
-    steamAppId: row.steamAppID ? Number(row.steamAppID) : null,
-    title: row.external,
-    cheapest: row.cheapest,
-    thumb: safeThumb(row.thumb),
-  }));
+const steamPage = (id: number) => ({ name: "Steam", url: `https://store.steampowered.com/app/${id}/` });
+
+// Games found by name in CheapShark's data: we know their name and prices, not how many can
+// play together. Used when the IGDB search isn't available.
+export function toStoreGames(rows: z.infer<typeof titleSearchSchema>): OtherGame[] {
+  return rows.map((row) => {
+    const steamAppId = row.steamAppID ? Number(row.steamAppID) : null;
+    return {
+      key: `cheapshark-${row.gameID}`,
+      title: row.external,
+      year: null,
+      image: safeThumb(row.thumb),
+      steamAppId,
+      cheapsharkGameId: row.gameID,
+      cheapest: row.cheapest,
+      links: steamAppId ? [steamPage(steamAppId)] : [],
+    };
+  });
 }
 
-export async function searchStoreGames(title: string, signal?: AbortSignal): Promise<StoreGame[]> {
+export async function searchStoreGames(title: string, signal?: AbortSignal): Promise<OtherGame[]> {
   const response = await fetch(`${API}/games?title=${encodeURIComponent(title)}&limit=20`, {
     signal: signal ?? AbortSignal.timeout(8000),
   });
@@ -108,6 +116,18 @@ export async function searchStoreGames(title: string, signal?: AbortSignal): Pro
   const parsed = titleSearchSchema.safeParse(await response.json());
   if (!parsed.success) throw new Error("CheapShark returned data in an unexpected shape");
   return toStoreGames(parsed.data);
+}
+
+// CheapShark's record for a Steam game, by exact Steam app ID (never by title). Null when there
+// is no single exact match, e.g. only DLC or another edition is listed.
+export async function cheapsharkIdForSteamApp(steamAppId: number, signal?: AbortSignal): Promise<string | null> {
+  const response = await fetch(`${API}/games?steamAppID=${steamAppId}`, { signal: signal ?? AbortSignal.timeout(8000) });
+  if (response.status === 429) throw new RateLimitedError(Number(response.headers.get("retry-after") ?? "60"));
+  if (!response.ok) throw new Error(`CheapShark responded ${response.status}`);
+  const parsed = z.array(z.object({ gameID: z.string().regex(/^\d+$/), steamAppID: z.string().nullable() })).safeParse(await response.json());
+  if (!parsed.success) throw new Error("CheapShark returned data in an unexpected shape");
+  const exact = parsed.data.filter((row) => row.steamAppID === String(steamAppId));
+  return exact.length === 1 ? exact[0].gameID : null;
 }
 
 // Every store's offer for one CheapShark game (one exact listing: base game, edition or DLC).

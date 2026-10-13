@@ -12,7 +12,7 @@ export function proxy(request: NextRequest) {
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ""};
     style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data: https://shared.fastly.steamstatic.com;
+    img-src 'self' blob: data: https://shared.fastly.steamstatic.com https://images.igdb.com;
     font-src 'self';
     connect-src 'self' https://www.cheapshark.com;
     object-src 'none';

@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "shared.fastly.steamstatic.com", pathname: "/store_item_assets/steam/apps/**" },
+      { protocol: "https", hostname: "images.igdb.com", pathname: "/igdb/image/upload/**" },
     ],
   },
   async headers() {

@@ -2,7 +2,8 @@ import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 import { games } from "@/lib/catalogue";
 import type { Game } from "@/lib/catalogue/schema";
-import { searchStoreGames, type StoreGame } from "@/lib/offers/cheapshark";
+import type { OtherGame } from "@/lib/igdb/map";
+import { searchStoreGames } from "@/lib/offers/cheapshark";
 import { findTitles } from "@/lib/search/titles";
 import { money, playLines } from "./labels";
 
@@ -28,7 +29,32 @@ const PLACEHOLDERS = [
 ];
 const QUICK = ["Four of us, online co-op, under $15 each", "Something relaxed for two", "Games like Lethal Company"];
 
-type Option = { kind: "catalogue"; game: Game } | { kind: "store"; game: StoreGame };
+type Option = { kind: "catalogue"; game: Game } | { kind: "store"; game: OtherGame };
+
+// Any PC game by name: IGDB through our own server when it's set up, otherwise (or if it fails)
+// CheapShark's store data straight from the browser.
+async function searchOtherGames(query: string, useIgdb: boolean, signal: AbortSignal): Promise<OtherGame[]> {
+  if (useIgdb) {
+    const response = await fetch(`/api/games?q=${encodeURIComponent(query)}`, { signal });
+    const data = response.ok ? await response.json().catch(() => null) : null;
+    if (Array.isArray(data?.games)) return data.games as OtherGame[];
+  }
+  return searchStoreGames(query, signal);
+}
+
+// Results for games we already list are dropped, matched by Steam ID or, for games that
+// aren't on Steam, by name.
+const normalise = (title: string) => title.toLowerCase().replace(/[^a-z0-9]/g, "");
+const knownSteamIds = new Set(games.map((g) => g.steamAppId).filter((id) => id !== null));
+const knownTitles = new Set(games.map((g) => normalise(g.title)));
+const isKnown = (g: OtherGame) => (g.steamAppId !== null && knownSteamIds.has(g.steamAppId)) || knownTitles.has(normalise(g.title));
+
+function otherGameDetail(game: OtherGame): string {
+  const stores = game.links.filter((l) => l.name !== "Official site").map((l) => l.name);
+  return [game.year, game.cheapest !== null ? `From ${money(game.cheapest)}` : stores.join(", ") || null]
+    .filter(Boolean)
+    .join(" · ");
+}
 
 function Sparkle({ className = "h-4 w-4" }: { className?: string }) {
   return (
@@ -45,18 +71,20 @@ type AssistBarProps = {
   aiAvailable: boolean;
   onModeChange: (mode: SearchMode) => void;
   onPickGame: (id: string) => void;
-  onPickStoreGame: (game: StoreGame) => void;
+  onPickStoreGame: (game: OtherGame) => void;
+  // Whether name search covers every PC game (IGDB) or only CheapShark's store data.
+  allGames: boolean;
 };
 
 // The search box: plain words, a mood or a game name. Suggestions appear as you type, from our
 // catalogue (verified player counts) and from store data (any PC game, prices only).
-export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChange, onPickGame, onPickStoreGame }: AssistBarProps) {
+export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChange, onPickGame, onPickStoreGame, allGames }: AssistBarProps) {
   const id = useId();
   const [text, setText] = useState("");
   const [tick, setTick] = useState(0);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(-1);
-  const [store, setStore] = useState<{ query: string; games: StoreGame[] }>({ query: "", games: [] });
+  const [store, setStore] = useState<{ query: string; games: OtherGame[] }>({ query: "", games: [] });
   const wrapper = useRef<HTMLDivElement>(null);
 
   // Rotate the placeholder every few seconds while the box is empty.
@@ -70,29 +98,28 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
   // Long sentences are requests, not names: only look names up when the text is short.
   const looksLikeName = query.length >= 3 && query.split(/\s+/).length <= 4;
 
-  // Store suggestions: after a short pause in typing, one request, cancelled if the text changes.
+  // Other games: after a short pause in typing, one request, cancelled if the text changes.
   useEffect(() => {
     if (!looksLikeName) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
-      searchStoreGames(query, controller.signal)
+      searchOtherGames(query, allGames, controller.signal)
         .then((found) => setStore({ query, games: found }))
         .catch(() => {
-          // Suggestions are optional: if store data is unavailable, the catalogue still answers.
+          // Suggestions are optional: if the search is unavailable, the catalogue still answers.
         });
     }, 350);
     return () => {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query, looksLikeName]);
+  }, [query, looksLikeName, allGames]);
 
   const catalogueMatches = query.length >= 2 ? findTitles(query, games, 0.6).slice(0, 5).map((m) => m.item) : [];
-  const known = new Set(games.map((g) => g.steamAppId));
-  // The store's own ordering is loose, so rank its results with the same title matcher.
+  // The search services' own ordering is loose, so rank results with the same title matcher.
   const storeMatches =
     looksLikeName && store.query === query
-      ? findTitles(query, store.games.filter((g) => !g.steamAppId || !known.has(g.steamAppId)), 0.6)
+      ? findTitles(query, store.games.filter((g) => !isKnown(g)), 0.6)
           .slice(0, 5)
           .map((m) => m.item)
       : [];
@@ -227,12 +254,12 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
             {options.map((option, i) => {
               const first = i === 0 || options[i - 1].kind !== option.kind;
               const line = option.kind === "catalogue" ? playLines(option.game)[0] : null;
-              const image = option.kind === "catalogue" ? option.game.image : option.game.thumb;
+              const image = option.game.image;
               return (
-                <div key={`${option.kind}-${option.kind === "catalogue" ? option.game.id : option.game.gameId}`}>
+                <div key={option.kind === "catalogue" ? option.game.id : option.game.key}>
                   {first && (
                     <p role="presentation" className="px-2 pt-2 pb-1 text-xs font-semibold tracking-wider text-muted uppercase">
-                      {option.kind === "catalogue" ? "In our catalogue" : "Other PC games · prices only"}
+                      {option.kind === "catalogue" ? "In our catalogue" : "Other PC games · group size not checked"}
                     </p>
                   )}
                   <div
@@ -259,7 +286,7 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
                           ? line
                             ? `${line.together ? `${line.together} together` : "Group size unverified"} · ${line.label}`
                             : "Solo"
-                          : `From ${money(option.game.cheapest)} · No verified player info yet`}
+                          : otherGameDetail(option.game)}
                       </span>
                     </span>
                   </div>

@@ -1,14 +1,16 @@
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { fetchStoreGameOffers, RateLimitedError, type StoreGame } from "@/lib/offers/cheapshark";
+import type { OtherGame } from "@/lib/igdb/map";
+import { cheapsharkIdForSteamApp, fetchStoreGameOffers, RateLimitedError } from "@/lib/offers/cheapshark";
 import type { OfferState } from "@/lib/offers/types";
+import Artwork from "./Artwork";
 import OffersTable from "./OffersTable";
 
-// Details for a game found by name that isn't in our catalogue: live prices only, and an honest
-// note that we haven't verified how many people can play it together.
-export default function StoreGameDrawer({ game, onClose }: { game: StoreGame | null; onClose: () => void }) {
+// Details for a game found by name that isn't in our catalogue: where to get it, live prices
+// when its store record can be matched exactly, and an honest note that we haven't checked how
+// many people can play it together.
+export default function StoreGameDrawer({ game, onClose }: { game: OtherGame | null; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
-  const [offers, setOffers] = useState<{ gameId: string; state: OfferState } | null>(null);
+  const [offers, setOffers] = useState<{ key: string; state: OfferState | null } | null>(null);
 
   useEffect(() => {
     const dialog = ref.current;
@@ -20,24 +22,28 @@ export default function StoreGameDrawer({ game, onClose }: { game: StoreGame | n
   useEffect(() => {
     if (!game) return;
     const controller = new AbortController();
-    fetchStoreGameOffers(game.gameId, controller.signal)
-      .then((state) => setOffers({ gameId: game.gameId, state }))
-      .catch((error) => {
+    (async () => {
+      try {
+        const id =
+          game.cheapsharkGameId ?? (game.steamAppId ? await cheapsharkIdForSteamApp(game.steamAppId, controller.signal) : null);
+        // No exact store record: show links only, not a guessed price.
+        const state = id ? await fetchStoreGameOffers(id, controller.signal) : null;
+        setOffers({ key: game.key, state });
+      } catch (error) {
         if (controller.signal.aborted) return;
         const reason =
           error instanceof RateLimitedError ? `price checks are paused for ${error.retryAfterSeconds}s` : "the price service didn't respond";
-        setOffers({ gameId: game.gameId, state: { status: "unavailable", reason } });
-      });
+        setOffers({ key: game.key, state: { status: "unavailable", reason } });
+      }
+    })();
     return () => controller.abort();
   }, [game]);
 
-  // Newer Steam apps don't serve the classic header path; fall back to the store thumbnail.
-  const [brokenHeader, setBrokenHeader] = useState<string | null>(null);
-  const state = game && offers?.gameId === game.gameId ? offers.state : undefined;
-  const header =
-    game?.steamAppId && brokenHeader !== game.gameId
-      ? `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${game.steamAppId}/header.jpg`
-      : game?.thumb ?? null;
+  const loaded = game && offers?.key === game.key;
+  const state = loaded ? offers.state : undefined;
+  const steamHeader = game?.steamAppId
+    ? `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${game.steamAppId}/header.jpg`
+    : null;
 
   return (
     <dialog
@@ -47,18 +53,9 @@ export default function StoreGameDrawer({ game, onClose }: { game: StoreGame | n
       className="m-0 ml-auto h-dvh max-h-dvh w-full max-w-xl overflow-y-auto border-l border-line bg-surface p-0 text-foreground"
     >
       {game && (
-        <div className="motion-safe:animate-enter">
+        <div>
           <div className="relative aspect-[460/215] bg-raised">
-            {header && (
-              <Image
-                src={header}
-                alt={`${game.title} artwork`}
-                fill
-                sizes="576px"
-                className="object-cover"
-                onError={() => setBrokenHeader(game.gameId)}
-              />
-            )}
+            <Artwork title={game.title} image={game.image ?? steamHeader} sizes="576px" eager />
           </div>
           <div className="space-y-6 p-6">
             <div className="flex items-start justify-between gap-4">
@@ -66,7 +63,7 @@ export default function StoreGameDrawer({ game, onClose }: { game: StoreGame | n
                 <h2 id="store-drawer-title" className="font-display text-2xl font-semibold">
                   {game.title}
                 </h2>
-                <p className="mt-1 text-sm text-muted">PC · found by name in store data</p>
+                <p className="mt-1 text-sm text-muted">PC{game.year ? ` · ${game.year}` : ""}</p>
               </div>
               <button
                 type="button"
@@ -83,17 +80,60 @@ export default function StoreGameDrawer({ game, onClose }: { game: StoreGame | n
             <p className="rounded-2xl bg-unverified/10 p-4 text-sm">
               <span className="font-medium">Not in our catalogue yet.</span>{" "}
               <span className="text-muted">
-                We haven&apos;t verified how many people can play it together, so it isn&apos;t in group results. Prices
-                below are live.
+                We haven&apos;t checked how many people can play it together, so it doesn&apos;t show up in group results.
               </span>
             </p>
 
+            {game.links.length > 0 && (
+              <section aria-labelledby="store-links-heading">
+                <h3 id="store-links-heading" className="text-sm font-semibold tracking-wide text-muted uppercase">
+                  Get the game
+                </h3>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {game.links.map((link) => (
+                    <li key={link.url}>
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block rounded-full border border-line px-3.5 py-1.5 text-sm hover:border-accent hover:text-accent"
+                      >
+                        {link.name}
+                        <span className="sr-only"> (opens in a new tab)</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
             <section aria-labelledby="store-offers-heading">
               <h3 id="store-offers-heading" className="text-sm font-semibold tracking-wide text-muted uppercase">
-                Offers
+                Prices
               </h3>
-              <OffersTable title={game.title} state={state} store={null} edition={`This listing ("${game.title}")`} />
+              {loaded && state === null ? (
+                <p className="mt-2 text-sm text-muted">
+                  None of the stores we check list this game, or it&apos;s free. Use the links above.
+                </p>
+              ) : (
+                <OffersTable title={game.title} state={state ?? undefined} store={null} edition={`This listing ("${game.title}")`} />
+              )}
             </section>
+
+            {game.key.startsWith("igdb-") && (
+              <p className="text-xs text-muted">
+                Game details from{" "}
+                <a
+                  href={`https://www.igdb.com/search?q=${encodeURIComponent(game.title)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2"
+                >
+                  IGDB
+                </a>
+                .
+              </p>
+            )}
           </div>
         </div>
       )}

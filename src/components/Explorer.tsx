@@ -7,7 +7,8 @@ import { useShortlist } from "@/hooks/useShortlist";
 import { catalogueDate, games, getGame } from "@/lib/catalogue";
 import type { Game } from "@/lib/catalogue/schema";
 import { cachedOffers, saveOffers } from "@/lib/offers/cache";
-import { BATCH_SIZE, fetchOffers, RateLimitedError, type StoreGame } from "@/lib/offers/cheapshark";
+import type { OtherGame } from "@/lib/igdb/map";
+import { BATCH_SIZE, fetchOffers, RateLimitedError } from "@/lib/offers/cheapshark";
 import type { OfferMap, OfferState } from "@/lib/offers/types";
 import { defaultFilters, filtersSchema, type Filters, type Sort } from "@/lib/search/filters";
 import { search, type Constraint, type Result } from "@/lib/search/search";
@@ -32,13 +33,13 @@ const CONSTRAINT_FIXES: Record<Constraint, { label: string; apply: (f: Filters) 
 
 const isKnown = (id: string) => getGame(id) !== undefined;
 
-type ExplorerProps = { initialFilters: Filters; sharedList: string[]; aiAvailable: boolean };
+type ExplorerProps = { initialFilters: Filters; sharedList: string[]; aiAvailable: boolean; allGames: boolean };
 
-export default function Explorer({ initialFilters, sharedList, aiAvailable }: ExplorerProps) {
+export default function Explorer({ initialFilters, sharedList, aiAvailable, allGames }: ExplorerProps) {
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [offers, setOffers] = useState<OfferMap>({});
   const [openId, setOpenId] = useState<string | null>(null);
-  const [storeGame, setStoreGame] = useState<StoreGame | null>(null);
+  const [storeGame, setStoreGame] = useState<OtherGame | null>(null);
   const [searchMode, setSearchMode] = useState<SearchMode>(aiAvailable ? "ai" : "keyword");
   const [assist, setAssist] = useState<AssistStatus>({ pending: false });
   const [history, setHistory] = useState<Turn[]>([]);
@@ -208,6 +209,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable }: Ex
           onModeChange={setSearchMode}
           onPickGame={pickGame}
           onPickStoreGame={setStoreGame}
+          allGames={allGames}
         />
         <PartyPicker value={filters.groupSize} onChange={(groupSize) => setFilters({ ...filters, groupSize })} />
       </div>
@@ -398,8 +400,9 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable }: Ex
           <a href="https://www.cheapshark.com" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">CheapShark</a>, in US dollars,
           checked live and not converted to local currency. Multiplayer details from{" "}
           <a href="https://www.pcgamingwiki.com" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">PCGamingWiki</a>{" "}
-          (<a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">CC BY-NC-SA 3.0</a>), catalogue checked {catalogueDate}. Game artwork © its
-          publishers, via Steam. {site.name} recommends games and links to stores; it doesn&apos;t sell anything.
+          (<a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">CC BY-NC-SA 3.0</a>), catalogue checked {catalogueDate}. Descriptions, name search and some artwork from{" "}
+          <a href="https://www.igdb.com" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2">IGDB</a>. Game artwork © its
+          publishers, via Steam and IGDB. {site.name} recommends games and links to stores; it doesn&apos;t sell anything.
         </p>
       </footer>
 

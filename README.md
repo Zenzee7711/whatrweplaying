@@ -12,8 +12,10 @@ It recommends PC games and links to stores. It doesn't sell anything.
   co-op, preferably horror, under $15 each"), or use the filters. All three use the same search.
 - Start typing a game's name, even with typos ("monstr huntr", "cs2"), and suggestions appear
   as you type. Catalogue games show how many can play together; pick one to see it and games like
-  it. Other PC games come from store data with live prices only, marked "No verified player info
-  yet", so they never land in group results.
+  it. Any other PC game can be found too (from IGDB), wherever it's sold: Steam, Epic, GOG,
+  Battle.net, the EA app, Riot. Those show where to get the game and live prices when a store
+  we check sells it, and are marked "group size not checked", so they never land in group
+  results.
 - Switch between **AI** and **Keywords** above the search box. AI understands full sentences and
   follow-ups; Keywords is a simple reader that never calls the AI.
 - Player counts always mean **how many friends can play together** (a co-op team, a party or a
@@ -53,8 +55,11 @@ loosening your search. Games whose player count can't be verified go in a separa
   game's record (same Steam app ID) is used, so DLC and other editions aren't mixed in.
   CheapShark doesn't track the EA app, Battle.net or Riot, so games sold only there have no
   price comparison, just a link to get them.
-- **Descriptions:** `npm run sync:igdb` adds descriptions from **[IGDB](https://www.igdb.com)**.
-  It needs Twitch credentials and **hasn't been run yet**, so the current catalogue has none.
+- **[IGDB](https://www.igdb.com):** name search for every PC game runs through the app's own
+  server (`/api/games`), so the Twitch credentials never reach the browser; results are cached
+  and the endpoint is rate-limited. `npm run sync:igdb` adds a description to every catalogue
+  game and artwork for the games that aren't on Steam, matched by Steam app ID or by a reviewed
+  IGDB ID in `data/seed.json`, never by name. `npm run sync` runs both syncs in order.
 - Missing information stays unknown: no invented player counts, prices, crossplay or release
   details. A $0 offer is shown as a promotion, not as free-to-play.
 
@@ -72,10 +77,11 @@ npm run build                # production build
 |---|---|---|
 | `GROQ_API_KEY` | AI search (optional) | [console.groq.com/keys](https://console.groq.com/keys) |
 | `GROQ_MODEL` | AI search | A production model with strict structured outputs, e.g. `openai/gpt-oss-20b` |
-| `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET` | `npm run sync:igdb` only | Register an app at [dev.twitch.tv/console/apps](https://dev.twitch.tv/console/apps) |
+| `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET` | Searching every PC game, and `npm run sync:igdb` (optional) | Register an app at [dev.twitch.tv/console/apps](https://dev.twitch.tv/console/apps) |
 
 All of them stay on the server. Without the Groq values, the AI option is turned off and the
-search box uses the keyword reader. `.env.local` is ignored by Git.
+search box uses the keyword reader. Without the Twitch values, name suggestions come from
+CheapShark's store data only. `.env.local` is ignored by Git.
 
 ## How the AI is used
 
@@ -94,7 +100,7 @@ quota or returns something invalid, the keyword reader takes over and your filte
 - Buying on different stores doesn't prove you can play together; pick one store when in doubt.
 - Player counts come from a community wiki plus a few reviewed sources, so mistakes are possible.
   Each game links its sources.
-- The AI endpoint's rate limit is kept in memory per server instance.
+- The AI and game-search rate limits and the search cache are kept in memory per server instance.
 
 ## Built with
 
