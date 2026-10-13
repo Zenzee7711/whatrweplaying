@@ -86,7 +86,24 @@ catalogue from `data/seed.json`.
 
 ## Built with
 
-Next.js 16, React 19, TypeScript, Tailwind CSS 4, Zod and Vitest.
+**App**
+
+![Next.js](https://img.shields.io/badge/Next.js_16-000000?logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React_19-20232A?logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4-06B6D4?logo=tailwindcss&logoColor=white)
+![Zod](https://img.shields.io/badge/Zod-3E67B1?logo=zod&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-6E9F18?logo=vitest&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?logo=nodedotjs&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white)
+
+**Data and AI**
+
+![Groq](https://img.shields.io/badge/Groq_AI-F55036)
+![IGDB](https://img.shields.io/badge/IGDB-9147FF?logo=twitch&logoColor=white)
+![Steam Web API](https://img.shields.io/badge/Steam_Web_API-171A21?logo=steam&logoColor=white)
+![CheapShark](https://img.shields.io/badge/CheapShark-1F6FB2)
+![PCGamingWiki](https://img.shields.io/badge/PCGamingWiki-2E3440)
 
 Game data from PCGamingWiki is licensed [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/).
 Game artwork belongs to its publishers. This is a non-commercial project.
