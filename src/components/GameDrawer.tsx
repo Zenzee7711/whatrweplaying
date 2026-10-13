@@ -2,7 +2,8 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import type { Game } from "@/lib/catalogue/schema";
 import type { OfferState } from "@/lib/offers/types";
-import { money, playLines } from "./labels";
+import { playLines } from "./labels";
+import OffersTable from "./OffersTable";
 
 type GameDrawerProps = {
   game: Game | null;
@@ -11,7 +12,6 @@ type GameDrawerProps = {
   onClose: () => void;
 };
 
-const time = (iso: string) => new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
 // A side drawer built on <dialog>: Esc closes it, focus stays inside while open, and the
 // browser returns focus to where it was afterwards.
@@ -25,7 +25,6 @@ export default function GameDrawer({ game, offerState, store, onClose }: GameDra
     if (!game && dialog.open) dialog.close();
   }, [game]);
 
-  const offers = offerState?.status === "ok" ? offerState.offers : [];
   const lines = game ? playLines(game) : [];
 
   return (
@@ -98,55 +97,8 @@ export default function GameDrawer({ game, offerState, store, onClose }: GameDra
               </h3>
               {game.monetization === "free-to-play" ? (
                 <p className="mt-2 text-sm">Free-to-play. Download it from the game&apos;s store page.</p>
-              ) : !offerState ? (
-                <p className="mt-2 text-sm text-muted">Checking prices…</p>
-              ) : offerState.status === "unavailable" ? (
-                <p className="mt-2 text-sm text-muted">Price unavailable: {offerState.reason}.</p>
-              ) : offers.length === 0 ? (
-                <p className="mt-2 text-sm text-muted">No listing found at the stores we check.</p>
               ) : (
-                <>
-                  <table className="mt-2 w-full text-sm">
-                    <caption className="sr-only">Offers for {game.title}, lowest price first</caption>
-                    <thead className="text-left text-xs text-muted">
-                      <tr>
-                        <th scope="col" className="py-2 font-medium">Store</th>
-                        <th scope="col" className="py-2 font-medium">Price</th>
-                        <th scope="col" className="hidden py-2 font-medium sm:table-cell">Regular</th>
-                        <th scope="col" className="py-2"><span className="sr-only">Link</span></th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-line">
-                      {offers.map((offer, i) => (
-                        <tr key={offer.dealId} className={store && offer.storeId !== store ? "text-muted" : ""}>
-                          <td className="py-2.5">
-                            {offer.storeName}
-                            {i === 0 && <span className="ml-2 text-xs text-verified">Lowest</span>}
-                          </td>
-                          <td className="py-2.5 font-semibold">
-                            {money(offer.price)}
-                            {offer.savings > 0 && <span className="ml-1.5 text-xs text-accent">−{offer.savings}%</span>}
-                          </td>
-                          <td className="hidden py-2.5 text-muted sm:table-cell">{money(offer.regularPrice)}</td>
-                          <td className="py-2.5 text-right">
-                            <a
-                              href={offer.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="rounded-full border border-line px-3 py-1.5 text-xs hover:border-accent hover:text-accent"
-                            >
-                              Visit store<span className="sr-only"> ({offer.storeName}, opens in a new tab)</span>
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <p className="mt-2 text-xs text-muted">
-                    Base game, prices in USD from CheapShark, checked {time(offerState.retrievedAt)}. Lowest among checked
-                    stores; your regional price may differ. A $0 price is a temporary promotion, not free-to-play.
-                  </p>
-                </>
+                <OffersTable title={game.title} state={offerState} store={store} edition="Base game" />
               )}
             </section>
 

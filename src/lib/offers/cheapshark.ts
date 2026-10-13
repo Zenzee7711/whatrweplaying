@@ -69,6 +69,71 @@ export function toOffers(game: Game, record: z.infer<typeof gameLookupSchema>[st
     .sort((a, b) => a.price - b.price);
 }
 
+// --- Any PC game by name (for search suggestions outside our catalogue) ---
+
+const titleSearchSchema = z.array(
+  z.object({
+    gameID: z.string(),
+    steamAppID: z.string().nullable(),
+    cheapest: priceText,
+    external: z.string(),
+    thumb: z.string(),
+  }),
+);
+
+// A game CheapShark knows about. We only know its name and prices, not how many can play together.
+export type StoreGame = { gameId: string; steamAppId: number | null; title: string; cheapest: number; thumb: string | null };
+
+// Thumbnails are only used from Steam's image server, which the page's security policy allows.
+export function safeThumb(url: string): string | null {
+  return url.startsWith("https://shared.fastly.steamstatic.com/") ? url : null;
+}
+
+export function toStoreGames(rows: z.infer<typeof titleSearchSchema>): StoreGame[] {
+  return rows.map((row) => ({
+    gameId: row.gameID,
+    steamAppId: row.steamAppID ? Number(row.steamAppID) : null,
+    title: row.external,
+    cheapest: row.cheapest,
+    thumb: safeThumb(row.thumb),
+  }));
+}
+
+export async function searchStoreGames(title: string, signal?: AbortSignal): Promise<StoreGame[]> {
+  const response = await fetch(`${API}/games?title=${encodeURIComponent(title)}&limit=20`, {
+    signal: signal ?? AbortSignal.timeout(8000),
+  });
+  if (response.status === 429) throw new RateLimitedError(Number(response.headers.get("retry-after") ?? "60"));
+  if (!response.ok) throw new Error(`CheapShark responded ${response.status}`);
+  const parsed = titleSearchSchema.safeParse(await response.json());
+  if (!parsed.success) throw new Error("CheapShark returned data in an unexpected shape");
+  return toStoreGames(parsed.data);
+}
+
+// Every store's offer for one CheapShark game (one exact listing: base game, edition or DLC).
+export async function fetchStoreGameOffers(gameId: string, signal?: AbortSignal): Promise<OfferState> {
+  const response = await fetch(`${API}/games?id=${encodeURIComponent(gameId)}`, { signal: signal ?? AbortSignal.timeout(8000) });
+  if (response.status === 429) throw new RateLimitedError(Number(response.headers.get("retry-after") ?? "60"));
+  if (!response.ok) throw new Error(`CheapShark responded ${response.status}`);
+  const parsed = z
+    .object({ deals: z.array(z.object({ storeID: z.string(), dealID: z.string().min(1), price: priceText, retailPrice: priceText, savings: priceText })) })
+    .safeParse(await response.json());
+  if (!parsed.success) throw new Error("CheapShark returned data in an unexpected shape");
+  const offers = parsed.data.deals
+    .filter((deal) => STORES[deal.storeID])
+    .map((deal) => ({
+      storeId: deal.storeID,
+      storeName: STORES[deal.storeID],
+      price: deal.price,
+      regularPrice: deal.retailPrice,
+      savings: Math.round(deal.savings),
+      dealId: deal.dealID,
+      url: dealUrl(deal.dealID),
+    }))
+    .sort((a, b) => a.price - b.price);
+  return { status: "ok", offers, retrievedAt: new Date().toISOString() };
+}
+
 export class RateLimitedError extends Error {
   constructor(public retryAfterSeconds: number) {
     super(`Price lookups are paused for ${retryAfterSeconds}s`);

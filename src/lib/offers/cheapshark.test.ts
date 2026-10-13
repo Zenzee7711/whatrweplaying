@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Game } from "../catalogue/schema.ts";
-import { dealUrl, toOffers } from "./cheapshark.ts";
+import { dealUrl, toOffers, toStoreGames } from "./cheapshark.ts";
 
 const game = { id: "overcooked-2", steamAppId: 728880, cheapsharkGameId: "188278" } as Game;
 // Deals as toOffers receives them: after validation has turned CheapShark's price text into numbers.
@@ -50,5 +50,17 @@ describe("dealUrl", () => {
 
   it("encodes anything outside the safe form so it can't break the link", () => {
     expect(dealUrl("a+b/c=&x=1")).toBe("https://www.cheapshark.com/redirect?dealID=a%2Bb%2Fc%3D%26x%3D1");
+  });
+});
+
+describe("toStoreGames (search suggestions outside the catalogue)", () => {
+  it("keeps Steam thumbnails and drops images from other hosts", () => {
+    const games = toStoreGames([
+      { gameID: "1", steamAppID: "2807960", cheapest: 69.99, external: "Battlefield 6", thumb: "https://shared.fastly.steamstatic.com/a.jpg" },
+      { gameID: "2", steamAppID: null, cheapest: 9.99, external: "Some Game", thumb: "https://evil.example/x.jpg" },
+    ]);
+    expect(games[0]).toEqual({ gameId: "1", steamAppId: 2807960, title: "Battlefield 6", cheapest: 69.99, thumb: "https://shared.fastly.steamstatic.com/a.jpg" });
+    expect(games[1].thumb).toBeNull();
+    expect(games[1].steamAppId).toBeNull();
   });
 });

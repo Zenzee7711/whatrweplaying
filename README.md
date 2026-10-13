@@ -10,8 +10,12 @@ It recommends PC games and links to stores. It doesn't sell anything.
 
 - Tap how many of you are playing, describe your group in plain words ("four of us, online
   co-op, preferably horror, under $15 each"), or use the filters. All three use the same search.
-- Type a game's name, even with typos ("monstr huntr", "cs2"), to see it and games like it.
-  A game that isn't in the catalogue gets an honest "not in our catalogue yet".
+- Start typing a game's name, even with typos ("monstr huntr", "cs2"), and suggestions appear
+  as you type. Catalogue games show how many can play together; pick one to see it and games like
+  it. Other PC games come from store data with live prices only, marked "No verified player info
+  yet", so they never land in group results.
+- Switch between **AI** and **Keywords** above the search box. AI understands full sentences and
+  follow-ups; Keywords is a simple reader that never calls the AI.
 - Player counts always mean **how many friends can play together** (a co-op team, a party or a
   private lobby), never the size of a whole public match. Apex Legends shows "up to 3 together"
   (a squad), not "30–60 players per match".
@@ -31,14 +35,15 @@ loosening your search. Games whose player count can't be verified go in a separa
 
 ## Data and coverage
 
-- **Catalogue:** 50 curated PC games (`data/catalogue.json`), built by `npm run sync:catalogue`
+- **Catalogue:** 70 curated PC games, including current hits like Aion 2, WARDOGS, Battlefield 6,
+  Marvel Rivals and ARC Raiders (`data/catalogue.json`), built by `npm run sync:catalogue`
   from **[PCGamingWiki](https://www.pcgamingwiki.com)** (CC BY-NC-SA 3.0): local and online player
   counts, co-op and versus, crossplay notes, free-to-play or paid, genres and themes. Each game is
   matched by Steam app ID, and the wiki page must list that same ID.
 - **Reviewed party sizes:** the wiki's online numbers are often whole-match sizes, so they are
   never shown as group sizes. `data/overrides.json` holds reviewed co-op team sizes and online
-  party or lobby sizes for 13 games, each with its sources and date (for example, Left 4 Dead 2's
-  co-op campaign is 4, Team Fortress 2 parties are up to 6, Among Us private lobbies hold 15).
+  party or lobby sizes for 25 games, each with its sources and date (for example, Left 4 Dead 2's
+  co-op campaign is 4, Battlefield 6 squads are 4, Among Us private lobbies hold 15).
   Games without a reviewed size say "group size unverified" and go in a separate list.
 - **Prices:** live from **[CheapShark](https://www.cheapshark.com)**, requested from your browser
   for the games on screen (25 per request, cached for 10 minutes). Prices are **USD**, the
@@ -65,8 +70,8 @@ npm run build                # production build
 | `GROQ_MODEL` | AI search | A production model with strict structured outputs, e.g. `openai/gpt-oss-20b` |
 | `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET` | `npm run sync:igdb` only | Register an app at [dev.twitch.tv/console/apps](https://dev.twitch.tv/console/apps) |
 
-All of them stay on the server. Without the Groq values, the search box uses a simple keyword
-reader instead and says so. `.env.local` is ignored by Git.
+All of them stay on the server. Without the Groq values, the AI option is turned off and the
+search box uses the keyword reader. `.env.local` is ignored by Git.
 
 ## How the AI is used
 
@@ -78,7 +83,9 @@ quota or returns something invalid, the keyword reader takes over and your filte
 
 ## Limitations
 
-- PC only, 50 games, and only the stores CheapShark tracks (no Xbox store).
+- PC only, 70 catalogue games, and only the stores CheapShark tracks (no Xbox store). Some games
+  have no CheapShark record matching their Steam app (CheapShark's Battlefield 6 record isn't
+  linked to a Steam app), so they show no price rather than a guessed one.
 - USD prices; no regional pricing or currency conversion.
 - Buying on different stores doesn't prove you can play together; pick one store when in doubt.
 - Player counts come from a community wiki plus a few reviewed sources, so mistakes are possible.

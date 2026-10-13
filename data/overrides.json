@@ -71,5 +71,74 @@
     "online": { "coopPlayers": { "min": null, "max": 10 }, "versusPlayers": { "min": null, "max": 10 } },
     "sources": [{ "name": "PCGamingWiki online play", "url": "https://www.pcgamingwiki.com/wiki/Tabletop_Simulator", "retrieved": "2026-10-13" }],
     "note": "up to 10 players in one hosted lobby; what they play varies by game"
+  },
+  "aion-2": {
+    "monetization": "free-to-play",
+    "online": { "coopPlayers": { "min": null, "max": 10 } },
+    "sources": [{ "name": "AION 2 on Steam", "url": "https://store.steampowered.com/app/3393110/AION_2/", "retrieved": "2026-10-13" }],
+    "note": "free to play; dungeons for 5-player parties and 10-player groups"
+  },
+  "battlefield-6": {
+    "online": { "versusPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "EA Forums, community manager reply", "url": "https://forums.ea.com/discussions/battlefield-6-general-discussion-en/squad--party-size-of-four/12443241", "retrieved": "2026-10-13" }],
+    "note": "parties and squads are capped at 4"
+  },
+  "marvel-rivals": {
+    "online": { "versusPlayers": { "min": null, "max": 6 } },
+    "sources": [{ "name": "VGC", "url": "https://videogameschronicle.com/news/marvel-rivals-revealed-as-6v6-team-shooter-from-cod-and-battlefield-devs", "retrieved": "2026-10-13" }],
+    "note": "6v6 matches; a team is 6 players"
+  },
+  "palworld": {
+    "online": { "coopPlayers": { "min": null, "max": 32 } },
+    "sources": [
+      { "name": "Prima Games", "url": "https://primagames.com/gaming/is-palworld-multiplayer-co-op-explained", "retrieved": "2026-10-13" },
+      { "name": "GameServerKings", "url": "https://www.gameserverkings.com/knowledge-base/palworld/palworld-multiplayer/", "retrieved": "2026-10-13" }
+    ],
+    "note": "4 in a friend's world by invite code; up to 32 on a dedicated server"
+  },
+  "destiny-2": {
+    "online": { "coopPlayers": { "min": null, "max": 6 } },
+    "sources": [{ "name": "Co-Optimus review", "url": "https://www.co-optimus.com/review/2062/page/2/destiny-2-co-op-review.html", "retrieved": "2026-10-13" }],
+    "note": "fireteams of 3 for strikes and story missions; 6 for raids"
+  },
+  "warframe": {
+    "monetization": "free-to-play",
+    "online": { "coopPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "PCGamingWiki online play notes", "url": "https://www.pcgamingwiki.com/wiki/Warframe", "retrieved": "2026-10-13" }],
+    "note": "free to play (the wiki field is malformed); four-player squads for PvE co-op"
+  },
+  "monster-hunter-wilds": {
+    "online": { "coopPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "PCGamingWiki online play notes", "url": "https://www.pcgamingwiki.com/wiki/Monster_Hunter_Wilds", "retrieved": "2026-10-13" }],
+    "note": "hunts for up to 4 players"
+  },
+  "dota-2": {
+    "local": { "supported": false },
+    "online": { "versusPlayers": { "min": null, "max": 5 } },
+    "sources": [
+      { "name": "Dot Esports", "url": "https://dotesports.com/dota-2/news/new-dota-2-update-finally-adds-forfeit-option-but-only-for-5-player-parties", "retrieved": "2026-10-13" },
+      { "name": "PCGamingWiki local play notes", "url": "https://www.pcgamingwiki.com/wiki/Dota_2", "retrieved": "2026-10-13" }
+    ],
+    "note": "5v5 matches; parties of up to 5. The wiki's local play is offline matches against bots, not people sharing one PC"
+  },
+  "rainbow-six-siege": {
+    "online": { "versusPlayers": { "min": null, "max": 5 } },
+    "sources": [{ "name": "Microsoft Store listing", "url": "https://apps.microsoft.com/detail/c12t09dsvp8j?hl=en-US", "retrieved": "2026-10-13" }],
+    "note": "5v5 attack and defense; a team is 5 players"
+  },
+  "the-finals": {
+    "online": { "versusPlayers": { "min": null, "max": 3 } },
+    "sources": [{ "name": "Shacknews", "url": "https://www.shacknews.com/article/138360/max-team-size-the-finals", "retrieved": "2026-10-13" }],
+    "note": "squads of up to 3; Power Shift teams of 5 are filled by matchmaking"
+  },
+  "delta-force": {
+    "online": { "coopPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "PCGamingWiki online play notes", "url": "https://www.pcgamingwiki.com/wiki/Delta_Force_(2024)", "retrieved": "2026-10-13" }],
+    "note": "Operations are 3-player co-op and Black Hawk Down is 4-player co-op; Warfare is 32v32"
+  },
+  "pubg": {
+    "online": { "versusPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "Samurai Gamers, game modes", "url": "https://samurai-gamers.com/playerunknowns-battlegrounds-pubg/game-modes/", "retrieved": "2026-10-13" }],
+    "note": "squads of up to 4 in a 100-player match"
   }
 }

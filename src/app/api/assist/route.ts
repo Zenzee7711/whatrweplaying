@@ -21,6 +21,8 @@ const bodySchema = z.strictObject({
   history: z
     .array(z.strictObject({ role: z.enum(["user", "assistant"]), text: z.string().max(300) }))
     .max(6),
+  // The user's choice in the AI / Keywords toggle.
+  mode: z.enum(["ai", "keyword"]).default("ai"),
 });
 
 const json = (data: unknown, status = 200, headers: HeadersInit = {}) =>
@@ -37,7 +39,7 @@ export async function POST(request: Request) {
 
   const raw = await request.text();
   if (raw.length > MAX_BODY_BYTES) return json({ error: "Request too large." }, 413);
-  let input: z.infer<typeof bodySchema>;
+  let input: z.output<typeof bodySchema>;
   try {
     input = bodySchema.parse(JSON.parse(raw));
   } catch {
@@ -58,13 +60,23 @@ export async function POST(request: Request) {
   let mode: "ai" | "basic" = "basic";
   let notice: string | null = null;
   const config = groqConfig();
-  if (!config) {
+  if (input.mode === "keyword") {
+    patch = basicPatch(input.message, tagVocabulary, titles);
+  } else if (!config) {
     patch = basicPatch(input.message, tagVocabulary, titles);
     notice = "AI search isn't set up, so a simple keyword reader was used.";
   } else {
     try {
       patch = await groqPatch({ ...config, ...input, tags: tagVocabulary, games: titles });
       mode = "ai";
+      // Safety net: the keyword reader reliably spots "no X". Its exclusions are always kept,
+      // so an AI reply that forgets one can't quietly undo "no horror".
+      const keyword = basicPatch(input.message, tagVocabulary, titles);
+      patch = {
+        ...patch,
+        addExcluded: [...new Set([...patch.addExcluded, ...keyword.addExcluded])].slice(0, 6),
+        removePreferred: [...new Set([...patch.removePreferred, ...keyword.addExcluded])].slice(0, 6),
+      };
     } catch (error) {
       patch = basicPatch(input.message, tagVocabulary, titles);
       const reason = error instanceof AiUnavailableError ? error.message : "The AI service failed.";

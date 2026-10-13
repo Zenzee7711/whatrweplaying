@@ -1,7 +1,8 @@
 // Builds data/catalogue.json from data/seed.json. Run occasionally, by hand:
 //   npm run sync:catalogue
 // Multiplayer facts come from PCGamingWiki (CC BY-NC-SA 3.0). The CheapShark game ID is
-// looked up by Steam app ID only, never by title. Requests are throttled.
+// looked up by Steam app ID only, never by title. Header images come from Steam's store API.
+// Requests are throttled.
 import { readFileSync, writeFileSync } from "node:fs";
 import { parsePcgw } from "../src/lib/catalogue/pcgw.ts";
 import { catalogueSchema, type Game } from "../src/lib/catalogue/schema.ts";
@@ -41,6 +42,21 @@ async function cheapsharkGameId(steamAppId: number): Promise<{ id: string | null
   return { id: null, issue: `ambiguous: ${exact.length} CheapShark records (${exact.map((g) => g.external).join(" / ")})` };
 }
 
+// Steam keeps newer apps' artwork under a hashed folder, so ask the store API for the real
+// header URL. Only Steam's own image CDN is accepted; otherwise use the classic path.
+async function steamHeader(steamAppId: number): Promise<string> {
+  const classic = `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${steamAppId}/header.jpg`;
+  try {
+    const response = await get(`https://store.steampowered.com/api/appdetails?appids=${steamAppId}&filters=basic`);
+    const data = await response.json();
+    const url = String(data?.[steamAppId]?.data?.header_image ?? "");
+    const path = url.match(/^https:\/\/shared\.[a-z]+\.steamstatic\.com(\/store_item_assets\/steam\/apps\/\d+\/[A-Za-z0-9/_.-]+)/)?.[1];
+    return path ? `https://shared.fastly.steamstatic.com${path}` : classic;
+  } catch {
+    return classic;
+  }
+}
+
 const seed = JSON.parse(readFileSync("data/seed.json", "utf8")) as {
   id: string;
   steamAppId: number;
@@ -48,7 +64,14 @@ const seed = JSON.parse(readFileSync("data/seed.json", "utf8")) as {
 }[];
 // Hand-reviewed corrections, each with the source it was checked against.
 type Override = {
-  local?: { coopPlayers?: Game["local"]["coopPlayers"]; versusPlayers?: Game["local"]["versusPlayers"] };
+  // For a game the wiki hasn't classified yet (e.g. a new release), from its store page.
+  monetization?: Game["monetization"];
+  local?: {
+    // false when the wiki's "local" entry isn't people playing together on one PC (e.g. offline vs bots).
+    supported?: false;
+    coopPlayers?: Game["local"]["coopPlayers"];
+    versusPlayers?: Game["local"]["versusPlayers"];
+  };
   online?: { coopPlayers?: Game["online"]["coopPlayers"]; versusPlayers?: Game["online"]["versusPlayers"] };
   sources: { name: string; url: string; retrieved: string }[];
   note: string;
@@ -56,8 +79,12 @@ type Override = {
 
 // A reviewed size also confirms the mode exists (e.g. the wiki lists no mode for Among Us,
 // but its lobby size is sourced), so the mode flag is set along with it.
-function applyOverride(connection: Game["online"], reviewed: Override["online"]) {
+function applyOverride(connection: Game["online"], reviewed: Override["local"]) {
   if (!reviewed) return;
+  if (reviewed.supported === false) {
+    Object.assign(connection, { supported: false, players: null, sharedRange: false, coop: false, versus: false, coopPlayers: null, versusPlayers: null });
+    return;
+  }
   if (reviewed.coopPlayers) Object.assign(connection, { supported: true, coop: true, coopPlayers: reviewed.coopPlayers });
   if (reviewed.versusPlayers) Object.assign(connection, { supported: true, versus: true, versusPlayers: reviewed.versusPlayers });
 }
@@ -78,6 +105,8 @@ for (const { id, steamAppId, pcgwPage: seedPage } of seed) {
     const cheapshark = await cheapsharkGameId(steamAppId);
     await pause(1200);
     if (cheapshark.issue) issues.push(`${id}: ${cheapshark.issue}`);
+    const image = await steamHeader(steamAppId);
+    await pause(1200);
 
     const override = overrides[id];
     applyOverride(facts.local, override?.local);
@@ -96,7 +125,7 @@ for (const { id, steamAppId, pcgwPage: seedPage } of seed) {
       steamAppId,
       cheapsharkGameId: cheapshark.id,
       platforms: ["pc"],
-      monetization: facts.monetization,
+      monetization: override?.monetization ?? facts.monetization,
       singleplayer: facts.singleplayer,
       local: facts.local,
       lan: facts.lan,
@@ -105,7 +134,7 @@ for (const { id, steamAppId, pcgwPage: seedPage } of seed) {
       genres: facts.genres,
       themes: facts.themes,
       description: null,
-      image: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${steamAppId}/header.jpg`,
+      image,
       sources: [
         { name: "PCGamingWiki", url: pageUrl, retrieved: today },
         ...(override?.sources ?? []).map((source) => ({ ...source, name: `${source.name} (reviewed: ${override!.note})` })),
@@ -113,7 +142,7 @@ for (const { id, steamAppId, pcgwPage: seedPage } of seed) {
     });
     const show = (c: Game["online"]) =>
       c.supported ? `${c.players ? `${c.players.min ?? "?"}-${c.players.max}` : "?"}${c.coop ? " co-op" : ""}${c.versus ? " vs" : ""}` : String(c.supported);
-    console.log(`${id.padEnd(34)} local ${show(facts.local).padEnd(16)} online ${show(facts.online).padEnd(16)} ${facts.monetization}`);
+    console.log(`${id.padEnd(34)} local ${show(facts.local).padEnd(16)} online ${show(facts.online).padEnd(16)} ${games.at(-1)!.monetization}`);
   } catch (error) {
     issues.push(`${id}: ${(error as Error).message}`);
   }

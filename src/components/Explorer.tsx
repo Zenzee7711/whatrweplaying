@@ -7,17 +7,18 @@ import { useShortlist } from "@/hooks/useShortlist";
 import { catalogueDate, games, getGame } from "@/lib/catalogue";
 import type { Game } from "@/lib/catalogue/schema";
 import { cachedOffers, saveOffers } from "@/lib/offers/cache";
-import { BATCH_SIZE, fetchOffers, RateLimitedError } from "@/lib/offers/cheapshark";
+import { BATCH_SIZE, fetchOffers, RateLimitedError, type StoreGame } from "@/lib/offers/cheapshark";
 import type { OfferMap, OfferState } from "@/lib/offers/types";
 import { defaultFilters, filtersSchema, type Filters, type Sort } from "@/lib/search/filters";
 import { search, type Constraint, type Result } from "@/lib/search/search";
 import { filtersToParams } from "@/lib/search/url";
 import ActiveFilters from "./ActiveFilters";
-import AssistBar, { type AssistStatus } from "./AssistBar";
+import AssistBar, { type AssistStatus, type SearchMode } from "./AssistBar";
 import FilterPanel from "./FilterPanel";
 import GameCard from "./GameCard";
 import GameDrawer from "./GameDrawer";
 import PartyPicker from "./PartyPicker";
+import StoreGameDrawer from "./StoreGameDrawer";
 
 type Turn = { role: "user" | "assistant"; text: string };
 
@@ -31,10 +32,14 @@ const CONSTRAINT_FIXES: Record<Constraint, { label: string; apply: (f: Filters) 
 
 const isKnown = (id: string) => getGame(id) !== undefined;
 
-export default function Explorer({ initialFilters, sharedList }: { initialFilters: Filters; sharedList: string[] }) {
+type ExplorerProps = { initialFilters: Filters; sharedList: string[]; aiAvailable: boolean };
+
+export default function Explorer({ initialFilters, sharedList, aiAvailable }: ExplorerProps) {
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [offers, setOffers] = useState<OfferMap>({});
   const [openId, setOpenId] = useState<string | null>(null);
+  const [storeGame, setStoreGame] = useState<StoreGame | null>(null);
+  const [searchMode, setSearchMode] = useState<SearchMode>(aiAvailable ? "ai" : "keyword");
   const [assist, setAssist] = useState<AssistStatus>({ pending: false });
   const [history, setHistory] = useState<Turn[]>([]);
   const [copied, setCopied] = useState(false);
@@ -104,12 +109,12 @@ export default function Explorer({ initialFilters, sharedList }: { initialFilter
         const response = await fetch("/api/assist", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message, filters, history: history.slice(-6) }),
+          body: JSON.stringify({ message, filters, history: history.slice(-6), mode: searchMode }),
         });
         const data = await response.json().catch(() => null);
         const next = filtersSchema.safeParse(data?.filters);
         if (!response.ok || !next.success) {
-          setAssist({ pending: false, error: (data?.error as string) ?? "AI search didn't work this time. Your filters still do." });
+          setAssist({ pending: false, error: (data?.error as string) ?? "Search didn't work this time. Your filters still do." });
           return;
         }
         setFilters(next.data);
@@ -124,11 +129,17 @@ export default function Explorer({ initialFilters, sharedList }: { initialFilter
           unknownTitle: data.unknownTitle,
         });
       } catch {
-        setAssist({ pending: false, error: "Couldn't reach AI search. Your filters still work." });
+        setAssist({ pending: false, error: "Couldn't reach search. Your filters still work." });
       }
     },
-    [filters, history],
+    [filters, history, searchMode],
   );
+
+  // A game picked from the suggestions: show it, and rank the rest by how similar they are.
+  const pickGame = (id: string) => {
+    setFilters({ ...filters, like: id });
+    setOpenId(id);
+  };
 
   async function copyShortlist() {
     const url = `${window.location.origin}/?list=${shortlist.ids.join(",")}`;
@@ -189,7 +200,15 @@ export default function Explorer({ initialFilters, sharedList }: { initialFilter
         <p className="mt-2 max-w-xl text-muted">Find a PC game that fits your whole group, then compare prices across stores.</p>
       </div>
       <div className="mt-6 space-y-5">
-        <AssistBar status={assist} onAsk={ask} />
+        <AssistBar
+          status={assist}
+          onAsk={ask}
+          mode={searchMode}
+          aiAvailable={aiAvailable}
+          onModeChange={setSearchMode}
+          onPickGame={pickGame}
+          onPickStoreGame={setStoreGame}
+        />
         <PartyPicker value={filters.groupSize} onChange={(groupSize) => setFilters({ ...filters, groupSize })} />
       </div>
 
@@ -392,6 +411,7 @@ export default function Explorer({ initialFilters, sharedList }: { initialFilter
       </dialog>
 
       <GameDrawer game={openGame} offerState={openGame ? offers[openGame.id] : undefined} store={filters.store} onClose={() => setOpenId(null)} />
+      <StoreGameDrawer game={storeGame} onClose={() => setStoreGame(null)} />
     </div>
   );
 }
