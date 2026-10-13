@@ -98,7 +98,7 @@ export default function OtherGameDrawer({ game, solo = false, onClose }: { game:
               </h3>
               <div className="mt-3">
                 <OtherPlayLines game={game} />
-                {game.play.length === 0 && !game.singleplayer && <p className="text-sm text-muted">No multiplayer details listed.</p>}
+                {(game.play ?? []).length === 0 && !game.singleplayer && <p className="text-sm text-muted">No multiplayer details listed.</p>}
               </div>
               {!solo && (
                 <p className="mt-3 text-xs text-muted">

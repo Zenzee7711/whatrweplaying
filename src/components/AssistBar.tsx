@@ -55,7 +55,7 @@ const isKnown = (g: OtherGame) => (g.steamAppId !== null && knownSteamIds.has(g.
 function otherGameDetail(game: OtherGame): string {
   const stores = game.links.filter((l) => l.name !== "Official site").map((l) => l.name);
   // IGDB's co-op group size when it lists one; it isn't checked by us, so the drawer says so.
-  const together = Math.max(0, ...game.play.map((p) => p.together ?? 0));
+  const together = Math.max(0, ...(game.play ?? []).map((p) => p.together ?? 0));
   return [game.year, together > 1 ? `up to ${together} together` : null, game.cheapest !== null ? `From ${money(game.cheapest)}` : stores.join(", ") || null]
     .filter(Boolean)
     .join(" · ");

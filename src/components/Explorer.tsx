@@ -235,7 +235,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
       // rule it out (single-player only, or every listed group is smaller than yours).
       const size = filters.groupSize ?? 1;
       if (size <= 1) return true;
-      const { play, singleplayer } = pick.game;
+      const { play = [], singleplayer = false } = pick.game;
       if (play.length === 0) return !singleplayer;
       return play.some((line) => line.together === null || line.together >= size);
     }

@@ -6,12 +6,14 @@ import { money, People } from "./labels";
 // How a game outside the catalogue can be played, from IGDB's listing (not checked by us). A
 // known co-op group size reads like ours; anything else says plainly that it isn't checked.
 export function OtherPlayLines({ game, limit = 4 }: { game: OtherGame; limit?: number }) {
-  if (game.play.length === 0) {
+  // Results cached before these fields existed may not have them.
+  const play = game.play ?? [];
+  if (play.length === 0) {
     return game.singleplayer ? <p className="text-sm text-muted">Single-player</p> : null;
   }
   return (
     <ul className="space-y-1.5 text-sm">
-      {game.play.slice(0, limit).map((line) => (
+      {play.slice(0, limit).map((line) => (
         <li key={line.label} className="flex items-center gap-2">
           <span className={line.together ? "text-muted" : "text-unverified"}>
             <People />

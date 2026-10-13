@@ -3,11 +3,12 @@ import type { Game } from "../catalogue/schema.ts";
 import type { OtherGame } from "../igdb/map.ts";
 import type { Offer, OfferState } from "./types.ts";
 
-// Live offers from CheapShark (https://apidocs.cheapshark.com). Called from the user's browser,
-// as CheapShark recommends, on demand for the games being shown: at most 25 games per request.
-// Prices are USD. Deal links must go through CheapShark's redirect page.
+// Live offers from CheapShark (https://apidocs.cheapshark.com), on demand for the games being
+// shown: at most 25 games per request. Requests go through our own /api/cheapshark route, which
+// identifies the app to CheapShark and caches answers for every visitor (CheapShark blocks
+// browsers that make many requests). Prices are USD. Deal links go through CheapShark's redirect.
 
-const API = "https://www.cheapshark.com/api/1.0";
+const API = "/api/cheapshark";
 export const BATCH_SIZE = 25;
 
 // Stores that CheapShark reported as active on 2026-10-13. Deals from any other store are ignored.
@@ -187,9 +188,15 @@ export async function fetchOtherOffers(games: readonly OtherGame[], signal?: Abo
   const states: Record<string, OfferState> = {};
   const found: { game: OtherGame; id: string }[] = [];
   for (const game of games) {
-    const id = game.cheapsharkGameId ?? (game.steamAppId ? await cheapsharkIdForSteamApp(game.steamAppId, signal) : null);
-    if (id) found.push({ game, id });
-    else states[game.key] = { status: "ok", offers: [], retrievedAt };
+    try {
+      const id = game.cheapsharkGameId ?? (game.steamAppId ? await cheapsharkIdForSteamApp(game.steamAppId, signal) : null);
+      if (id) found.push({ game, id });
+      else states[game.key] = { status: "ok", offers: [], retrievedAt };
+    } catch (error) {
+      if (signal?.aborted) throw error;
+      // One game's lookup failing doesn't take the others' prices down with it.
+      states[game.key] = { status: "unavailable", reason: "the price service didn't respond" };
+    }
   }
   if (found.length === 0) return states;
 
