@@ -2,6 +2,10 @@
 
 Find a PC game your whole group can actually play together, then see where it's cheapest.
 
+Most game sites tell you how many players a match holds. WhatRWePlaying tells you how many
+friends can join the same party, checks it against real data, and shows the best current price,
+all from one plain-English request like "four of us, co-op, nothing scary, under $15".
+
 **Try it: [whatrweplaying.vercel.app](https://whatrweplaying.vercel.app)**
 
 [![Searching for a game for four friends](docs/search.png)](https://whatrweplaying.vercel.app)
@@ -24,17 +28,31 @@ Find a PC game your whole group can actually play together, then see where it's 
 
 ## How it works
 
-| | Source |
-|---|---|
-| Group sizes, play modes, genres | [PCGamingWiki](https://www.pcgamingwiki.com), plus hand-checked party sizes with sources |
-| Descriptions, artwork, search for other games | [IGDB](https://www.igdb.com) |
-| Prices | [CheapShark](https://www.cheapshark.com), fetched live in your browser |
-| Popular right now | Steam's live player counts; IGDB for games that aren't on Steam (refreshed every 30 minutes) |
-| AI search and picks | [Groq](https://groq.com) (`openai/gpt-oss-20b`) |
+```mermaid
+flowchart LR
+  A[Your request] --> B[AI turns it into<br/>filters + game ideas]
+  B --> C[Server checks<br/>every value and title]
+  C --> D[Matched against<br/>verified group sizes]
+  D --> E[Live prices and<br/>player counts]
+  E --> F[Results]
+```
 
-The catalogue has 80 games, from Steam and from other launchers like Riot and Epic.
-The AI only turns your words into filters and game names. Group sizes, prices and links always
-come from the data above, never from the AI.
+1. **You describe your group.** The AI ([Groq](https://groq.com)) reads your message and turns it
+   into filters (how many of you, co-op or versus, mood, budget) and a few game ideas. In Keywords
+   mode, or if the AI is busy, a simple keyword reader does the same job.
+2. **The server checks the AI's answer.** Filters can only use known values, and each suggested
+   game is looked up in our catalogue or on [IGDB](https://www.igdb.com). Anything that can't be
+   found is dropped. API keys stay on the server.
+3. **Your group is matched against verified data.** The catalogue of 80 games is built ahead of
+   time from [PCGamingWiki](https://www.pcgamingwiki.com) plus hand-checked party sizes, each
+   with a source. A game only counts as a match if it fits your group and the way you want to
+   play; games we can't confirm go in a separate list instead of being guessed.
+4. **Prices come in live.** Your browser asks [CheapShark](https://www.cheapshark.com) for current
+   offers, matched by each game's Steam ID so DLC and other editions don't mix in.
+5. **Results are ranked by what's popular now.** Equal matches are ordered by how many people are
+   playing right now: Steam's live player counts, or IGDB's for games that aren't on Steam.
+
+The AI only suggests. Group sizes, prices and store links always come from the sources above.
 
 ## Run it locally
 
