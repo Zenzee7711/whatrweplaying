@@ -2,8 +2,9 @@ import type { OtherGame } from "@/lib/igdb/map";
 import Artwork from "./Artwork";
 
 // A recommended game that isn't in our catalogue: what the AI said about it, where it's sold, and
-// a plain note that we haven't checked group sizes. Prices load when the details open.
-export default function OtherGameCard({ game, note, onOpen }: { game: OtherGame; note: string | null; onOpen: () => void }) {
+// (for group searches) a plain note that we haven't checked group sizes. Prices load when the
+// details open.
+export default function OtherGameCard({ game, note, solo = false, onOpen }: { game: OtherGame; note: string | null; solo?: boolean; onOpen: () => void }) {
   const stores = game.links.filter((l) => l.name !== "Official site").map((l) => l.name);
   return (
     <article className="relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-colors hover:border-muted/50">
@@ -22,7 +23,7 @@ export default function OtherGameCard({ game, note, onOpen }: { game: OtherGame;
 
         {note && <p className="text-sm">{note}</p>}
 
-        <p className="text-sm text-muted">Not in our catalogue, so group size isn&apos;t checked.</p>
+        {!solo && <p className="text-sm text-muted">Not in our catalogue, so group size isn&apos;t checked.</p>}
 
         <div className="mt-auto flex items-center justify-between gap-3 border-t border-line pt-3 text-sm">
           <span className="truncate text-muted">{stores.length ? stores.join(", ") : "Official site"}</span>

@@ -6,11 +6,12 @@ import Artwork from "./Artwork";
 import OffersTable from "./OffersTable";
 
 // Details for a game found by name that isn't in our catalogue: where to get it, live prices
-// when its store record can be matched exactly, and an honest note that we haven't checked how
-// many people can play it together.
-export default function OtherGameDrawer({ game, onClose }: { game: OtherGame | null; onClose: () => void }) {
+// when its store record can be matched exactly, and (for group searches) an honest note that we
+// haven't checked how many people can play it together.
+export default function OtherGameDrawer({ game, solo = false, onClose }: { game: OtherGame | null; solo?: boolean; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   const [offers, setOffers] = useState<{ key: string; state: OfferState | null } | null>(null);
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     const dialog = ref.current;
@@ -22,12 +23,22 @@ export default function OtherGameDrawer({ game, onClose }: { game: OtherGame | n
   useEffect(() => {
     if (!game) return;
     const controller = new AbortController();
+    const lookUp = async () => {
+      const id = game.cheapsharkGameId ?? (game.steamAppId ? await cheapsharkIdForSteamApp(game.steamAppId, controller.signal) : null);
+      // No exact store record: show links only, not a guessed price.
+      return id ? fetchStoreGameOffers(id, controller.signal) : null;
+    };
     (async () => {
       try {
-        const id =
-          game.cheapsharkGameId ?? (game.steamAppId ? await cheapsharkIdForSteamApp(game.steamAppId, controller.signal) : null);
-        // No exact store record: show links only, not a guessed price.
-        const state = id ? await fetchStoreGameOffers(id, controller.signal) : null;
+        let state: OfferState | null;
+        try {
+          state = await lookUp();
+        } catch (error) {
+          if (controller.signal.aborted || error instanceof RateLimitedError) throw error;
+          // One quiet retry: the price service sometimes refuses a burst of requests.
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+          state = await lookUp();
+        }
         setOffers({ key: game.key, state });
       } catch (error) {
         if (controller.signal.aborted) return;
@@ -37,8 +48,12 @@ export default function OtherGameDrawer({ game, onClose }: { game: OtherGame | n
       }
     })();
     return () => controller.abort();
-  }, [game]);
+  }, [game, attempt]);
 
+  const retry = () => {
+    setOffers(null);
+    setAttempt((n) => n + 1);
+  };
   const loaded = game && offers?.key === game.key;
   const state = loaded ? offers.state : undefined;
   const steamHeader = game?.steamAppId
@@ -77,12 +92,14 @@ export default function OtherGameDrawer({ game, onClose }: { game: OtherGame | n
               </button>
             </div>
 
-            <p className="rounded-2xl bg-unverified/10 p-4 text-sm">
-              <span className="font-medium">Not in our catalogue yet.</span>{" "}
-              <span className="text-muted">
-                We haven&apos;t checked how many people can play it together, so it doesn&apos;t show up in group results.
-              </span>
-            </p>
+            {!solo && (
+              <p className="rounded-2xl bg-unverified/10 p-4 text-sm">
+                <span className="font-medium">Not in our catalogue yet.</span>{" "}
+                <span className="text-muted">
+                  We haven&apos;t checked how many people can play it together, so it doesn&apos;t show up in group results.
+                </span>
+              </p>
+            )}
 
             {game.links.length > 0 && (
               <section aria-labelledby="store-links-heading">
@@ -116,7 +133,7 @@ export default function OtherGameDrawer({ game, onClose }: { game: OtherGame | n
                   None of the stores we check list this game, or it&apos;s free. Use the links above.
                 </p>
               ) : (
-                <OffersTable title={game.title} state={state ?? undefined} store={null} edition={`This listing ("${game.title}")`} />
+                <OffersTable title={game.title} state={state ?? undefined} store={null} edition={`This listing ("${game.title}")`} onRetry={retry} />
               )}
             </section>
 

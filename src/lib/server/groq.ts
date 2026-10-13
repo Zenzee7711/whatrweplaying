@@ -39,7 +39,7 @@ function systemPrompt(tags: readonly string[], games: readonly { id: string; tit
     "Picks:",
     "- Up to 6 real, released PC games that best fit the whole request (for a follow-up, the earlier request plus this change). Best fit first.",
     "- Any PC game counts, not only the catalogue. Prefer games from the catalogue when they fit equally well.",
-    "- title: the game's exact official title, e.g. 'The Witcher 3: Wild Hunt'. Never invent a game.",
+    "- title: the game's exact official title, e.g. 'The Witcher 3: Wild Hunt'. Use the version currently sold on PC when an older one was replaced (e.g. 'The Elder Scrolls V: Skyrim Special Edition'). Never invent a game.",
     "- why: under 20 words on why it fits the request (story, mood, style, setting). Never mention player counts, team sizes, play modes (local/online co-op, split-screen), prices, free-to-play, platforms or release dates: the app shows those from verified data.",
     "- For a group, only pick games people are known to play together in the way asked (co-op or versus).",
     "- Respect exclusions: no horror games when they said no horror.",

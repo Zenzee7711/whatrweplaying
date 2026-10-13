@@ -218,10 +218,13 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
   };
   const shownPicks = picks ? picks.items.filter(pickFits) : [];
 
+  // Playing alone: group sizes don't matter, so games outside the catalogue need no warning.
+  const solo = filters.groupSize === 1 || (filters.modes.length > 0 && filters.modes.every((m) => m === "solo"));
+
   // An AI pick as a card: ours with verified group sizes, or another game with its store links.
   const pickCard = (pick: Pick, index: number) => {
     if (pick.kind === "other") {
-      return <OtherGameCard key={pick.game.key} game={pick.game} note={pick.why} onOpen={() => setOtherGame(pick.game)} />;
+      return <OtherGameCard key={pick.game.key} game={pick.game} note={pick.why} solo={solo} onOpen={() => setOtherGame(pick.game)} />;
     }
     const game = getGame(pick.id);
     return game ? card(resultFor(game), index, pick.why) : null;
@@ -487,8 +490,8 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
         </button>
       </dialog>
 
-      <GameDrawer game={openGame} offerState={openGame ? offers[openGame.id] : undefined} store={filters.store} onClose={() => setOpenId(null)} />
-      <OtherGameDrawer game={otherGame} onClose={() => setOtherGame(null)} />
+      <GameDrawer game={openGame} offerState={openGame ? offers[openGame.id] : undefined} store={filters.store} onClose={() => setOpenId(null)} onRetryPrices={retryPrices} />
+      <OtherGameDrawer game={otherGame} solo={solo} onClose={() => setOtherGame(null)} />
     </div>
   );
 }

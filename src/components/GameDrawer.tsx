@@ -10,12 +10,12 @@ type GameDrawerProps = {
   offerState: OfferState | undefined;
   store: string | null;
   onClose: () => void;
+  onRetryPrices: () => void;
 };
-
 
 // A side drawer built on <dialog>: Esc closes it, focus stays inside while open, and the
 // browser returns focus to where it was afterwards.
-export default function GameDrawer({ game, offerState, store, onClose }: GameDrawerProps) {
+export default function GameDrawer({ game, offerState, store, onClose, onRetryPrices }: GameDrawerProps) {
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -124,7 +124,7 @@ export default function GameDrawer({ game, offerState, store, onClose }: GameDra
                   {getItLink}
                 </>
               ) : (
-                <OffersTable title={game.title} state={offerState} store={store} edition="Base game" />
+                <OffersTable title={game.title} state={offerState} store={store} edition="Base game" onRetry={onRetryPrices} />
               )}
             </section>
 

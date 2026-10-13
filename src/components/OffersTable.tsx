@@ -9,14 +9,28 @@ export default function OffersTable({
   state,
   store,
   edition,
+  onRetry,
 }: {
   title: string;
   state: OfferState | undefined;
   store: string | null;
   edition: string;
+  // Offered when the price service failed, so a one-off hiccup isn't a dead end.
+  onRetry?: () => void;
 }) {
   if (!state) return <p className="mt-2 text-sm text-muted">Checking prices…</p>;
-  if (state.status === "unavailable") return <p className="mt-2 text-sm text-muted">Price unavailable: {state.reason}.</p>;
+  if (state.status === "unavailable") {
+    return (
+      <p className="mt-2 text-sm text-muted">
+        Price unavailable: {state.reason}.{" "}
+        {onRetry && (
+          <button type="button" onClick={onRetry} className="underline underline-offset-4 hover:text-foreground">
+            Try again
+          </button>
+        )}
+      </p>
+    );
+  }
   if (state.offers.length === 0) return <p className="mt-2 text-sm text-muted">No listing found at the stores we check.</p>;
 
   return (
