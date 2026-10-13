@@ -54,7 +54,9 @@ const isKnown = (g: OtherGame) => (g.steamAppId !== null && knownSteamIds.has(g.
 
 function otherGameDetail(game: OtherGame): string {
   const stores = game.links.filter((l) => l.name !== "Official site").map((l) => l.name);
-  return [game.year, game.cheapest !== null ? `From ${money(game.cheapest)}` : stores.join(", ") || null]
+  // IGDB's co-op group size when it lists one; it isn't checked by us, so the drawer says so.
+  const together = Math.max(0, ...game.play.map((p) => p.together ?? 0));
+  return [game.year, together > 1 ? `up to ${together} together` : null, game.cheapest !== null ? `From ${money(game.cheapest)}` : stores.join(", ") || null]
     .filter(Boolean)
     .join(" · ");
 }
@@ -262,7 +264,7 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
                 <div key={option.kind === "catalogue" ? option.game.id : option.game.key}>
                   {first && (
                     <p role="presentation" className="px-2 pt-2 pb-1 text-xs font-semibold tracking-wider text-muted uppercase">
-                      {option.kind === "catalogue" ? "In our catalogue" : "Other PC games · group size not checked"}
+                      {option.kind === "catalogue" ? "Checked for groups" : "Other PC games"}
                     </p>
                   )}
                   <div
@@ -322,8 +324,8 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
             )}
             {status.unknownTitle && (
               <span>
-                <span className="text-foreground">&ldquo;{status.unknownTitle}&rdquo;</span> isn&apos;t in our catalogue yet.
-                Type its name to see prices, or we used the rest of your request.
+                <span className="text-foreground">&ldquo;{status.unknownTitle}&rdquo;</span> isn&apos;t in our checked list yet.
+                Type its name to see its details and prices. We used the rest of your request.
               </span>
             )}
             {status.summary && (

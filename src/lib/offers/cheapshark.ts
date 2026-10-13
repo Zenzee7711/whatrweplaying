@@ -36,27 +36,23 @@ export function dealUrl(dealId: string): string {
 }
 
 const priceText = z.string().regex(/^\d+(\.\d+)?$/).transform(Number);
+const dealSchema = z.object({
+  storeID: z.string(),
+  dealID: z.string().min(1),
+  price: priceText,
+  retailPrice: priceText,
+  savings: priceText,
+});
 const gameLookupSchema = z.record(
   z.string(),
-  z.object({
-    info: z.object({ title: z.string(), steamAppID: z.string().nullable() }),
-    deals: z.array(
-      z.object({
-        storeID: z.string(),
-        dealID: z.string().min(1),
-        price: priceText,
-        retailPrice: priceText,
-        savings: priceText,
-      }),
-    ),
-  }),
+  z.object({ info: z.object({ title: z.string(), steamAppID: z.string().nullable() }), deals: z.array(dealSchema) }),
 );
 
-// Turns one CheapShark game record into offers for one catalogue game. The record must be the
-// same Steam app as the catalogue entry; anything else (a DLC, another edition) is discarded.
-export function toOffers(game: Game, record: z.infer<typeof gameLookupSchema>[string] | undefined): Offer[] | null {
-  if (!record || record.info.steamAppID !== String(game.steamAppId)) return null;
-  return record.deals
+type Deal = z.infer<typeof dealSchema>;
+
+// Deals from the stores we check, cheapest first, each linking through CheapShark's redirect.
+function dealsToOffers(deals: readonly Deal[]): Offer[] {
+  return deals
     .filter((deal) => STORES[deal.storeID])
     .map((deal) => ({
       storeId: deal.storeID,
@@ -68,6 +64,13 @@ export function toOffers(game: Game, record: z.infer<typeof gameLookupSchema>[st
       url: dealUrl(deal.dealID),
     }))
     .sort((a, b) => a.price - b.price);
+}
+
+// Turns one CheapShark game record into offers for one game. When the game has a Steam ID, the
+// record must be that same Steam app; anything else (a DLC, another edition) is discarded.
+export function toOffers(game: Pick<Game, "steamAppId">, record: z.infer<typeof gameLookupSchema>[string] | undefined): Offer[] | null {
+  if (!record || record.info.steamAppID !== String(game.steamAppId)) return null;
+  return dealsToOffers(record.deals);
 }
 
 // --- Any PC game by name (for search suggestions outside our catalogue) ---
@@ -104,6 +107,9 @@ export function toStoreGames(rows: z.infer<typeof titleSearchSchema>): OtherGame
       cheapest: row.cheapest,
       links: steamAppId ? [steamPage(steamAppId)] : [],
       popularity: 0,
+      // CheapShark only knows names and prices.
+      play: [],
+      singleplayer: false,
     };
   });
 }
@@ -136,22 +142,9 @@ export async function fetchStoreGameOffers(gameId: string, signal?: AbortSignal)
   const response = await fetch(`${API}/games?id=${encodeURIComponent(gameId)}`, { signal: signal ?? AbortSignal.timeout(8000) });
   if (response.status === 429) throw new RateLimitedError(Number(response.headers.get("retry-after") ?? "60"));
   if (!response.ok) throw new Error(`CheapShark responded ${response.status}`);
-  const parsed = z
-    .object({ deals: z.array(z.object({ storeID: z.string(), dealID: z.string().min(1), price: priceText, retailPrice: priceText, savings: priceText })) })
-    .safeParse(await response.json());
+  const parsed = z.object({ deals: z.array(dealSchema) }).safeParse(await response.json());
   if (!parsed.success) throw new Error("CheapShark returned data in an unexpected shape");
-  const offers = parsed.data.deals
-    .filter((deal) => STORES[deal.storeID])
-    .map((deal) => ({
-      storeId: deal.storeID,
-      storeName: STORES[deal.storeID],
-      price: deal.price,
-      regularPrice: deal.retailPrice,
-      savings: Math.round(deal.savings),
-      dealId: deal.dealID,
-      url: dealUrl(deal.dealID),
-    }))
-    .sort((a, b) => a.price - b.price);
+  const offers = dealsToOffers(parsed.data.deals);
   return { status: "ok", offers, retrievedAt: new Date().toISOString() };
 }
 
@@ -182,6 +175,35 @@ export async function fetchOffers(batch: Game[], signal?: AbortSignal): Promise<
     states[game.id] = offers
       ? { status: "ok", offers, retrievedAt }
       : { status: "unavailable", reason: "No matching store record" };
+  }
+  return states;
+}
+
+// Prices for games outside the catalogue (AI picks), keyed by OtherGame.key. Each game's record is
+// found by its exact Steam ID, one lookup at a time so a few cards don't look like a burst; the
+// offers then come in one request. A game with no record gets an empty, successful result.
+export async function fetchOtherOffers(games: readonly OtherGame[], signal?: AbortSignal): Promise<Record<string, OfferState>> {
+  const retrievedAt = new Date().toISOString();
+  const states: Record<string, OfferState> = {};
+  const found: { game: OtherGame; id: string }[] = [];
+  for (const game of games) {
+    const id = game.cheapsharkGameId ?? (game.steamAppId ? await cheapsharkIdForSteamApp(game.steamAppId, signal) : null);
+    if (id) found.push({ game, id });
+    else states[game.key] = { status: "ok", offers: [], retrievedAt };
+  }
+  if (found.length === 0) return states;
+
+  const response = await fetch(`${API}/games?ids=${found.map((f) => f.id).join(",")}`, { signal: signal ?? AbortSignal.timeout(10000) });
+  if (response.status === 429) throw new RateLimitedError(Number(response.headers.get("retry-after") ?? "60"));
+  if (!response.ok) throw new Error(`CheapShark responded ${response.status}`);
+  const parsed = gameLookupSchema.safeParse(await response.json());
+  if (!parsed.success) throw new Error("CheapShark returned data in an unexpected shape");
+  for (const { game, id } of found) {
+    const record = parsed.data[id];
+    // A record found by Steam ID must still be that Steam app; one from CheapShark's own search is
+    // already the exact listing.
+    const offers = game.steamAppId !== null ? toOffers(game, record) : record ? dealsToOffers(record.deals) : null;
+    states[game.key] = { status: "ok", offers: offers ?? [], retrievedAt };
   }
   return states;
 }

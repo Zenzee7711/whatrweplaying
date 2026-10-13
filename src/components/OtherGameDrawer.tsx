@@ -4,10 +4,10 @@ import { cheapsharkIdForSteamApp, fetchStoreGameOffers, RateLimitedError } from 
 import type { OfferState } from "@/lib/offers/types";
 import Artwork from "./Artwork";
 import OffersTable from "./OffersTable";
+import { OtherPlayLines } from "./OtherGameCard";
 
-// Details for a game found by name that isn't in our catalogue: where to get it, live prices
-// when its store record can be matched exactly, and (for group searches) an honest note that we
-// haven't checked how many people can play it together.
+// Details for a game found by name that isn't in our hand-checked list: how it can be played
+// according to IGDB, where to get it, and live prices when its store record matches exactly.
 export default function OtherGameDrawer({ game, solo = false, onClose }: { game: OtherGame | null; solo?: boolean; onClose: () => void }) {
   const ref = useRef<HTMLDialogElement>(null);
   const [offers, setOffers] = useState<{ key: string; state: OfferState | null } | null>(null);
@@ -92,14 +92,21 @@ export default function OtherGameDrawer({ game, solo = false, onClose }: { game:
               </button>
             </div>
 
-            {!solo && (
-              <p className="rounded-2xl bg-unverified/10 p-4 text-sm">
-                <span className="font-medium">Not in our catalogue yet.</span>{" "}
-                <span className="text-muted">
-                  We haven&apos;t checked how many people can play it together, so it doesn&apos;t show up in group results.
-                </span>
-              </p>
-            )}
+            <section aria-labelledby="store-play-heading">
+              <h3 id="store-play-heading" className="text-sm font-semibold tracking-wide text-muted uppercase">
+                Playing together
+              </h3>
+              <div className="mt-3">
+                <OtherPlayLines game={game} />
+                {game.play.length === 0 && !game.singleplayer && <p className="text-sm text-muted">No multiplayer details listed.</p>}
+              </div>
+              {!solo && (
+                <p className="mt-3 text-xs text-muted">
+                  From IGDB&apos;s listing, not checked by us, so it can be out of date. Games in our own list have checked group
+                  sizes with sources.
+                </p>
+              )}
+            </section>
 
             {game.links.length > 0 && (
               <section aria-labelledby="store-links-heading">

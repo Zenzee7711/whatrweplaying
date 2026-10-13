@@ -15,9 +15,11 @@ all from one plain-English request like "four of us, co-op, nothing scary, under
 - **Describe your group in plain words.** "Four of us, online co-op, nothing scary, under $15 each"
   sets the filters for you. Follow up with "actually, cheaper" and only that part changes.
 - **AI picks.** Ask for a mood ("a solo game with a great story") and the AI suggests games from
-  any PC game, each with a short reason. Every pick is checked to exist before it's shown.
+  any PC game, each with a short reason, how many can play together and its best price. Every
+  pick is checked to exist before it's shown.
 - **Real group sizes.** Player counts mean how many friends can play together in one party or
-  lobby, not the size of a public match. If we can't confirm it, the card says so.
+  lobby, not the size of a public match. 80 games are hand-checked with sources; for any other
+  game the count comes from IGDB and is marked as not checked by us.
 - **See what's popular right now.** By default, games are ordered by how many people are playing
   them at the moment, with live Steam player counts on the cards.
 - **Search any game by name**, with suggestions as you type, even with typos ("monstr huntr").
@@ -43,10 +45,11 @@ flowchart LR
 2. **The server checks the AI's answer.** Filters can only use known values, and each suggested
    game is looked up in our catalogue or on [IGDB](https://www.igdb.com). Anything that can't be
    found is dropped. API keys stay on the server.
-3. **Your group is matched against verified data.** The catalogue of 80 games is built ahead of
-   time from [PCGamingWiki](https://www.pcgamingwiki.com) plus hand-checked party sizes, each
+3. **Your group is matched against verified data.** Our checked list of 80 games is built ahead
+   of time from [PCGamingWiki](https://www.pcgamingwiki.com) plus hand-checked party sizes, each
    with a source. A game only counts as a match if it fits your group and the way you want to
-   play; games we can't confirm go in a separate list instead of being guessed.
+   play; games we can't confirm go in a separate list instead of being guessed. Other games show
+   IGDB's co-op group size, and an AI pick that IGDB says is too small for your group is hidden.
 4. **Prices come in live.** Your browser asks [CheapShark](https://www.cheapshark.com) for current
    offers, matched by each game's Steam ID so DLC and other editions don't mix in.
 5. **Results are ranked by what's popular now.** Equal matches are ordered by how many people are

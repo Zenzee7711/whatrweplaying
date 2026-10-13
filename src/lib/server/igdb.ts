@@ -65,7 +65,9 @@ export async function searchIgdb(query: string): Promise<OtherGame[]> {
   const body = [
     `search "${safe}";`,
     "fields name, first_release_date, total_rating_count, cover.image_id, artworks.image_id, screenshots.image_id,",
-    "websites.type, websites.url, external_games.external_game_source, external_games.uid;",
+    "websites.type, websites.url, external_games.external_game_source, external_games.uid, game_modes.name,",
+    "multiplayer_modes.platform, multiplayer_modes.onlinecoop, multiplayer_modes.onlinecoopmax, multiplayer_modes.offlinecoop,",
+    "multiplayer_modes.offlinecoopmax, multiplayer_modes.splitscreen;",
     "where platforms = (6) & game_type = (0,4,8,9,10,11) & version_parent = null;",
     "limit 15;",
   ].join(" ");

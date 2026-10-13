@@ -9,7 +9,7 @@ import type { Game } from "@/lib/catalogue/schema";
 import { cachedOffers, saveOffers } from "@/lib/offers/cache";
 import type { Pick } from "@/lib/ai/picks";
 import type { OtherGame } from "@/lib/igdb/map";
-import { BATCH_SIZE, fetchOffers, RateLimitedError } from "@/lib/offers/cheapshark";
+import { BATCH_SIZE, fetchOffers, fetchOtherOffers, RateLimitedError } from "@/lib/offers/cheapshark";
 import type { OfferMap, OfferState } from "@/lib/offers/types";
 import { defaultFilters, filtersSchema, type Filters, type Sort } from "@/lib/search/filters";
 import type { Popularity } from "@/lib/search/popularity";
@@ -54,6 +54,8 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
   const [searchMode, setSearchMode] = useState<SearchMode>(aiAvailable ? "ai" : "keyword");
   // Games the AI recommended for the last request, already checked to exist by the server.
   const [picks, setPicks] = useState<{ request: string; items: Pick[] } | null>(null);
+  // Prices for the AI's picks outside the catalogue, by OtherGame.key.
+  const [otherOffers, setOtherOffers] = useState<Record<string, OfferState>>({});
   const [assist, setAssist] = useState<AssistStatus>({ pending: false });
   const [history, setHistory] = useState<Turn[]>([]);
   const [copied, setCopied] = useState(false);
@@ -109,6 +111,24 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
     })();
     return () => controller.abort();
   }, [missingKey]);
+
+  // Prices for picks outside the catalogue, once per new set of picks.
+  const otherPickKey = (picks?.items ?? []).flatMap((p) => (p.kind === "other" ? [p.game.key] : [])).join(",");
+  useEffect(() => {
+    const others = (picks?.items ?? []).flatMap((p) => (p.kind === "other" ? [p.game] : []));
+    if (others.length === 0) return;
+    const controller = new AbortController();
+    fetchOtherOffers(others, controller.signal)
+      .then((states) => setOtherOffers((previous) => ({ ...previous, ...states })))
+      .catch(() => {
+        if (controller.signal.aborted) return;
+        const failed: OfferState = { status: "unavailable", reason: "the price service didn't respond" };
+        setOtherOffers((previous) => ({ ...previous, ...Object.fromEntries(others.map((g) => [g.key, failed])) }));
+      });
+    return () => controller.abort();
+    // otherPickKey changes exactly when the set of picks does.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [otherPickKey]);
 
   const outcome = useMemo(() => search(games, filters, offers, rank), [filters, offers, rank]);
   const checking = candidates.filter((g) => offers[g.id] === undefined).length;
@@ -210,7 +230,15 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
   // one that can't fit (e.g. a 2-player game for 4 of you) is left out. Price filters don't
   // apply here, so a pick isn't hidden just because its price hasn't loaded yet.
   const pickFits = (pick: Pick) => {
-    if (pick.kind === "other") return true;
+    if (pick.kind === "other") {
+      // Games outside the catalogue only have IGDB's numbers: hide one only when those clearly
+      // rule it out (single-player only, or every listed group is smaller than yours).
+      const size = filters.groupSize ?? 1;
+      if (size <= 1) return true;
+      const { play, singleplayer } = pick.game;
+      if (play.length === 0) return !singleplayer;
+      return play.some((line) => line.together === null || line.together >= size);
+    }
     const game = getGame(pick.id);
     if (!game) return false;
     const fit = search([game], { ...filters, like: null, maxPrice: null, store: null, pricing: "any" }, offers);
@@ -224,7 +252,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
   // An AI pick as a card: ours with verified group sizes, or another game with its store links.
   const pickCard = (pick: Pick, index: number) => {
     if (pick.kind === "other") {
-      return <OtherGameCard key={pick.game.key} game={pick.game} note={pick.why} solo={solo} onOpen={() => setOtherGame(pick.game)} />;
+      return <OtherGameCard key={pick.game.key} game={pick.game} note={pick.why} offerState={otherOffers[pick.game.key]} onOpen={() => setOtherGame(pick.game)} />;
     }
     const game = getGame(pick.id);
     return game ? card(resultFor(game), index, pick.why) : null;
@@ -311,7 +339,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
 
           <div className={`flex flex-wrap items-end justify-between gap-3 ${picks && shownPicks.length > 0 ? "mt-12 border-t border-line pt-8" : "mt-6"}`}>
             <h2 aria-live="polite" className="font-display text-2xl font-semibold">
-              {picks && shownPicks.length > 0 && <span className="text-muted">From our catalogue: </span>}
+              {picks && shownPicks.length > 0 && <span className="text-muted">From our checked list: </span>}
               {outcome.matches.length} {outcome.matches.length === 1 ? "game" : "games"}
               <span className="text-muted">{groupLabel}</span>
             </h2>

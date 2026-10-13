@@ -14,6 +14,10 @@ export type OtherGame = {
   links: { name: string; url: string }[];
   // IGDB rating count: picks the well-known game when two share a name ("Hades" 2020 vs 1995).
   popularity: number;
+  // Ways to play according to IGDB (not checked by us). `together` is how many can play in one
+  // co-op group; IGDB's other numbers are whole-match sizes, so they're never used as a group size.
+  play: { label: "Online co-op" | "Local co-op" | "Online multiplayer" | "Local multiplayer"; together: number | null }[];
+  singleplayer: boolean;
 };
 
 // IGDB website types we link to, with the hosts each one must point at.
@@ -33,6 +37,19 @@ export const igdbGameSchema = z.object({
   name: z.string().min(1),
   first_release_date: z.number().optional(),
   total_rating_count: z.number().optional(),
+  game_modes: z.array(z.object({ name: z.string() })).optional(),
+  multiplayer_modes: z
+    .array(
+      z.object({
+        platform: z.number().optional(),
+        onlinecoop: z.boolean().optional(),
+        onlinecoopmax: z.number().optional(),
+        offlinecoop: z.boolean().optional(),
+        offlinecoopmax: z.number().optional(),
+        splitscreen: z.boolean().optional(),
+      }),
+    )
+    .optional(),
   cover: imageSchema.optional(),
   artworks: z.array(imageSchema).optional(),
   screenshots: z.array(imageSchema).optional(),
@@ -74,6 +91,27 @@ export function igdbSteamAppId(game: IgdbGame): number | null {
   return uid && /^\d{1,9}$/.test(uid) ? Number(uid) : null;
 }
 
+const PC = 6; // IGDB platform id
+
+export function igdbPlay(game: IgdbGame): Pick<OtherGame, "play" | "singleplayer"> {
+  const modes = new Set((game.game_modes ?? []).map((m) => m.name.toLowerCase()));
+  const all = game.multiplayer_modes ?? [];
+  // The PC entry when there is one; consoles can differ.
+  const mm = all.find((m) => m.platform === PC) ?? all.find((m) => m.platform === undefined) ?? all[0];
+  const size = (n: number | undefined) => (n && n > 1 ? n : null);
+  const play: OtherGame["play"] = [];
+  if (mm?.onlinecoop || size(mm?.onlinecoopmax)) play.push({ label: "Online co-op", together: size(mm?.onlinecoopmax) });
+  if (size(mm?.offlinecoopmax) || (mm?.offlinecoop && mm.offlinecoopmax === undefined)) {
+    play.push({ label: "Local co-op", together: size(mm?.offlinecoopmax) });
+  }
+  const online = modes.has("multiplayer") || modes.has("battle royale") || [...modes].some((m) => m.startsWith("massively multiplayer"));
+  if (online && !play.some((p) => p.label === "Online co-op")) play.push({ label: "Online multiplayer", together: null });
+  if ((modes.has("split screen") || mm?.splitscreen) && !play.some((p) => p.label === "Local co-op")) {
+    play.push({ label: "Local multiplayer", together: null });
+  }
+  return { play, singleplayer: modes.has("single player") };
+}
+
 export function toOtherGame(game: IgdbGame): OtherGame {
   return {
     key: `igdb-${game.id}`,
@@ -85,5 +123,6 @@ export function toOtherGame(game: IgdbGame): OtherGame {
     cheapest: null,
     links: igdbLinks(game),
     popularity: game.total_rating_count ?? 0,
+    ...igdbPlay(game),
   };
 }

@@ -1,11 +1,61 @@
 import type { OtherGame } from "@/lib/igdb/map";
+import type { OfferState } from "@/lib/offers/types";
 import Artwork from "./Artwork";
+import { money, People } from "./labels";
 
-// A recommended game that isn't in our catalogue: what the AI said about it, where it's sold, and
-// (for group searches) a plain note that we haven't checked group sizes. Prices load when the
-// details open.
-export default function OtherGameCard({ game, note, solo = false, onOpen }: { game: OtherGame; note: string | null; solo?: boolean; onOpen: () => void }) {
+// How a game outside the catalogue can be played, from IGDB's listing (not checked by us). A
+// known co-op group size reads like ours; anything else says plainly that it isn't checked.
+export function OtherPlayLines({ game, limit = 4 }: { game: OtherGame; limit?: number }) {
+  if (game.play.length === 0) {
+    return game.singleplayer ? <p className="text-sm text-muted">Single-player</p> : null;
+  }
+  return (
+    <ul className="space-y-1.5 text-sm">
+      {game.play.slice(0, limit).map((line) => (
+        <li key={line.label} className="flex items-center gap-2">
+          <span className={line.together ? "text-muted" : "text-unverified"}>
+            <People />
+          </span>
+          <span className={line.together ? "font-medium" : "text-unverified"}>
+            {line.together ? `up to ${line.together} together` : "Group size not checked"}
+          </span>
+          <span className="text-muted">· {line.label}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function CardPrice({ game, state }: { game: OtherGame; state: OfferState | undefined }) {
+  if (!state) return <span className="text-muted">Checking price…</span>;
+  if (state.status === "unavailable") return <span className="text-muted">Price unavailable</span>;
+  const best = state.offers[0];
+  if (best) {
+    return (
+      <span>
+        <span className="font-semibold">{money(best.price)}</span> <span className="text-muted">at {best.storeName}</span>
+        {best.savings > 0 && <span className="ml-1.5 text-xs text-accent">−{best.savings}%</span>}
+      </span>
+    );
+  }
+  // Not sold at the stores we check (often free, or only on its own launcher).
   const stores = game.links.filter((l) => l.name !== "Official site").map((l) => l.name);
+  return <span className="truncate text-muted">{stores.length ? `On ${stores.join(", ")}` : "Official site"}</span>;
+}
+
+// A recommended game that isn't in our hand-checked list: what the AI said about it, how it can be
+// played according to IGDB, and its best current price.
+export default function OtherGameCard({
+  game,
+  note,
+  offerState,
+  onOpen,
+}: {
+  game: OtherGame;
+  note: string | null;
+  offerState: OfferState | undefined;
+  onOpen: () => void;
+}) {
   return (
     <article className="relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-colors hover:border-muted/50">
       <button type="button" onClick={onOpen} className="relative block aspect-[460/215] overflow-hidden bg-raised text-left">
@@ -23,10 +73,10 @@ export default function OtherGameCard({ game, note, solo = false, onOpen }: { ga
 
         {note && <p className="text-sm">{note}</p>}
 
-        {!solo && <p className="text-sm text-muted">Not in our catalogue, so group size isn&apos;t checked.</p>}
+        <OtherPlayLines game={game} limit={2} />
 
         <div className="mt-auto flex items-center justify-between gap-3 border-t border-line pt-3 text-sm">
-          <span className="truncate text-muted">{stores.length ? stores.join(", ") : "Official site"}</span>
+          <CardPrice game={game} state={offerState} />
           <button type="button" onClick={onOpen} className="shrink-0 font-medium text-accent hover:underline hover:underline-offset-4">
             Details
           </button>

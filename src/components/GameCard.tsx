@@ -1,7 +1,7 @@
 import type { OfferState } from "@/lib/offers/types";
 import type { Result } from "@/lib/search/search";
 import Artwork from "./Artwork";
-import { playLines, PriceTag } from "./labels";
+import { People, playLines, PriceTag } from "./labels";
 
 type GameCardProps = {
   result: Result;
@@ -17,17 +17,6 @@ type GameCardProps = {
 };
 
 const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
-
-function People() {
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 shrink-0">
-      <circle cx="9" cy="8" r="3" fill="currentColor" />
-      <circle cx="16.5" cy="9" r="2.4" fill="currentColor" opacity="0.6" />
-      <path d="M3.5 19c.7-3.3 3-5 5.5-5s4.8 1.7 5.5 5z" fill="currentColor" />
-      <path d="M14.2 14.4c2.6-.4 5.1.9 5.9 4.6h-4.4" fill="currentColor" opacity="0.6" />
-    </svg>
-  );
-}
 
 export default function GameCard({ result, eager = false, offerState, saved, onOpen, onToggleSave, note, playingNow }: GameCardProps) {
   const { game, reasons, price } = result;
