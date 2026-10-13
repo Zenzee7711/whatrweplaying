@@ -2,7 +2,9 @@
 
 Find a PC game your whole group can actually play together, then see where it's cheapest.
 
-![Searching for a game for four friends](docs/search.png)
+**Try it: [whatrweplaying.vercel.app](https://whatrweplaying.vercel.app)**
+
+[![Searching for a game for four friends](docs/search.png)](https://whatrweplaying.vercel.app)
 
 ## What it does
 
