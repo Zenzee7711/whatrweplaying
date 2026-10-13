@@ -50,8 +50,9 @@ flowchart LR
    with a source. A game only counts as a match if it fits your group and the way you want to
    play; games we can't confirm go in a separate list instead of being guessed. Other games show
    IGDB's co-op group size, and an AI pick that IGDB says is too small for your group is hidden.
-4. **Prices come in live.** Your browser asks [CheapShark](https://www.cheapshark.com) for current
-   offers, matched by each game's Steam ID so DLC and other editions don't mix in.
+4. **Prices come in live.** Our server asks [CheapShark](https://www.cheapshark.com) for current
+   offers and shares each answer with every visitor for a few minutes. Offers are matched by each
+   game's Steam ID so DLC and other editions don't mix in.
 5. **Results are ranked by what's popular now.** Equal matches are ordered by how many people are
    playing right now: Steam's live player counts, or IGDB's for games that aren't on Steam.
 
