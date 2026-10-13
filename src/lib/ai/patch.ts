@@ -5,21 +5,24 @@ import { defaultFilters, filtersSchema, MODES, PRICING, SORTS, type Filters } fr
 // validated and then applied here, in code. A follow-up like "no horror" therefore changes only
 // what it mentions, and everything else the user set is kept.
 
-export const CLEARABLE = ["groupSize", "modes", "maxPrice", "pricing", "genres", "themes", "exclude"] as const;
+export const CLEARABLE = ["groupSize", "modes", "maxPrice", "pricing", "genres", "themes", "exclude", "like"] as const;
 
-// Built from the catalogue's own genres and themes, so only known tags can be used.
-export function makePatchSchema(tags: readonly string[]) {
+// Built from the catalogue's own genres, themes and game IDs, so only known values can be used.
+export function makePatchSchema(tags: readonly string[], gameIds: readonly string[]) {
   const tag = z.enum(tags as [string, ...string[]]);
   return z.strictObject({
     action: z.enum(["update", "clarify"]),
     clarification: z.string().max(200).nullable(),
     summary: z.string().max(200).nullable(),
+    // A game the user named that isn't in the catalogue ("PUBG"), so the app can say so.
+    unknownTitle: z.string().max(60).nullable(),
     set: z.strictObject({
       groupSize: z.number().int().min(1).max(16).nullable(),
       modes: z.array(z.enum(MODES)).max(MODES.length).nullable(),
       maxPrice: z.number().min(0).max(500).nullable(),
       pricing: z.enum(PRICING).nullable(),
       sort: z.enum(SORTS).nullable(),
+      like: z.enum(gameIds as [string, ...string[]]).nullable(),
     }),
     clear: z.array(z.enum(CLEARABLE)).max(CLEARABLE.length),
     addPreferred: z.array(tag).max(6),
@@ -34,7 +37,8 @@ export const emptyPatch: Patch = {
   action: "update",
   clarification: null,
   summary: null,
-  set: { groupSize: null, modes: null, maxPrice: null, pricing: null, sort: null },
+  unknownTitle: null,
+  set: { groupSize: null, modes: null, maxPrice: null, pricing: null, sort: null, like: null },
   clear: [],
   addPreferred: [],
   removePreferred: [],
@@ -56,6 +60,7 @@ export function applyPatch(current: Filters, patch: Patch, genres: readonly stri
   if (patch.set.maxPrice !== null) next.maxPrice = patch.set.maxPrice;
   if (patch.set.pricing !== null) next.pricing = patch.set.pricing;
   if (patch.set.sort !== null) next.sort = patch.set.sort;
+  if (patch.set.like !== null) next.like = patch.set.like;
 
   const isGenre = (tag: string) => genres.includes(tag);
   const addGenres = patch.addPreferred.filter(isGenre);

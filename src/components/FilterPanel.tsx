@@ -1,7 +1,7 @@
 import { useId } from "react";
 import { games } from "@/lib/catalogue";
 import { STORES } from "@/lib/offers/cheapshark";
-import { defaultFilters, MODE_LABELS, MODES, type Filters, type Sort } from "@/lib/search/filters";
+import { defaultFilters, MODE_LABELS, MODES, type Filters } from "@/lib/search/filters";
 
 // The most common genres and themes in the catalogue, so the panel stays short.
 function topTags(pick: "genres" | "themes", count: number): string[] {
@@ -12,7 +12,6 @@ function topTags(pick: "genres" | "themes", count: number): string[] {
 const GENRES = topTags("genres", 12);
 const THEMES = topTags("themes", 8);
 
-const SORT_LABELS: Record<Sort, string> = { best: "Best match", price: "Lowest price", discount: "Biggest discount" };
 
 type FilterPanelProps = { filters: Filters; onChange: (next: Filters) => void };
 
@@ -61,7 +60,7 @@ export default function FilterPanel({ filters, onChange }: FilterPanelProps) {
   return (
     <div className="space-y-7">
       <fieldset>
-        <legend className={heading}>Players</legend>
+        <legend className={heading}>Players (up to 16)</legend>
         <div className="mt-2 flex items-center gap-2">
           <button
             type="button"
@@ -179,24 +178,6 @@ export default function FilterPanel({ filters, onChange }: FilterPanelProps) {
         <div className="mt-2">{tagChips(THEMES, "themes")}</div>
       </fieldset>
 
-      <fieldset>
-        <legend className={heading}>Sort by</legend>
-        <label htmlFor={`${id}-sort`} className="sr-only">
-          Sort by
-        </label>
-        <select
-          id={`${id}-sort`}
-          value={filters.sort}
-          onChange={(event) => set({ sort: event.target.value as Sort })}
-          className="mt-2 w-full rounded-xl border border-line bg-background px-3 py-2"
-        >
-          {Object.entries(SORT_LABELS).map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </fieldset>
 
       <button type="button" onClick={() => onChange(defaultFilters)} className="text-sm text-muted underline underline-offset-4 hover:text-foreground">
         Reset all filters

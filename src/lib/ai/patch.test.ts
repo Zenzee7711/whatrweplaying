@@ -5,7 +5,7 @@ import { applyPatch, emptyPatch, makePatchSchema } from "./patch.ts";
 
 const tags = ["horror", "survival horror", "simulation", "farming", "life sim", "puzzle", "comedy", "party game", "shooter"];
 const genres = ["survival horror", "simulation", "farming", "life sim", "puzzle", "party game", "shooter"];
-const schema = makePatchSchema(tags);
+const schema = makePatchSchema(tags, ["monster-hunter-world", "valheim"]);
 
 describe("basicPatch (no-AI fallback)", () => {
   it("reads the example request into filters", () => {
@@ -66,5 +66,59 @@ describe("validating model output", () => {
 
   it("refuses a negative budget even if a patch slipped through", () => {
     expect(() => applyPatch(defaultFilters, { ...emptyPatch, set: { ...emptyPatch.set, maxPrice: -1 } }, genres)).toThrow();
+  });
+});
+
+describe("game names in a request", () => {
+  const catalogue = [
+    { id: "monster-hunter-world", title: "Monster Hunter: World" },
+    { id: "apex-legends", title: "Apex Legends" },
+  ];
+  const withRoyale = [...tags, "battle royale"];
+
+  it("treats a plain game name as 'games like this'", () => {
+    const patch = basicPatch("monster hunter", tags, catalogue);
+    expect(patch.set.like).toBe("monster-hunter-world");
+    expect(patch.addPreferred).toEqual([]);
+  });
+
+  it("handles typos in the game name", () => {
+    expect(basicPatch("something like monstr huntr for 3 of us", tags, catalogue).set.like).toBe("monster-hunter-world");
+  });
+
+  it("says when a named game isn't in the catalogue, and still uses the rest", () => {
+    const patch = basicPatch("pubg like battleroyle", withRoyale, catalogue);
+    expect(patch.set.like).toBeNull();
+    expect(patch.addPreferred).toContain("battle royale");
+  });
+
+  it("reports an unknown game named after 'like'", () => {
+    const patch = basicPatch("games like PUBG", withRoyale, catalogue);
+    expect(patch.unknownTitle).toBe("PUBG");
+  });
+});
+
+describe("group size phrasing", () => {
+  it.each([
+    ["something chill for two", 2],
+    ["me and 3 friends want co-op", 4],
+    ["co-op with 2 friends", 3],
+    ["four of us", 4],
+  ])("'%s' means %i players", (message, size) => {
+    expect(basicPatch(message, tags).set.groupSize).toBe(size);
+  });
+});
+
+describe("names that look like other words", () => {
+  const catalogue = [{ id: "among-us", title: "Among Us" }];
+
+  it("doesn't read 'of us' as Among Us", () => {
+    const patch = basicPatch("games like PUBG for 4 of us", tags, catalogue);
+    expect(patch.set.like).toBeNull();
+    expect(patch.unknownTitle).toBe("PUBG");
+  });
+
+  it("doesn't call a misspelled genre an unknown game", () => {
+    expect(basicPatch("pubg like battleroyle", [...tags, "battle royale"], catalogue).unknownTitle).toBeNull();
   });
 });

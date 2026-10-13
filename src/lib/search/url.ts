@@ -30,6 +30,7 @@ export function filtersFromParams(params: Params): Filters {
     maxPrice: pick("maxPrice", number(first(params.max))),
     store: pick("store", first(params.store) ?? null),
     sort: pick("sort", (SORTS as readonly string[]).includes(first(params.sort) ?? "") ? first(params.sort) : "best"),
+    like: pick("like", first(params.like) ?? null),
   };
 }
 
@@ -45,6 +46,7 @@ export function filtersToParams(filters: Filters): URLSearchParams {
   if (filters.maxPrice !== null) params.set("max", String(filters.maxPrice));
   if (filters.store !== null) params.set("store", filters.store);
   if (filters.sort !== "best") params.set("sort", filters.sort);
+  if (filters.like !== null) params.set("like", filters.like);
   return params;
 }
 

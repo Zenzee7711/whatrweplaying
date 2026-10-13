@@ -27,7 +27,7 @@ function strictProblems(node: Node, path = "root"): string[] {
 }
 
 describe("patchJsonSchema", () => {
-  const schema = patchJsonSchema(["horror", "puzzle"]) as Node;
+  const schema = patchJsonSchema(["horror", "puzzle"], ["overcooked-2", "valheim"]) as Node;
 
   it("meets Groq's strict structured-output rules", () => {
     expect(strictProblems(schema)).toEqual([]);

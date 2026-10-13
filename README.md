@@ -8,8 +8,13 @@ It recommends PC games and links to stores. It doesn't sell anything.
 
 ## What you can do
 
-- Describe your group in plain words ("four of us, online co-op, preferably horror, under $15
-  each"), or use the filters directly. Both use the same search.
+- Tap how many of you are playing, describe your group in plain words ("four of us, online
+  co-op, preferably horror, under $15 each"), or use the filters. All three use the same search.
+- Type a game's name, even with typos ("monstr huntr", "cs2"), to see it and games like it.
+  A game that isn't in the catalogue gets an honest "not in our catalogue yet".
+- Player counts always mean **how many friends can play together** (a co-op team, a party or a
+  private lobby), never the size of a whole public match. Apex Legends shows "up to 3 together"
+  (a squad), not "30–60 players per match".
 - Follow up ("actually, no horror, something more relaxed") and only the things you mention change.
 - Filter by group size, solo / online co-op / local co-op / online versus / local versus,
   free-to-play or paid, a maximum price per person, a common store for everyone, and genres or
@@ -30,10 +35,11 @@ loosening your search. Games whose player count can't be verified go in a separa
   from **[PCGamingWiki](https://www.pcgamingwiki.com)** (CC BY-NC-SA 3.0): local and online player
   counts, co-op and versus, crossplay notes, free-to-play or paid, genres and themes. Each game is
   matched by Steam app ID, and the wiki page must list that same ID.
-- **Reviewed corrections:** where the wiki gives one player range for both co-op and versus,
-  that range isn't treated as the co-op size. Five games have a reviewed co-op size in
-  `data/overrides.json`, each with its source and date (for example, Left 4 Dead 2 is 8 players
-  online but its co-op campaign is 4). Five others stay unverified.
+- **Reviewed party sizes:** the wiki's online numbers are often whole-match sizes, so they are
+  never shown as group sizes. `data/overrides.json` holds reviewed co-op team sizes and online
+  party or lobby sizes for 13 games, each with its sources and date (for example, Left 4 Dead 2's
+  co-op campaign is 4, Team Fortress 2 parties are up to 6, Among Us private lobbies hold 15).
+  Games without a reviewed size say "group size unverified" and go in a separate list.
 - **Prices:** live from **[CheapShark](https://www.cheapshark.com)**, requested from your browser
   for the games on screen (25 per request, cached for 10 minutes). Prices are **USD**, the
   lowest among the stores CheapShark checks, not your local or regional price. Only the base

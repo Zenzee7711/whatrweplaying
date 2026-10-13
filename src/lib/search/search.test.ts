@@ -70,6 +70,19 @@ describe("group size", () => {
     expect(ids(result.unverified)).toEqual(["battle-royale"]);
   });
 
+  it("uses the party size for online versus, never the whole match size", () => {
+    const squads = game("squads", {
+      online: online({ coop: null, versus: true, players: { min: 30, max: 60 }, versusPlayers: { min: null, max: 3 } }),
+    });
+    expect(ids(search([squads], filters({ groupSize: 3, modes: ["online-versus"] })).matches)).toEqual(["squads"]);
+    expect(ids(search([squads], filters({ groupSize: 4, modes: ["online-versus"] })).matches)).toEqual([]);
+  });
+
+  it("treats an online versus match size without a reviewed party size as unverified", () => {
+    const lobby = game("lobby", { online: online({ coop: null, versus: true, players: { min: null, max: 8 } }) });
+    expect(ids(search([lobby], filters({ groupSize: 4, modes: ["online-versus"] })).unverified)).toEqual(["lobby"]);
+  });
+
   it("does not offer solo games to a group", () => {
     const solo = game("solo-only");
     expect(ids(search([solo], filters({ groupSize: 3 })).matches)).toEqual([]);
@@ -148,7 +161,7 @@ describe("preferences and exclusions", () => {
 
   it("explains a match with facts", () => {
     const [result] = search([horror], filters({ groupSize: 4, modes: ["online-coop"], themes: ["horror"] })).matches;
-    expect(result.reasons).toContain("Online co-op, 1–4 players");
+    expect(result.reasons).toContain("Online co-op, 1–4 players together");
     expect(result.reasons).toContain("Matches horror");
   });
 });

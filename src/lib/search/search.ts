@@ -18,19 +18,28 @@ function capacityFit(players: Capacity | null, groupSize: number | null, kind: "
   return "yes";
 }
 
-// The verified player range for one kind of play. If the source gives one range for both
-// co-op and versus, that range is the overall limit, not the co-op team size, so only a
-// reviewed per-kind value counts.
-export function kindPlayers(connection: Connection, kind: "coop" | "versus"): Capacity | null {
+// How many friends can play this way TOGETHER (a team, a party, or one private lobby).
+// - Co-op: the team size. If the source gives one range for co-op and versus together, that
+//   is the overall limit, not the team size, so only a reviewed co-op value counts.
+// - Online versus: only a reviewed party/lobby size counts. The source's number is the size
+//   of a whole match (Apex: 30-60), which says nothing about how many friends can join together.
+// - Local versus: everyone is at the same PC, so the local player count is the group.
+export function kindPlayers(connection: Connection, kind: "coop" | "versus", where: "local" | "online"): Capacity | null {
   const reviewed = kind === "coop" ? connection.coopPlayers : connection.versusPlayers;
   if (reviewed) return reviewed;
+  if (kind === "versus") return where === "local" ? connection.players : null;
   return connection.sharedRange ? null : connection.players;
 }
 
-function connectionFit(connection: Connection, kind: "coop" | "versus", groupSize: number | null): Fit {
+function connectionFit(
+  connection: Connection,
+  kind: "coop" | "versus",
+  where: "local" | "online",
+  groupSize: number | null,
+): Fit {
   if (connection.supported === false || connection[kind] === false) return "no";
   if (connection.supported !== true || connection[kind] !== true) return "unverified";
-  return capacityFit(kindPlayers(connection, kind), groupSize, kind);
+  return capacityFit(kindPlayers(connection, kind, where), groupSize, kind);
 }
 
 export function modeFit(game: Game, mode: Mode, groupSize: number | null): Fit {
@@ -39,13 +48,13 @@ export function modeFit(game: Game, mode: Mode, groupSize: number | null): Fit {
       if (groupSize !== null && groupSize > 1) return "no";
       return game.singleplayer === true ? "yes" : game.singleplayer === false ? "no" : "unverified";
     case "online-coop":
-      return connectionFit(game.online, "coop", groupSize);
+      return connectionFit(game.online, "coop", "online", groupSize);
     case "local-coop":
-      return connectionFit(game.local, "coop", groupSize);
+      return connectionFit(game.local, "coop", "local", groupSize);
     case "online-versus":
-      return connectionFit(game.online, "versus", groupSize);
+      return connectionFit(game.online, "versus", "online", groupSize);
     case "local-versus":
-      return connectionFit(game.local, "versus", groupSize);
+      return connectionFit(game.local, "versus", "local", groupSize);
   }
 }
 
@@ -114,14 +123,15 @@ function formatRange(players: Capacity | null): string {
 function modeReason(game: Game, mode: Mode): string {
   const connection = mode.startsWith("online") ? game.online : game.local;
   if (mode === "solo") return "Can be played solo";
-  const range = formatRange(kindPlayers(connection, mode.endsWith("versus") ? "versus" : "coop"));
-  const per = mode.endsWith("versus") ? " per match" : "";
-  return `${MODE_LABELS[mode]}${range ? `, ${range}${per}` : ""}`;
+  const range = formatRange(
+    kindPlayers(connection, mode.endsWith("versus") ? "versus" : "coop", mode.startsWith("online") ? "online" : "local"),
+  );
+  return `${MODE_LABELS[mode]}${range ? `, ${range} together` : ""}`;
 }
 
 const money = (n: number) => `$${n.toFixed(2)}`;
 
-function evaluate(game: Game, filters: Filters, offers: OfferMap, skip: Constraint | null) {
+function evaluate(game: Game, filters: Filters, offers: OfferMap, skip: Constraint | null, likeGame: Game | null) {
   const checks = modesToCheck(filters);
   const modes = checks.map((mode) => ({ mode, fit: modeFit(game, mode, filters.groupSize) }));
   const fitting = modes.filter((m) => m.fit === "yes");
@@ -162,11 +172,14 @@ function evaluate(game: Game, filters: Filters, offers: OfferMap, skip: Constrai
   // Preferences: shared genres and themes, then price as a small tie-breaker.
   const liked = [...filters.genres, ...filters.themes].filter((t) => hasTag(tags, t));
   let score = liked.length * 10 + fitting.length;
+  const alike = likeGame ? similarity(likeGame, game) : null;
+  if (alike) score += alike.score * 6;
   if (effectivePrice !== null && filters.maxPrice) score += (1 - Math.min(effectivePrice / filters.maxPrice, 1)) * 2;
 
   const reasons: string[] = [];
   const shown = fitting.length > 0 ? fitting : modes.filter((m) => m.fit === "unverified");
   for (const { mode } of shown.slice(0, 2)) reasons.push(modeReason(game, mode));
+  if (alike && alike.shared.length > 0) reasons.push(`Like ${likeGame!.title}: ${alike.shared.slice(0, 3).join(", ")}`);
   if (liked.length > 0) reasons.push(`Matches ${liked.join(", ")}`);
   if (price.kind === "free-to-play") reasons.push("Free-to-play");
   else if (price.kind === "offer" && filters.maxPrice !== null && price.offer.price <= filters.maxPrice) {
@@ -176,6 +189,20 @@ function evaluate(game: Game, filters: Filters, offers: OfferMap, skip: Constrai
   const result: Result = { game, score, modes, price, reasons };
   const hardFail = modeStatus === "no" || excluded || !pricingOk || budget === "no" || storeFit === "no";
   return { result, hardFail, modeStatus, priceStatus: budget === "unverified" || storeFit === "unverified" ? "unverified" : "yes" };
+}
+
+// Place names say nothing about what a game is like.
+const NOT_SIMILARITY = new Set(["north america", "middle east", "contemporary"]);
+
+// How alike two games are: shared genres and themes, plus playing the same ways.
+export function similarity(a: Game, b: Game): { score: number; shared: string[] } {
+  const ofA = new Set(tagsOf(a));
+  const shared = tagsOf(b).filter((tag) => ofA.has(tag) && !NOT_SIMILARITY.has(tag));
+  let score = shared.length;
+  if (a.online.coop === true && b.online.coop === true) score += 1;
+  if (a.online.versus === true && b.online.versus === true) score += 1;
+  if (a.local.coop === true && b.local.coop === true) score += 0.5;
+  return { score, shared };
 }
 
 function sortResults(results: Result[], sort: Filters["sort"]): Result[] {
@@ -190,11 +217,14 @@ function sortResults(results: Result[], sort: Filters["sort"]): Result[] {
 }
 
 function run(games: Game[], filters: Filters, offers: OfferMap, skip: Constraint | null) {
+  // The named game is shown in its own panel, so it is left out of the lists.
+  const likeGame = filters.like ? games.find((g) => g.id === filters.like) ?? null : null;
   const matches: Result[] = [];
   const unverified: Result[] = [];
   const priceUnconfirmed: Result[] = [];
   for (const game of games) {
-    const { result, hardFail, modeStatus, priceStatus } = evaluate(game, filters, offers, skip);
+    if (game.id === likeGame?.id) continue;
+    const { result, hardFail, modeStatus, priceStatus } = evaluate(game, filters, offers, skip, likeGame);
     if (hardFail) continue;
     if (modeStatus === "unverified") unverified.push(result);
     else if (priceStatus === "unverified") priceUnconfirmed.push(result);

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { basicPatch } from "@/lib/ai/basic";
 import { applyPatch, type Patch } from "@/lib/ai/patch";
-import { genreVocabulary, tagVocabulary } from "@/lib/catalogue";
+import { games, genreVocabulary, tagVocabulary } from "@/lib/catalogue";
 import { filtersSchema } from "@/lib/search/filters";
 import { groqConfig } from "@/lib/server/env";
 import { AiUnavailableError, groqPatch } from "@/lib/server/groq";
@@ -12,6 +12,7 @@ import { createLimiter } from "@/lib/server/rate-limit";
 // on the client with the same code as the manual filters.
 
 const MAX_BODY_BYTES = 4_000;
+const titles = games.map((g) => ({ id: g.id, title: g.title }));
 const limiter = createLimiter({ perWindow: 8, windowMs: 60_000, perDay: 300 });
 
 const bodySchema = z.strictObject({
@@ -58,22 +59,22 @@ export async function POST(request: Request) {
   let notice: string | null = null;
   const config = groqConfig();
   if (!config) {
-    patch = basicPatch(input.message, tagVocabulary);
+    patch = basicPatch(input.message, tagVocabulary, titles);
     notice = "AI search isn't set up, so a simple keyword reader was used.";
   } else {
     try {
-      patch = await groqPatch({ ...config, ...input, tags: tagVocabulary });
+      patch = await groqPatch({ ...config, ...input, tags: tagVocabulary, games: titles });
       mode = "ai";
     } catch (error) {
-      patch = basicPatch(input.message, tagVocabulary);
+      patch = basicPatch(input.message, tagVocabulary, titles);
       const reason = error instanceof AiUnavailableError ? error.message : "The AI service failed.";
       notice = `${reason} A simple keyword reader was used instead.`;
     }
   }
 
   if (patch.action === "clarify" && patch.clarification) {
-    return json({ filters: input.filters, mode, notice, summary: null, clarification: patch.clarification });
+    return json({ filters: input.filters, mode, notice, summary: null, clarification: patch.clarification, unknownTitle: null });
   }
   const filters = applyPatch(input.filters, patch, genreVocabulary);
-  return json({ filters, mode, notice, summary: patch.summary, clarification: null });
+  return json({ filters, mode, notice, summary: patch.summary, clarification: null, unknownTitle: patch.unknownTitle });
 }

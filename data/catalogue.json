@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-12",
+  "generated": "2026-10-13",
   "games": [
     {
       "id": "overcooked-2",
@@ -50,7 +50,10 @@
           "min": 2,
           "max": 4
         },
-        "versusPlayers": null,
+        "versusPlayers": {
+          "min": 2,
+          "max": 4
+        },
         "notes": "For Steam players to play with players on GOG and Epic, manual activation of crossplay mode is required."
       },
       "crossplayNote": "For Steam players to play with players on GOG and Epic, manual activation of crossplay mode is required.",
@@ -70,11 +73,16 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Overcooked!_2",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         },
         {
-          "name": "Overcooked! 2 store listing (Xbox) (reviewed: local and online co-op for 2-4 players)",
+          "name": "Overcooked! 2 store listing (Xbox) (reviewed: co-op for 2-4; a whole versus match is at most 4 players)",
           "url": "https://www.xbox.com/en-CA/games/store/overcooked-2/9PGB72NFG5JN",
+          "retrieved": "2026-10-13"
+        },
+        {
+          "name": "PCGamingWiki online play (reviewed: co-op for 2-4; a whole versus match is at most 4 players)",
+          "url": "https://www.pcgamingwiki.com/wiki/Overcooked!_2",
           "retrieved": "2026-10-13"
         }
       ]
@@ -141,7 +149,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/It_Takes_Two",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -214,7 +222,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/A_Way_Out",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -277,7 +285,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Deep_Rock_Galactic",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -342,7 +350,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Lethal_Company",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -405,7 +413,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Phasmophobia",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -465,7 +473,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Content_Warning",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -527,7 +535,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/R.E.P.O.",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -586,7 +594,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/GTFO",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -657,7 +665,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Dying_Light",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         },
         {
           "name": "Co-Optimus: Techland pre-order announcement (reviewed: 4-player online co-op; Be the Zombie is a separate 1 vs 4 mode)",
@@ -735,7 +743,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Project_Zomboid",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -779,7 +787,10 @@
         "versus": true,
         "sharedRange": false,
         "coopPlayers": null,
-        "versusPlayers": null,
+        "versusPlayers": {
+          "min": null,
+          "max": 5
+        },
         "notes": "Player vs. bot also available."
       },
       "crossplayNote": null,
@@ -796,7 +807,12 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Dead_by_Daylight",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Dead by Daylight Wiki: Custom Game (reviewed: a private Custom Game is 1 killer and up to 4 survivors)",
+          "url": "https://deadbydaylight.wiki.gg/wiki/Custom_Game",
+          "retrieved": "2026-10-14"
         }
       ]
     },
@@ -870,10 +886,10 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Left_4_Dead_2",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         },
         {
-          "name": "PCGamingWiki online play notes (reviewed: co-op is 4 players; versus is up to 4v4)",
+          "name": "PCGamingWiki online play notes (reviewed: co-op campaign is 4 players; versus is up to 4v4)",
           "url": "https://www.pcgamingwiki.com/wiki/Left_4_Dead_2",
           "retrieved": "2026-10-13"
         }
@@ -925,7 +941,10 @@
           "min": null,
           "max": 10
         },
-        "versusPlayers": null,
+        "versusPlayers": {
+          "min": null,
+          "max": 10
+        },
         "notes": "PVP can be turned on. Off by default"
       },
       "crossplayNote": null,
@@ -945,10 +964,10 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Valheim",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         },
         {
-          "name": "PCGamingWiki online play notes (reviewed: a 10-player server is co-op; PvP is an optional toggle)",
+          "name": "PCGamingWiki online play notes (reviewed: up to 10 players on one server; PvP is an optional toggle on the same server)",
           "url": "https://www.pcgamingwiki.com/wiki/Valheim",
           "retrieved": "2026-10-13"
         }
@@ -1016,7 +1035,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Portal_2",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1083,7 +1102,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Stardew_Valley",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1150,7 +1169,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Terraria",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1218,7 +1237,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Don't_Starve_Together",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1281,7 +1300,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Risk_of_Rain_2",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1349,7 +1368,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Borderlands_2",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1410,7 +1429,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Monster_Hunter%3A_World",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1467,7 +1486,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Helldivers_2",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1522,7 +1541,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Raft",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1583,7 +1602,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Grounded",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1645,7 +1664,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Sea_of_Thieves",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1706,7 +1725,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Satisfactory",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1770,7 +1789,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Remnant_II",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1843,7 +1862,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Unrailed!",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         },
         {
           "name": "Unrailed! publisher description (PlayStation Store) (reviewed: co-op up to 4 in one team; versus is 2 vs 2)",
@@ -1913,7 +1932,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/PlateUp!",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -1969,7 +1988,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Moving_Out",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2031,7 +2050,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Payday_2",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2093,7 +2112,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/The_Forest",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2157,7 +2176,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Sons_of_the_Forest",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2216,7 +2235,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Keep_Talking_and_Nobody_Explodes",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2278,7 +2297,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Pico_Park",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2339,7 +2358,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Human%3A_Fall_Flat",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2401,7 +2420,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Cuphead",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2467,7 +2486,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Ultimate_Chicken_Horse",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2511,10 +2530,13 @@
           "max": 15
         },
         "coop": null,
-        "versus": null,
+        "versus": true,
         "sharedRange": false,
         "coopPlayers": null,
-        "versusPlayers": null,
+        "versusPlayers": {
+          "min": null,
+          "max": 15
+        },
         "notes": "Public games or join via room code."
       },
       "crossplayNote": null,
@@ -2533,7 +2555,12 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Among_Us",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Among Us Wiki: Lobby (reviewed: a private lobby holds up to 15 players)",
+          "url": "https://among-us.fandom.com/wiki/Lobby",
+          "retrieved": "2026-10-14"
         }
       ]
     },
@@ -2574,10 +2601,13 @@
           "max": 16
         },
         "coop": null,
-        "versus": null,
+        "versus": true,
         "sharedRange": false,
         "coopPlayers": null,
-        "versusPlayers": null,
+        "versusPlayers": {
+          "min": null,
+          "max": 16
+        },
         "notes": "Public games or join via room code."
       },
       "crossplayNote": null,
@@ -2594,7 +2624,12 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Goose_Goose_Duck",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Pro Game Guides: Goose Goose Duck vs Among Us (reviewed: up to 16 players in one game; public or private lobbies)",
+          "url": "https://progameguides.com/among-us/goose-goose-duck-vs-among-us-how-are-they-different/",
+          "retrieved": "2026-10-14"
         }
       ]
     },
@@ -2637,8 +2672,14 @@
         "coop": true,
         "versus": true,
         "sharedRange": true,
-        "coopPlayers": null,
-        "versusPlayers": null,
+        "coopPlayers": {
+          "min": null,
+          "max": 4
+        },
+        "versusPlayers": {
+          "min": null,
+          "max": 4
+        },
         "notes": "Free for All Season 3's Sunken Secrets Update on Febuary 21, 2023 reduced Solo Show match sizes from 60 to 40 to allow faster matchmaking. The launch of Season 4 (Creative Construction) reduced Duos and Squads match sizes from 60 to 40 too as of May 2023. The Fall Forever Update changed all mode player counts 40 to 32 players."
       },
       "crossplayNote": "Crossplay with PlayStation consoles was introduced in Ultimate Knockout season 4.5,, and was extended to Xbox One/Series and Nintendo Switch in Free for All season 1. Android/iOS added in 11.1.4 Update",
@@ -2653,7 +2694,12 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Fall_Guys",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Dot Esports: Fall Guys party size (reviewed: a party is up to 4 players)",
+          "url": "https://dotesports.com/fall-guys/news/how-many-people-can-be-in-a-fall-guys-party",
+          "retrieved": "2026-10-14"
         }
       ]
     },
@@ -2700,7 +2746,10 @@
         "versus": true,
         "sharedRange": false,
         "coopPlayers": null,
-        "versusPlayers": null,
+        "versusPlayers": {
+          "min": null,
+          "max": 12
+        },
         "notes": null
       },
       "crossplayNote": null,
@@ -2714,7 +2763,17 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Golf_with_Your_Friends",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
+        },
+        {
+          "name": "PlayStation Store listing (reviewed: up to 12 players online in a room you can host and invite friends to)",
+          "url": "https://store.playstation.com/en-sg/concept/235061",
+          "retrieved": "2026-10-14"
+        },
+        {
+          "name": "Nintendo World Report review (hosting rooms) (reviewed: up to 12 players online in a room you can host and invite friends to)",
+          "url": "https://www.nintendoworldreport.com/review/53852",
+          "retrieved": "2026-10-14"
         }
       ]
     },
@@ -2778,7 +2837,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Gang_Beasts",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2836,7 +2895,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Party_Animals",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2899,7 +2958,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Lethal_League_Blaze",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -2945,8 +3004,14 @@
         "coop": true,
         "versus": true,
         "sharedRange": true,
-        "coopPlayers": null,
-        "versusPlayers": null,
+        "coopPlayers": {
+          "min": null,
+          "max": 10
+        },
+        "versusPlayers": {
+          "min": null,
+          "max": 10
+        },
         "notes": "Varies from game to game."
       },
       "crossplayNote": null,
@@ -2961,7 +3026,12 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Tabletop_Simulator",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
+        },
+        {
+          "name": "PCGamingWiki online play (reviewed: up to 10 players in one hosted lobby; what they play varies by game)",
+          "url": "https://www.pcgamingwiki.com/wiki/Tabletop_Simulator",
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -3021,7 +3091,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Counter-Strike_2",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -3068,7 +3138,10 @@
         "versus": true,
         "sharedRange": true,
         "coopPlayers": null,
-        "versusPlayers": null,
+        "versusPlayers": {
+          "min": null,
+          "max": 6
+        },
         "notes": null
       },
       "crossplayNote": null,
@@ -3088,7 +3161,12 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Team_Fortress_2",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
+        },
+        {
+          "name": "Official TF2 Wiki: Casual mode (reviewed: a Casual party is you plus up to 5 others)",
+          "url": "https://wiki.teamfortress.com/wiki/Casual",
+          "retrieved": "2026-10-14"
         }
       ]
     },
@@ -3151,7 +3229,7 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Brawlhalla",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
         }
       ]
     },
@@ -3195,7 +3273,10 @@
         "versus": true,
         "sharedRange": false,
         "coopPlayers": null,
-        "versusPlayers": null,
+        "versusPlayers": {
+          "min": null,
+          "max": 3
+        },
         "notes": "Core Royale: 60 - Players Wildcard Mode: 30 - Players20 squads of 3 or 30 squads of 2 against each other."
       },
       "crossplayNote": "{{Refurl|url=https://help.ea.com/en/help/apex-legends/apex-legends/apex-legends-cross-play/|title=Apex",
@@ -3213,7 +3294,12 @@
         {
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Apex_Legends",
-          "retrieved": "2026-10-12"
+          "retrieved": "2026-10-13"
+        },
+        {
+          "name": "TheGamer: Respawn on squad sizes (reviewed: friends play together in squads of up to 3 inside a 60-player match)",
+          "url": "https://www.thegamer.com/apex-legends-dev-explains-why-dont-have-plans-add-quads/",
+          "retrieved": "2026-10-14"
         }
       ]
     }

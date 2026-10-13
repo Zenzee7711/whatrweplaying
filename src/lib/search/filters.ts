@@ -36,6 +36,8 @@ export const filtersSchema = z.object({
   // A common storefront everyone buys from (CheapShark store ID), so versions match.
   store: z.string().regex(/^\d{1,3}$/).nullable(),
   sort: z.enum(SORTS),
+  // A game the user named ("games like Monster Hunter"): ranks similar games higher. Never hides any.
+  like: z.string().regex(/^[a-z0-9-]{1,60}$/).nullable(),
 });
 export type Filters = z.infer<typeof filtersSchema>;
 
@@ -49,4 +51,5 @@ export const defaultFilters: Filters = {
   maxPrice: null,
   store: null,
   sort: "best",
+  like: null,
 };

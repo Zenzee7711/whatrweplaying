@@ -1,9 +1,11 @@
+import { getGame } from "@/lib/catalogue";
 import { STORES } from "@/lib/offers/cheapshark";
 import { defaultFilters, MODE_LABELS, type Filters } from "@/lib/search/filters";
 
 // The current filters as removable chips, always visible (also on phones, above the results).
 export default function ActiveFilters({ filters, onChange }: { filters: Filters; onChange: (next: Filters) => void }) {
   const chips: { label: string; remove: Partial<Filters> }[] = [];
+  if (filters.like) chips.push({ label: `Like ${getGame(filters.like)?.title ?? filters.like}`, remove: { like: null } });
   if (filters.groupSize !== null) chips.push({ label: `${filters.groupSize} ${filters.groupSize === 1 ? "player" : "players"}`, remove: { groupSize: null } });
   for (const mode of filters.modes) chips.push({ label: MODE_LABELS[mode], remove: { modes: filters.modes.filter((m) => m !== mode) } });
   for (const tag of filters.genres) chips.push({ label: `Prefer ${tag}`, remove: { genres: filters.genres.filter((t) => t !== tag) } });
@@ -13,7 +15,7 @@ export default function ActiveFilters({ filters, onChange }: { filters: Filters;
   if (filters.maxPrice !== null) chips.push({ label: `Up to $${filters.maxPrice} each`, remove: { maxPrice: null } });
   if (filters.store !== null) chips.push({ label: `${STORES[filters.store] ?? "One store"} only`, remove: { store: null } });
 
-  if (chips.length === 0) return <p className="text-sm text-muted">No filters yet: showing the whole catalogue.</p>;
+  if (chips.length === 0) return null;
 
   return (
     <ul aria-label="Active filters" className="flex flex-wrap items-center gap-1.5">

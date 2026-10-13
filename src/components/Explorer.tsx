@@ -9,7 +9,7 @@ import type { Game } from "@/lib/catalogue/schema";
 import { cachedOffers, saveOffers } from "@/lib/offers/cache";
 import { BATCH_SIZE, fetchOffers, RateLimitedError } from "@/lib/offers/cheapshark";
 import type { OfferMap, OfferState } from "@/lib/offers/types";
-import { defaultFilters, filtersSchema, type Filters } from "@/lib/search/filters";
+import { defaultFilters, filtersSchema, type Filters, type Sort } from "@/lib/search/filters";
 import { search, type Constraint, type Result } from "@/lib/search/search";
 import { filtersToParams } from "@/lib/search/url";
 import ActiveFilters from "./ActiveFilters";
@@ -17,6 +17,7 @@ import AssistBar, { type AssistStatus } from "./AssistBar";
 import FilterPanel from "./FilterPanel";
 import GameCard from "./GameCard";
 import GameDrawer from "./GameDrawer";
+import PartyPicker from "./PartyPicker";
 
 type Turn = { role: "user" | "assistant"; text: string };
 
@@ -114,7 +115,14 @@ export default function Explorer({ initialFilters, sharedList }: { initialFilter
         setFilters(next.data);
         const reply = (data.clarification ?? data.summary ?? "") as string;
         setHistory((h) => [...h, { role: "user" as const, text: message }, ...(reply ? [{ role: "assistant" as const, text: reply.slice(0, 300) }] : [])].slice(-6));
-        setAssist({ pending: false, mode: data.mode, summary: data.summary, notice: data.notice, clarification: data.clarification });
+        setAssist({
+          pending: false,
+          mode: data.mode,
+          summary: data.summary,
+          notice: data.notice,
+          clarification: data.clarification,
+          unknownTitle: data.unknownTitle,
+        });
       } catch {
         setAssist({ pending: false, error: "Couldn't reach AI search. Your filters still work." });
       }
@@ -134,17 +142,31 @@ export default function Explorer({ initialFilters, sharedList }: { initialFilter
   }
 
   const openGame = openId ? getGame(openId) ?? null : null;
-  const card = (result: Result) => (
+
+  // The game the user named: shown on its own, with whether it fits the current filters.
+  const likeGame = filters.like ? getGame(filters.like) ?? null : null;
+  const likeOutcome = likeGame ? search([likeGame], { ...filters, like: null }, offers) : null;
+  const likeResult = likeOutcome
+    ? likeOutcome.matches[0] ?? likeOutcome.unverified[0] ?? likeOutcome.priceUnconfirmed[0] ?? null
+    : null;
+  const likeFit = likeOutcome?.matches.length
+    ? "fits"
+    : likeOutcome?.unverified.length || likeOutcome?.priceUnconfirmed.length
+      ? "unverified"
+      : "no";
+  const groupLabel = filters.groupSize === null ? " to explore" : filters.groupSize === 1 ? " for one" : ` for ${filters.groupSize} players`;
+  const card = (result: Result, index = 99) => (
     <GameCard
       key={result.game.id}
       result={result}
+      eager={index < 3}
       offerState={offers[result.game.id]}
       saved={shortlist.ids.includes(result.game.id)}
       onOpen={() => setOpenId(result.game.id)}
       onToggleSave={() => shortlist.toggle(result.game.id)}
     />
   );
-  const grid = (results: Result[]) => <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{results.map(card)}</div>;
+  const grid = (results: Result[]) => <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{results.map((r, i) => card(r, i))}</div>;
   const savedResults = (ids: string[]) =>
     ids.map(getGame).filter((g): g is Game => !!g).map((game) => search([game], defaultFilters, offers).matches[0] ?? search([game], defaultFilters, offers).unverified[0]).filter(Boolean);
 
@@ -160,12 +182,21 @@ export default function Explorer({ initialFilters, sharedList }: { initialFilter
         </a>
       </header>
 
-      <h1 className="sr-only">{site.tagline}</h1>
-      <AssistBar status={assist} onAsk={ask} />
+      <div className="pt-6 pb-2 sm:pt-10">
+        <h1 className="font-display text-4xl leading-tight font-bold tracking-tight text-balance sm:text-5xl">
+          What are we playing <span className="text-accent">tonight?</span>
+        </h1>
+        <p className="mt-2 max-w-xl text-muted">Find a PC game that fits your whole group, then compare prices across stores.</p>
+      </div>
+      <div className="mt-6 space-y-5">
+        <AssistBar status={assist} onAsk={ask} />
+        <PartyPicker value={filters.groupSize} onChange={(groupSize) => setFilters({ ...filters, groupSize })} />
+      </div>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-[280px_1fr]">
         <aside aria-label="Filters" className="hidden lg:block">
           <div className="sticky top-6 max-h-[calc(100dvh-3rem)] overflow-y-auto pr-2">
+            <h2 className="mb-5 font-display text-lg font-semibold">Refine</h2>
             <FilterPanel filters={filters} onChange={setFilters} />
           </div>
         </aside>
@@ -178,12 +209,43 @@ export default function Explorer({ initialFilters, sharedList }: { initialFilter
               onClick={() => sheet.current?.showModal()}
               className="rounded-full border border-line px-4 py-2 text-sm font-medium lg:hidden"
             >
-              Filters
+              Refine
             </button>
           </div>
 
-          <p aria-live="polite" className="mt-4 text-sm text-muted">
-            {outcome.matches.length} {outcome.matches.length === 1 ? "game fits" : "games fit"}
+          <div className="mt-6 flex flex-wrap items-end justify-between gap-3">
+            <h2 aria-live="polite" className="font-display text-2xl font-semibold">
+              {outcome.matches.length} {outcome.matches.length === 1 ? "game" : "games"}
+              <span className="text-muted">{groupLabel}</span>
+            </h2>
+            <div className="flex flex-wrap items-center gap-2">
+              {outcome.matches.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => setOpenId(outcome.matches[Math.floor(Math.random() * outcome.matches.length)].game.id)}
+                  className="rounded-full border border-accent/50 px-3.5 py-2 text-sm font-medium text-accent transition hover:bg-accent/10"
+                >
+                  Can&apos;t decide? Pick one for us
+                </button>
+              )}
+              <label htmlFor="sort" className="sr-only">
+                Sort by
+              </label>
+              <select
+                id="sort"
+                value={filters.sort}
+                onChange={(event) => setFilters({ ...filters, sort: event.target.value as Sort })}
+                className="rounded-full border border-line bg-surface px-3.5 py-2 text-sm"
+              >
+                <option value="best">Best match</option>
+                <option value="price">Lowest price</option>
+                <option value="discount">Biggest discount</option>
+              </select>
+            </div>
+          </div>
+
+          <p className="mt-1 text-sm text-muted">
+            Prices in USD, checked live
             {checking > 0 && ` · checking prices for ${checking} games…`}
             {unavailable > 0 && (
               <>
@@ -194,6 +256,36 @@ export default function Explorer({ initialFilters, sharedList }: { initialFilter
               </>
             )}
           </p>
+
+          {likeGame && (
+            <section
+              aria-labelledby="searched-heading"
+              className="mt-6 grid gap-4 rounded-2xl border border-accent/40 bg-accent/5 p-4 sm:grid-cols-[minmax(0,300px)_1fr] sm:items-center"
+            >
+              {card(likeResult ?? { game: likeGame, score: 0, modes: [], price: { kind: "unknown" }, reasons: [] })}
+              <div>
+                <h2 id="searched-heading" className="text-xs font-semibold tracking-wider text-muted uppercase">
+                  You searched for
+                </h2>
+                <p className="mt-1 font-display text-2xl font-semibold">{likeGame.title}</p>
+                <p className="mt-2 text-sm">
+                  {likeFit === "fits"
+                    ? "It fits your filters."
+                    : likeFit === "unverified"
+                      ? "It might fit, but we couldn't confirm it for your group."
+                      : "It doesn't fit your current filters."}{" "}
+                  <span className="text-muted">The games below are ranked by how similar they are.</span>
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setFilters({ ...filters, like: null })}
+                  className="mt-3 text-sm text-muted underline underline-offset-4 hover:text-foreground"
+                >
+                  Clear this search
+                </button>
+              </div>
+            </section>
+          )}
 
           {sharedList.length > 0 && (
             <section aria-labelledby="shared-heading" className="mt-6 rounded-2xl border border-accent/40 p-4">

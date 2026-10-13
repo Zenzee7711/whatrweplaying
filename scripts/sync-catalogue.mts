@@ -50,9 +50,17 @@ const seed = JSON.parse(readFileSync("data/seed.json", "utf8")) as {
 type Override = {
   local?: { coopPlayers?: Game["local"]["coopPlayers"]; versusPlayers?: Game["local"]["versusPlayers"] };
   online?: { coopPlayers?: Game["online"]["coopPlayers"]; versusPlayers?: Game["online"]["versusPlayers"] };
-  source: { name: string; url: string; retrieved: string };
+  sources: { name: string; url: string; retrieved: string }[];
   note: string;
 };
+
+// A reviewed size also confirms the mode exists (e.g. the wiki lists no mode for Among Us,
+// but its lobby size is sourced), so the mode flag is set along with it.
+function applyOverride(connection: Game["online"], reviewed: Override["online"]) {
+  if (!reviewed) return;
+  if (reviewed.coopPlayers) Object.assign(connection, { supported: true, coop: true, coopPlayers: reviewed.coopPlayers });
+  if (reviewed.versusPlayers) Object.assign(connection, { supported: true, versus: true, versusPlayers: reviewed.versusPlayers });
+}
 const overrides = JSON.parse(readFileSync("data/overrides.json", "utf8")) as Record<string, Override>;
 
 const games: Game[] = [];
@@ -72,12 +80,13 @@ for (const { id, steamAppId, pcgwPage: seedPage } of seed) {
     if (cheapshark.issue) issues.push(`${id}: ${cheapshark.issue}`);
 
     const override = overrides[id];
-    if (override) {
-      Object.assign(facts.local, override.local ?? {});
-      Object.assign(facts.online, override.online ?? {});
-    }
+    applyOverride(facts.local, override?.local);
+    applyOverride(facts.online, override?.online);
     if (facts.online.sharedRange && !facts.online.coopPlayers) {
       issues.push(`${id}: one online range for co-op and versus; co-op size unverified until reviewed`);
+    }
+    if (facts.online.versus && !facts.online.versusPlayers) {
+      issues.push(`${id}: online versus party/lobby size unverified until reviewed`);
     }
 
     const pageUrl = `https://www.pcgamingwiki.com/wiki/${encodeURIComponent(page.replace(/ /g, "_"))}`;
@@ -99,7 +108,7 @@ for (const { id, steamAppId, pcgwPage: seedPage } of seed) {
       image: `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${steamAppId}/header.jpg`,
       sources: [
         { name: "PCGamingWiki", url: pageUrl, retrieved: today },
-        ...(override ? [{ ...override.source, name: `${override.source.name} (reviewed: ${override.note})` }] : []),
+        ...(override?.sources ?? []).map((source) => ({ ...source, name: `${source.name} (reviewed: ${override!.note})` })),
       ],
     });
     const show = (c: Game["online"]) =>

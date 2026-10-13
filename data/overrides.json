@@ -1,29 +1,75 @@
 {
   "left-4-dead-2": {
     "online": { "coopPlayers": { "min": null, "max": 4 }, "versusPlayers": { "min": null, "max": 8 } },
-    "source": { "name": "PCGamingWiki online play notes", "url": "https://www.pcgamingwiki.com/wiki/Left_4_Dead_2", "retrieved": "2026-10-13" },
-    "note": "co-op is 4 players; versus is up to 4v4"
+    "sources": [{ "name": "PCGamingWiki online play notes", "url": "https://www.pcgamingwiki.com/wiki/Left_4_Dead_2", "retrieved": "2026-10-13" }],
+    "note": "co-op campaign is 4 players; versus is up to 4v4"
   },
   "valheim": {
-    "online": { "coopPlayers": { "min": null, "max": 10 } },
-    "source": { "name": "PCGamingWiki online play notes", "url": "https://www.pcgamingwiki.com/wiki/Valheim", "retrieved": "2026-10-13" },
-    "note": "a 10-player server is co-op; PvP is an optional toggle"
+    "online": { "coopPlayers": { "min": null, "max": 10 }, "versusPlayers": { "min": null, "max": 10 } },
+    "sources": [{ "name": "PCGamingWiki online play notes", "url": "https://www.pcgamingwiki.com/wiki/Valheim", "retrieved": "2026-10-13" }],
+    "note": "up to 10 players on one server; PvP is an optional toggle on the same server"
   },
   "overcooked-2": {
     "local": { "coopPlayers": { "min": 2, "max": 4 } },
-    "online": { "coopPlayers": { "min": 2, "max": 4 } },
-    "source": { "name": "Overcooked! 2 store listing (Xbox)", "url": "https://www.xbox.com/en-CA/games/store/overcooked-2/9PGB72NFG5JN", "retrieved": "2026-10-13" },
-    "note": "local and online co-op for 2-4 players"
+    "online": { "coopPlayers": { "min": 2, "max": 4 }, "versusPlayers": { "min": 2, "max": 4 } },
+    "sources": [
+      { "name": "Overcooked! 2 store listing (Xbox)", "url": "https://www.xbox.com/en-CA/games/store/overcooked-2/9PGB72NFG5JN", "retrieved": "2026-10-13" },
+      { "name": "PCGamingWiki online play", "url": "https://www.pcgamingwiki.com/wiki/Overcooked!_2", "retrieved": "2026-10-13" }
+    ],
+    "note": "co-op for 2-4; a whole versus match is at most 4 players"
   },
   "unrailed": {
     "local": { "coopPlayers": { "min": null, "max": 4 }, "versusPlayers": { "min": 4, "max": 4 } },
     "online": { "coopPlayers": { "min": null, "max": 4 }, "versusPlayers": { "min": 4, "max": 4 } },
-    "source": { "name": "Unrailed! publisher description (PlayStation Store)", "url": "https://www.playstation.com/en-hk/games/unrailed/", "retrieved": "2026-10-13" },
+    "sources": [{ "name": "Unrailed! publisher description (PlayStation Store)", "url": "https://www.playstation.com/en-hk/games/unrailed/", "retrieved": "2026-10-13" }],
     "note": "co-op up to 4 in one team; versus is 2 vs 2"
   },
   "dying-light": {
     "online": { "coopPlayers": { "min": null, "max": 4 } },
-    "source": { "name": "Co-Optimus: Techland pre-order announcement", "url": "https://www.co-optimus.com/article/12414/techland-outlines-dying-light-pre-order-promotion.html", "retrieved": "2026-10-13" },
+    "sources": [{ "name": "Co-Optimus: Techland pre-order announcement", "url": "https://www.co-optimus.com/article/12414/techland-outlines-dying-light-pre-order-promotion.html", "retrieved": "2026-10-13" }],
     "note": "4-player online co-op; Be the Zombie is a separate 1 vs 4 mode"
+  },
+  "apex-legends": {
+    "online": { "versusPlayers": { "min": null, "max": 3 } },
+    "sources": [{ "name": "TheGamer: Respawn on squad sizes", "url": "https://www.thegamer.com/apex-legends-dev-explains-why-dont-have-plans-add-quads/", "retrieved": "2026-10-14" }],
+    "note": "friends play together in squads of up to 3 inside a 60-player match"
+  },
+  "team-fortress-2": {
+    "online": { "versusPlayers": { "min": null, "max": 6 } },
+    "sources": [{ "name": "Official TF2 Wiki: Casual mode", "url": "https://wiki.teamfortress.com/wiki/Casual", "retrieved": "2026-10-14" }],
+    "note": "a Casual party is you plus up to 5 others"
+  },
+  "fall-guys": {
+    "online": { "coopPlayers": { "min": null, "max": 4 }, "versusPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "Dot Esports: Fall Guys party size", "url": "https://dotesports.com/fall-guys/news/how-many-people-can-be-in-a-fall-guys-party", "retrieved": "2026-10-14" }],
+    "note": "a party is up to 4 players"
+  },
+  "among-us": {
+    "online": { "versusPlayers": { "min": null, "max": 15 } },
+    "sources": [{ "name": "Among Us Wiki: Lobby", "url": "https://among-us.fandom.com/wiki/Lobby", "retrieved": "2026-10-14" }],
+    "note": "a private lobby holds up to 15 players"
+  },
+  "goose-goose-duck": {
+    "online": { "versusPlayers": { "min": null, "max": 16 } },
+    "sources": [{ "name": "Pro Game Guides: Goose Goose Duck vs Among Us", "url": "https://progameguides.com/among-us/goose-goose-duck-vs-among-us-how-are-they-different/", "retrieved": "2026-10-14" }],
+    "note": "up to 16 players in one game; public or private lobbies"
+  },
+  "golf-with-your-friends": {
+    "online": { "versusPlayers": { "min": null, "max": 12 } },
+    "sources": [
+      { "name": "PlayStation Store listing", "url": "https://store.playstation.com/en-sg/concept/235061", "retrieved": "2026-10-14" },
+      { "name": "Nintendo World Report review (hosting rooms)", "url": "https://www.nintendoworldreport.com/review/53852", "retrieved": "2026-10-14" }
+    ],
+    "note": "up to 12 players online in a room you can host and invite friends to"
+  },
+  "dead-by-daylight": {
+    "online": { "versusPlayers": { "min": null, "max": 5 } },
+    "sources": [{ "name": "Dead by Daylight Wiki: Custom Game", "url": "https://deadbydaylight.wiki.gg/wiki/Custom_Game", "retrieved": "2026-10-14" }],
+    "note": "a private Custom Game is 1 killer and up to 4 survivors"
+  },
+  "tabletop-simulator": {
+    "online": { "coopPlayers": { "min": null, "max": 10 }, "versusPlayers": { "min": null, "max": 10 } },
+    "sources": [{ "name": "PCGamingWiki online play", "url": "https://www.pcgamingwiki.com/wiki/Tabletop_Simulator", "retrieved": "2026-10-13" }],
+    "note": "up to 10 players in one hosted lobby; what they play varies by game"
   }
 }

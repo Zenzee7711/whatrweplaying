@@ -5,72 +5,95 @@ import { playLines, PriceTag } from "./labels";
 
 type GameCardProps = {
   result: Result;
+  eager?: boolean; // the first row of cards: load the artwork straight away
   offerState: OfferState | undefined;
   saved: boolean;
   onOpen: () => void;
   onToggleSave: () => void;
 };
 
-export default function GameCard({ result, offerState, saved, onOpen, onToggleSave }: GameCardProps) {
+function People() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 shrink-0">
+      <circle cx="9" cy="8" r="3" fill="currentColor" />
+      <circle cx="16.5" cy="9" r="2.4" fill="currentColor" opacity="0.6" />
+      <path d="M3.5 19c.7-3.3 3-5 5.5-5s4.8 1.7 5.5 5z" fill="currentColor" />
+      <path d="M14.2 14.4c2.6-.4 5.1.9 5.9 4.6h-4.4" fill="currentColor" opacity="0.6" />
+    </svg>
+  );
+}
+
+export default function GameCard({ result, eager = false, offerState, saved, onOpen, onToggleSave }: GameCardProps) {
   const { game, reasons, price } = result;
+  // The ways of playing that matched the search come first; otherwise the game's own list.
   const lines = playLines(game).slice(0, 2);
 
   return (
-    <article className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition hover:border-muted/40 motion-safe:animate-enter">
+    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition duration-200 hover:border-accent/40 motion-safe:animate-enter motion-safe:hover:-translate-y-1 hover:shadow-[0_12px_32px_-12px_rgb(255_138_61/0.25)]">
       <button type="button" onClick={onOpen} className="relative block aspect-[460/215] overflow-hidden bg-raised text-left">
         <Image
           src={game.image}
           alt={`${game.title} artwork`}
           fill
+          loading={eager ? "eager" : "lazy"}
           sizes="(min-width: 1280px) 320px, (min-width: 640px) 45vw, 100vw"
-          className="object-cover transition duration-300 group-hover:scale-[1.02] motion-reduce:transition-none"
+          className="object-cover transition duration-300 group-hover:scale-[1.03] motion-reduce:transition-none"
         />
         <span className="sr-only">Show details for {game.title}</span>
       </button>
 
+      <button
+        type="button"
+        onClick={onToggleSave}
+        aria-pressed={saved}
+        aria-label={saved ? `Remove ${game.title} from shortlist` : `Add ${game.title} to shortlist`}
+        className={`absolute top-2.5 right-2.5 grid h-9 w-9 place-items-center rounded-full backdrop-blur-sm transition ${
+          saved ? "bg-accent text-accent-foreground" : "bg-background/80 text-foreground hover:bg-background"
+        }`}
+      >
+        <svg aria-hidden="true" viewBox="0 0 20 20" className="h-4 w-4">
+          <path
+            d="M5 3h10a1 1 0 0 1 1 1v13l-6-3.5L4 17V4a1 1 0 0 1 1-1z"
+            fill={saved ? "currentColor" : "none"}
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+
       <div className="flex flex-1 flex-col gap-3 p-4">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="font-display text-lg leading-snug font-semibold">
-            <button type="button" onClick={onOpen} className="text-left hover:text-accent">
-              {game.title}
-            </button>
-          </h3>
-          <button
-            type="button"
-            onClick={onToggleSave}
-            aria-pressed={saved}
-            aria-label={saved ? `Remove ${game.title} from shortlist` : `Add ${game.title} to shortlist`}
-            className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border transition ${
-              saved ? "border-accent bg-accent/15 text-accent" : "border-line text-muted hover:text-foreground"
-            }`}
-          >
-            <svg aria-hidden="true" viewBox="0 0 20 20" className="h-4 w-4">
-              <path
-                d="M5 3h10a1 1 0 0 1 1 1v13l-6-3.5L4 17V4a1 1 0 0 1 1-1z"
-                fill={saved ? "currentColor" : "none"}
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinejoin="round"
-              />
-            </svg>
+        <h3 className="font-display text-lg leading-snug font-semibold">
+          <button type="button" onClick={onOpen} className="text-left hover:text-accent">
+            {game.title}
           </button>
-        </div>
+        </h3>
 
         {lines.length > 0 && (
-          <ul className="flex flex-wrap gap-1.5 text-xs">
+          <ul className="space-y-1.5 text-sm">
             {lines.map((line) => (
-              <li key={line.label} className="rounded-full border border-line px-2.5 py-1">
-                {line.label} <span className={line.verified ? "text-verified" : "text-unverified"}>· {line.detail}</span>
+              <li key={line.label} className="flex items-center gap-2">
+                <span className={line.verified ? "text-verified" : "text-unverified"}>
+                  <People />
+                </span>
+                <span className={line.verified ? "font-medium" : "text-unverified"}>
+                  {line.together ? `${line.together} together` : "Group size unverified"}
+                </span>
+                <span className="text-muted">· {line.label}</span>
               </li>
             ))}
           </ul>
         )}
 
-        {reasons.length > 0 && <p className="text-sm text-muted">{reasons.slice(0, 3).join(" · ")}</p>}
+        {reasons.length > 0 && (
+          <p className="line-clamp-2 text-sm text-muted">
+            {reasons.filter((r) => !/players together$|^Online |^Local |^Can be played solo/.test(r)).join(" · ")}
+          </p>
+        )}
 
         <div className="mt-auto flex items-center justify-between gap-3 border-t border-line pt-3 text-sm">
           <PriceTag price={price} state={offerState} />
-          <button type="button" onClick={onOpen} className="shrink-0 text-sm text-muted underline-offset-4 hover:text-foreground hover:underline">
+          <button type="button" onClick={onOpen} className="shrink-0 font-medium text-accent hover:underline hover:underline-offset-4">
             Details
           </button>
         </div>

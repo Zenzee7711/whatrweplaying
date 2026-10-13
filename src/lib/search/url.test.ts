@@ -13,6 +13,7 @@ describe("shareable filters", () => {
       themes: ["horror"],
       maxPrice: 15,
       sort: "price",
+      like: "monster-hunter-world",
     };
     expect(filtersFromParams(params(filtersToParams(filters).toString()))).toEqual(filters);
   });

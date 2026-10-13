@@ -10,18 +10,22 @@ export function rangeText(players: Capacity | null): string | null {
   return players.min === players.max ? `${players.max}` : `up to ${players.max}`;
 }
 
-// One short line per way of playing, e.g. "Online co-op · 1–4" or "Online versus · up to 8 per match".
-export function playLines(game: Game): { label: string; detail: string; verified: boolean }[] {
-  const lines: { label: string; detail: string; verified: boolean }[] = [];
+// One short line per way of playing, e.g. "Online co-op · up to 4 together". Counts are always
+// how many friends can play together (team, party or private lobby), never a whole match size.
+export type PlayLine = { label: string; detail: string; together: string | null; verified: boolean };
+
+export function playLines(game: Game): PlayLine[] {
+  const lines: PlayLine[] = [];
   const add = (where: "Online" | "Local", connection: Connection) => {
     if (connection.supported !== true) return;
     for (const kind of ["coop", "versus"] as const) {
       if (connection[kind] !== true) continue;
-      const range = rangeText(kindPlayers(connection, kind));
+      const range = rangeText(kindPlayers(connection, kind, where === "Online" ? "online" : "local"));
       const name = `${where} ${kind === "coop" ? "co-op" : "versus"}`;
       lines.push({
         label: name,
-        detail: range ? `${range} players${kind === "versus" ? " per match" : ""}` : "player count unverified",
+        detail: range ? `${range} together` : "group size unverified",
+        together: range,
         verified: range !== null,
       });
     }

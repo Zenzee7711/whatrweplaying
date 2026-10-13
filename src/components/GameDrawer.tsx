@@ -164,7 +164,7 @@ export default function GameDrawer({ game, offerState, store, onClose }: GameDra
               <h3 id="sources-heading" className="font-semibold">Sources</h3>
               <ul className="mt-1 space-y-1">
                 {game.sources.map((source) => (
-                  <li key={source.url}>
+                  <li key={`${source.name}|${source.url}`}>
                     <a href={source.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-foreground">
                       {source.name}
                     </a>{" "}
