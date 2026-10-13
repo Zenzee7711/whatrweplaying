@@ -64,7 +64,7 @@ export async function searchIgdb(query: string): Promise<OtherGame[]> {
   const safe = query.replace(/[^\p{L}\p{N} :'&!.,-]/gu, " ").trim();
   const body = [
     `search "${safe}";`,
-    "fields name, first_release_date, cover.image_id, artworks.image_id, screenshots.image_id,",
+    "fields name, first_release_date, total_rating_count, cover.image_id, artworks.image_id, screenshots.image_id,",
     "websites.type, websites.url, external_games.external_game_source, external_games.uid;",
     "where platforms = (6) & game_type = (0,4,8,9,10,11) & version_parent = null;",
     "limit 15;",

@@ -1,15 +1,17 @@
 import { z } from "zod";
-import { basicPatch } from "@/lib/ai/basic";
+import { basicPatch, looksLikeFollowUp } from "@/lib/ai/basic";
 import { applyPatch, type Patch } from "@/lib/ai/patch";
 import { games, genreVocabulary, tagVocabulary } from "@/lib/catalogue";
-import { filtersSchema } from "@/lib/search/filters";
+import { defaultFilters, filtersSchema } from "@/lib/search/filters";
 import { groqConfig } from "@/lib/server/env";
 import { AiUnavailableError, groqPatch } from "@/lib/server/groq";
+import { resolvePicks } from "@/lib/server/picks";
 import { createLimiter } from "@/lib/server/rate-limit";
 
-// POST /api/assist: turns a natural-language request into updated filters.
-// The response only ever contains validated filters and short text; search and ranking run
-// on the client with the same code as the manual filters.
+// POST /api/assist: turns a natural-language request into updated filters, plus (in AI mode)
+// games the AI recommends, each confirmed to exist before it's returned. The response only
+// contains validated filters, checked picks and short text; search and ranking run on the
+// client with the same code as the manual filters.
 
 const MAX_BODY_BYTES = 4_000;
 const titles = games.map((g) => ({ id: g.id, title: g.title }));
@@ -56,6 +58,13 @@ export async function POST(request: Request) {
     );
   }
 
+  // A follow-up ("actually no horror", "cheaper") adjusts the last search. Anything else is a new
+  // request: it starts from fresh filters, and the AI doesn't see the old conversation, so
+  // nothing from the last search can leak into it.
+  const scope: "new" | "refine" = input.history.length > 0 && looksLikeFollowUp(input.message) ? "refine" : "new";
+  const base = scope === "new" ? defaultFilters : input.filters;
+  const history = scope === "new" ? [] : input.history;
+
   let patch: Patch;
   let mode: "ai" | "basic" = "basic";
   let notice: string | null = null;
@@ -67,7 +76,7 @@ export async function POST(request: Request) {
     notice = "AI search isn't set up, so a simple keyword reader was used.";
   } else {
     try {
-      patch = await groqPatch({ ...config, ...input, tags: tagVocabulary, games: titles });
+      patch = await groqPatch({ ...config, message: input.message, filters: base, history, tags: tagVocabulary, games: titles });
       mode = "ai";
       // Safety net: the keyword reader reliably spots "no X". Its exclusions are always kept,
       // so an AI reply that forgets one can't quietly undo "no horror".
@@ -76,6 +85,8 @@ export async function POST(request: Request) {
         ...patch,
         addExcluded: [...new Set([...patch.addExcluded, ...keyword.addExcluded])].slice(0, 6),
         removePreferred: [...new Set([...patch.removePreferred, ...keyword.addExcluded])].slice(0, 6),
+        // Moods like "immersive" or "cozy" should still rank our own list when the AI adds no tags.
+        addPreferred: patch.addPreferred.length ? patch.addPreferred : keyword.addPreferred,
       };
     } catch (error) {
       patch = basicPatch(input.message, tagVocabulary, titles);
@@ -85,8 +96,18 @@ export async function POST(request: Request) {
   }
 
   if (patch.action === "clarify" && patch.clarification) {
-    return json({ filters: input.filters, mode, notice, summary: null, clarification: patch.clarification, unknownTitle: null });
+    return json({ filters: input.filters, mode, notice, summary: null, clarification: patch.clarification, unknownTitle: null, scope: "refine", picks: [] });
   }
-  const filters = applyPatch(input.filters, patch, genreVocabulary);
-  return json({ filters, mode, notice, summary: patch.summary, clarification: null, unknownTitle: patch.unknownTitle });
+  const filters = applyPatch(base, patch, genreVocabulary);
+  const picks = mode === "ai" ? await resolvePicks(patch.picks, games) : [];
+  return json({
+    filters,
+    mode,
+    notice,
+    summary: patch.summary,
+    clarification: null,
+    unknownTitle: patch.unknownTitle,
+    scope,
+    picks,
+  });
 }

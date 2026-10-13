@@ -143,6 +143,7 @@ for (const { id, steamAppId, pcgwPage: seedPage, launcher } of seed) {
       genres: facts.genres,
       themes: facts.themes,
       description: null,
+      ratingCount: null,
       image,
       launcher: launcher ?? null,
       sources: [

@@ -50,6 +50,9 @@ export const gameSchema = z.object({
   genres: z.array(z.string()),
   themes: z.array(z.string()),
   description: z.string().nullable(),
+  // How many people rated it on IGDB: a rough "how well known" signal, used only to order
+  // otherwise equal matches. Null until sync:igdb runs.
+  ratingCount: z.number().int().nonnegative().nullable().default(null),
   image: z.url().nullable(),
   // Reviewed official place to get a game the checked stores don't sell (Riot Client, Epic, ...).
   launcher: z.object({ name: z.string().min(1), url: z.url() }).nullable(),

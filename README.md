@@ -21,7 +21,11 @@ It recommends PC games and links to stores. It doesn't sell anything.
 - Player counts always mean **how many friends can play together** (a co-op team, a party or a
   private lobby), never the size of a whole public match. Apex Legends shows "up to 3 together"
   (a squad), not "30–60 players per match".
-- Follow up ("actually, no horror, something more relaxed") and only the things you mention change.
+- Describe what you're in the mood for ("I want a solo, story-heavy game") and the AI picks
+  games for it, from any PC game, each with a one-line reason. Every pick is checked to exist
+  before it's shown, and group sizes and prices on the cards come from our data, never the AI.
+- Each new request starts a fresh search. Start with "actually", "cheaper", "no horror" or
+  "what about..." to adjust the last one instead, and only the things you mention change.
 - Filter by group size, solo / online co-op / local co-op / online versus / local versus,
   free-to-play or paid, a maximum price per person, a common store for everyone, and genres or
   themes to prefer or exclude.
@@ -85,11 +89,21 @@ CheapShark's store data only. `.env.local` is ignored by Git.
 
 ## How the AI is used
 
-The AI only turns your words into a small list of filter changes, chosen from fixed values and
-the catalogue's own genres and themes. The response is validated (Zod) before the server
-applies it to your current filters. It never sees game descriptions, never produces prices or
-store links, and never decides compatibility. If the AI is unavailable, times out, runs out of
-quota or returns something invalid, the keyword reader takes over and your filters are kept.
+The AI does two things with your words:
+
+1. **Filter changes**, chosen from fixed values and the catalogue's own genres and themes.
+   Anything outside that list is dropped, and the result is validated (Zod) before the server
+   applies it. A new request is applied to fresh filters and the AI doesn't see the earlier
+   conversation; only a message that reads as a follow-up builds on the last search.
+2. **Picks**: up to six games it recommends. The server looks each title up in the catalogue or
+   on IGDB and drops any it can't find. The AI's one-line reason is shown as its opinion, and a
+   reason that states player counts, play modes or prices is removed, because those facts only
+   come from verified data.
+
+It never sees prices or store data, never produces store links, and never decides group
+compatibility. Requests use a small schema to stay within Groq's free token limit, and a busy
+model fails over to the other free model. If the AI is unavailable, times out, runs out of quota
+or returns something invalid, the keyword reader takes over.
 
 ## Limitations
 

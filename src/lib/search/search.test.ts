@@ -16,7 +16,7 @@ function game(id: string, partial: Partial<Game> = {}): Game {
   return {
     id, title: id, steamAppId: 1, cheapsharkGameId: "1", platforms: ["pc"], monetization: "paid",
     singleplayer: true, local: none, lan: none, online: none, crossplayNote: null,
-    genres: [], themes: [], description: null, image: "https://example.com/a.jpg", launcher: null,
+    genres: [], themes: [], description: null, image: "https://example.com/a.jpg", launcher: null, ratingCount: null,
     sources: [{ name: "Test", url: "https://example.com", retrieved: "2026-10-13" }], ...partial,
   };
 }

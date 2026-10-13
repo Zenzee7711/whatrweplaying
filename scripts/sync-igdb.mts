@@ -29,8 +29,15 @@ if (!tokenResponse.ok) {
 }
 const { access_token: token } = (await tokenResponse.json()) as { access_token: string };
 
-type IgdbRecord = { id: number; name: string; summary?: string; artworks?: { image_id: string }[]; screenshots?: { image_id: string }[] };
-const GAME_FIELDS = "id, name, summary, artworks.image_id, screenshots.image_id";
+type IgdbRecord = {
+  id: number;
+  name: string;
+  summary?: string;
+  total_rating_count?: number;
+  artworks?: { image_id: string }[];
+  screenshots?: { image_id: string }[];
+};
+const GAME_FIELDS = "id, name, summary, total_rating_count, artworks.image_id, screenshots.image_id";
 
 async function igdb<T>(endpoint: string, body: string): Promise<T> {
   const response = await fetch(`https://api.igdb.com/v4/${endpoint}`, {
@@ -79,6 +86,7 @@ for (const game of catalogue.games) {
     game.description = summary.length > 600 ? `${summary.slice(0, 597).trimEnd()}…` : summary;
     described++;
   }
+  game.ratingCount = record.total_rating_count ?? 0;
   // Steam games keep their Steam header; the others get IGDB's wide artwork.
   if (game.image === null) game.image = igdbWideImage(record);
   game.sources = [

@@ -10,6 +10,8 @@ type GameCardProps = {
   saved: boolean;
   onOpen: () => void;
   onToggleSave: () => void;
+  // The AI's one-line reason, when the card is one of its picks.
+  note?: string | null;
 };
 
 function People() {
@@ -23,7 +25,7 @@ function People() {
   );
 }
 
-export default function GameCard({ result, eager = false, offerState, saved, onOpen, onToggleSave }: GameCardProps) {
+export default function GameCard({ result, eager = false, offerState, saved, onOpen, onToggleSave, note }: GameCardProps) {
   const { game, reasons, price } = result;
   // The ways of playing that matched the search come first; otherwise the game's own list.
   const lines = playLines(game).slice(0, 2);
@@ -67,6 +69,8 @@ export default function GameCard({ result, eager = false, offerState, saved, onO
           </button>
         </h3>
 
+        {note && <p className="text-sm">{note}</p>}
+
         {lines.length > 0 && (
           <ul className="space-y-1.5 text-sm">
             {lines.map((line) => (
@@ -83,7 +87,7 @@ export default function GameCard({ result, eager = false, offerState, saved, onO
           </ul>
         )}
 
-        {reasons.length > 0 && (
+        {!note && reasons.length > 0 && (
           <p className="line-clamp-2 text-sm text-muted">
             {reasons.filter((r) => !/players together$|^Online |^Local |^Can be played solo/.test(r)).join(" · ")}
           </p>

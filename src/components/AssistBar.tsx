@@ -15,6 +15,8 @@ export type AssistStatus = {
   clarification?: string | null;
   unknownTitle?: string | null;
   error?: string | null;
+  // Whether the last search started fresh or adjusted the one before.
+  scope?: "new" | "refine";
 };
 
 export type SearchMode = "ai" | "keyword";
@@ -119,7 +121,7 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
   // The search services' own ordering is loose, so rank results with the same title matcher.
   const storeMatches =
     looksLikeName && store.query === query
-      ? findTitles(query, store.games.filter((g) => !isKnown(g)), 0.6)
+      ? findTitles(query, store.games.filter((g) => !isKnown(g)).sort((a, b) => b.popularity - a.popularity), 0.6)
           .slice(0, 5)
           .map((m) => m.item)
       : [];
@@ -323,7 +325,12 @@ export default function AssistBar({ status, onAsk, mode, aiAvailable, onModeChan
                 Type its name to see prices, or we used the rest of your request.
               </span>
             )}
-            {status.summary && <span className="text-foreground">{status.summary}</span>}
+            {status.summary && (
+              <span className="text-foreground">
+                {status.scope === "refine" && <span className="text-muted">Updated your last search: </span>}
+                {status.summary}
+              </span>
+            )}
           </p>
         ) : (
           <p className="flex flex-wrap items-center gap-x-2 gap-y-1.5 text-muted">

@@ -16,12 +16,24 @@ const MOODS: Record<string, string[]> = {
   relaxed: ["farming", "life sim", "simulation", "puzzle", "comedy"],
   scary: ["horror"],
   funny: ["comedy", "party game"],
+  story: ["rpg", "adventure", "open world", "exploration"],
 };
 const MOOD_WORDS: Record<string, keyof typeof MOODS> = {
   relaxed: "relaxed", relaxing: "relaxed", chill: "relaxed", cozy: "relaxed", cosy: "relaxed", casual: "relaxed", calm: "relaxed",
   scary: "scary", spooky: "scary",
   funny: "funny", silly: "funny", chaotic: "funny",
+  story: "story", immersive: "story", narrative: "story", "story-driven": "story",
 };
+
+// A message that changes the last search ("actually no horror", "cheaper", "make it 3") rather
+// than describing a new one. New requests start from fresh filters.
+export function looksLikeFollowUp(message: string): boolean {
+  const text = message.trim().toLowerCase();
+  return (
+    /^(actually|also|and|but|plus|instead|now|ok(ay)?|no|not|without|make it|change|only|more|less|cheaper|same|what about|how about|under|below|with|except|remove|add)\b/.test(text) ||
+    /^(cheaper|cheapest|free|paid|online|local)( ones?| only)?$/.test(text)
+  );
+}
 
 function groupSize(text: string): number | null {
   const numberWord = `\\d{1,2}|${Object.keys(WORD_NUMBERS).join("|")}`;

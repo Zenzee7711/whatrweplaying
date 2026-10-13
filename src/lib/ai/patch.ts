@@ -2,14 +2,17 @@ import { z } from "zod";
 import { defaultFilters, filtersSchema, MODES, PRICING, SORTS, type Filters } from "../search/filters.ts";
 
 // The AI never edits filters directly. It returns a small list of changes ("patch"), which is
-// validated and then applied here, in code. A follow-up like "no horror" therefore changes only
-// what it mentions, and everything else the user set is kept.
+// validated and then applied here, in code. The server decides whether a message is a new
+// request (fresh filters) or a follow-up like "no horror" (changes only what it mentions).
+// It can also name games it recommends ("picks"); the server checks each one exists before
+// showing it, and never takes player counts or prices from the AI.
 
 export const CLEARABLE = ["groupSize", "modes", "maxPrice", "pricing", "genres", "themes", "exclude", "like"] as const;
 
-// Built from the catalogue's own genres, themes and game IDs, so only known values can be used.
-export function makePatchSchema(tags: readonly string[], gameIds: readonly string[]) {
-  const tag = z.enum(tags as [string, ...string[]]);
+// One shape, two strictness levels: the tag and game fields are either free text (what the
+// model is asked for, so the schema sent with every request stays small) or limited to the
+// catalogue's own genres, themes and game IDs (what the app accepts).
+function patchShape<Tag extends z.ZodType<string>, Like extends z.ZodType<string>>(tag: Tag, like: Like) {
   return z.strictObject({
     action: z.enum(["update", "clarify"]),
     clarification: z.string().max(200).nullable(),
@@ -22,13 +25,36 @@ export function makePatchSchema(tags: readonly string[], gameIds: readonly strin
       maxPrice: z.number().min(0).max(500).nullable(),
       pricing: z.enum(PRICING).nullable(),
       sort: z.enum(SORTS).nullable(),
-      like: z.enum(gameIds as [string, ...string[]]).nullable(),
+      like: like.nullable(),
     }),
     clear: z.array(z.enum(CLEARABLE)).max(CLEARABLE.length),
     addPreferred: z.array(tag).max(6),
     removePreferred: z.array(tag).max(6),
     addExcluded: z.array(tag).max(6),
     removeExcluded: z.array(tag).max(6),
+    picks: z.array(z.strictObject({ title: z.string().min(1).max(80), why: z.string().max(160) })).max(6),
+  });
+}
+
+export function makePatchSchema(tags: readonly string[], gameIds: readonly string[]) {
+  return patchShape(z.enum(tags as [string, ...string[]]), z.enum(gameIds as [string, ...string[]]));
+}
+
+// What the model replies with: tags and the liked game as plain text.
+export const wirePatchSchema = patchShape(z.string().max(40), z.string().max(60));
+
+// Keeps only known tags and game IDs from the model's reply (case-insensitive), then checks the
+// result against the strict schema. An unknown tag is dropped rather than failing the request.
+export function fromWire(wire: z.infer<typeof wirePatchSchema>, tags: readonly string[], gameIds: readonly string[]): Patch {
+  const known = (list: string[]) => [...new Set(list.map((t) => t.trim().toLowerCase()).filter((t) => tags.includes(t)))];
+  const like = wire.set.like?.trim().toLowerCase() ?? null;
+  return makePatchSchema(tags, gameIds).parse({
+    ...wire,
+    set: { ...wire.set, like: like && gameIds.includes(like) ? like : null },
+    addPreferred: known(wire.addPreferred),
+    removePreferred: known(wire.removePreferred),
+    addExcluded: known(wire.addExcluded),
+    removeExcluded: known(wire.removeExcluded),
   });
 }
 export type Patch = z.infer<ReturnType<typeof makePatchSchema>>;
@@ -44,6 +70,7 @@ export const emptyPatch: Patch = {
   removePreferred: [],
   addExcluded: [],
   removeExcluded: [],
+  picks: [],
 };
 
 const without = (list: string[], remove: string[]) => list.filter((item) => !remove.includes(item));

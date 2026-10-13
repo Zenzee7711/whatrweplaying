@@ -27,13 +27,13 @@ function strictProblems(node: Node, path = "root"): string[] {
 }
 
 describe("patchJsonSchema", () => {
-  const schema = patchJsonSchema(["horror", "puzzle"], ["overcooked-2", "valheim"]) as Node;
+  const schema = patchJsonSchema() as Node;
 
   it("meets Groq's strict structured-output rules", () => {
     expect(strictProblems(schema)).toEqual([]);
   });
 
-  it("limits tags to the catalogue's vocabulary", () => {
-    expect(schema.properties!.addPreferred.items!.enum).toEqual(["horror", "puzzle"]);
+  it("stays small: tag lists aren't repeated in the schema sent with every request", () => {
+    expect(JSON.stringify(schema).length).toBeLessThan(4000);
   });
 });

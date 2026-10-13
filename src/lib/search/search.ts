@@ -212,7 +212,8 @@ function sortResults(results: Result[], sort: Filters["sort"]): Result[] {
   return [...results].sort((a, b) => {
     if (sort === "price") return priceOf(a) - priceOf(b) || b.score - a.score || byTitle(a, b);
     if (sort === "discount") return discountOf(b) - discountOf(a) || b.score - a.score || byTitle(a, b);
-    return b.score - a.score || priceOf(a) - priceOf(b) || byTitle(a, b);
+    // Equal matches: better-known games first, not whichever happens to be free.
+    return b.score - a.score || (b.game.ratingCount ?? 0) - (a.game.ratingCount ?? 0) || byTitle(a, b);
   });
 }
 

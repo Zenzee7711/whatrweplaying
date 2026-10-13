@@ -77,6 +77,14 @@ describe("parsePcgw", () => {
     const f2p = parsePcgw("{{Infobox game/row/taxonomy/monetization | Free-to-play, Cosmetic microtransactions }}");
     expect(f2p.monetization).toBe("free-to-play");
   });
+
+  it("drops a trailing reference parameter and evens out capitalisation in taxonomy rows", () => {
+    const facts = parsePcgw(
+      "{{Infobox game/row/taxonomy/monetization | free-to-play | ref= }}\n{{Infobox game/row/taxonomy/genres | Puzzle, puzzle, shooter | ref= }}",
+    );
+    expect(facts.monetization).toBe("free-to-play");
+    expect(facts.genres).toEqual(["Puzzle", "Shooter"]);
+  });
 });
 
 describe("parsePlayers", () => {

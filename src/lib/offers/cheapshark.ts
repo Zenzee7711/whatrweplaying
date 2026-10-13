@@ -103,6 +103,7 @@ export function toStoreGames(rows: z.infer<typeof titleSearchSchema>): OtherGame
       cheapsharkGameId: row.gameID,
       cheapest: row.cheapest,
       links: steamAppId ? [steamPage(steamAppId)] : [],
+      popularity: 0,
     };
   });
 }

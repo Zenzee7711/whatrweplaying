@@ -7,6 +7,7 @@ import { useShortlist } from "@/hooks/useShortlist";
 import { catalogueDate, games, getGame } from "@/lib/catalogue";
 import type { Game } from "@/lib/catalogue/schema";
 import { cachedOffers, saveOffers } from "@/lib/offers/cache";
+import type { Pick } from "@/lib/ai/picks";
 import type { OtherGame } from "@/lib/igdb/map";
 import { BATCH_SIZE, fetchOffers, RateLimitedError } from "@/lib/offers/cheapshark";
 import type { OfferMap, OfferState } from "@/lib/offers/types";
@@ -18,6 +19,7 @@ import AssistBar, { type AssistStatus, type SearchMode } from "./AssistBar";
 import FilterPanel from "./FilterPanel";
 import GameCard from "./GameCard";
 import GameDrawer from "./GameDrawer";
+import OtherGameCard from "./OtherGameCard";
 import PartyPicker from "./PartyPicker";
 import StoreGameDrawer from "./StoreGameDrawer";
 
@@ -41,6 +43,8 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
   const [openId, setOpenId] = useState<string | null>(null);
   const [storeGame, setStoreGame] = useState<OtherGame | null>(null);
   const [searchMode, setSearchMode] = useState<SearchMode>(aiAvailable ? "ai" : "keyword");
+  // Games the AI recommended for the last request, already checked to exist by the server.
+  const [picks, setPicks] = useState<{ request: string; items: Pick[] } | null>(null);
   const [assist, setAssist] = useState<AssistStatus>({ pending: false });
   const [history, setHistory] = useState<Turn[]>([]);
   const [copied, setCopied] = useState(false);
@@ -63,8 +67,9 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
     const loose = search(games as Game[], { ...filters, maxPrice: null, store: null }, {});
     const ids = new Set([...loose.matches, ...loose.unverified].map((r) => r.game.id));
     for (const id of [...shortlist.ids, ...sharedList]) ids.add(id);
+    for (const pick of picks?.items ?? []) if (pick.kind === "catalogue") ids.add(pick.id);
     return [...ids].map(getGame).filter((g): g is Game => !!g && g.monetization !== "free-to-play");
-  }, [filters, shortlist.ids, sharedList]);
+  }, [filters, shortlist.ids, sharedList, picks]);
   const missingKey = candidates.filter((g) => offers[g.id] === undefined).map((g) => g.id).join(",");
 
   // Fetch missing offers in batches of 25, using the 10-minute cache first.
@@ -120,7 +125,13 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
         }
         setFilters(next.data);
         const reply = (data.clarification ?? data.summary ?? "") as string;
-        setHistory((h) => [...h, { role: "user" as const, text: message }, ...(reply ? [{ role: "assistant" as const, text: reply.slice(0, 300) }] : [])].slice(-6));
+        const turns: Turn[] = [{ role: "user", text: message }, ...(reply ? [{ role: "assistant" as const, text: reply.slice(0, 300) }] : [])];
+        // A new request starts a new conversation; a follow-up continues the last one.
+        setHistory((h) => (data.scope === "refine" ? [...h, ...turns] : turns).slice(-6));
+        if (!data.clarification) {
+          const items = Array.isArray(data.picks) ? (data.picks as Pick[]) : [];
+          setPicks(items.length ? { request: message, items } : null);
+        }
         setAssist({
           pending: false,
           mode: data.mode,
@@ -128,6 +139,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
           notice: data.notice,
           clarification: data.clarification,
           unknownTitle: data.unknownTitle,
+          scope: data.scope,
         });
       } catch {
         setAssist({ pending: false, error: "Couldn't reach search. Your filters still work." });
@@ -179,6 +191,39 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
     />
   );
   const grid = (results: Result[]) => <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{results.map((r, i) => card(r, i))}</div>;
+  // Picks from our catalogue are checked against the group and play mode with verified data;
+  // one that can't fit (e.g. a 2-player game for 4 of you) is left out. Price filters don't
+  // apply here, so a pick isn't hidden just because its price hasn't loaded yet.
+  const pickFits = (pick: Pick) => {
+    if (pick.kind === "other") return true;
+    const game = getGame(pick.id);
+    if (!game) return false;
+    const fit = search([game], { ...filters, like: null, maxPrice: null, store: null, pricing: "any" }, offers);
+    return fit.matches.length + fit.unverified.length + fit.priceUnconfirmed.length > 0;
+  };
+  const shownPicks = picks ? picks.items.filter(pickFits) : [];
+
+  // A catalogue pick as a card, with its verified group sizes and the AI's reason.
+  const pickCard = (pick: Pick, index: number) => {
+    if (pick.kind === "other") {
+      return <OtherGameCard key={pick.game.key} game={pick.game} note={pick.why} onOpen={() => setStoreGame(pick.game)} />;
+    }
+    const game = getGame(pick.id);
+    if (!game) return null;
+    const result = search([game], defaultFilters, offers).matches[0] ?? { game, score: 0, modes: [], price: { kind: "unknown" as const }, reasons: [] };
+    return (
+      <GameCard
+        key={game.id}
+        result={result}
+        eager={index < 3}
+        offerState={offers[game.id]}
+        saved={shortlist.ids.includes(game.id)}
+        onOpen={() => setOpenId(game.id)}
+        onToggleSave={() => shortlist.toggle(game.id)}
+        note={pick.why}
+      />
+    );
+  };
   const savedResults = (ids: string[]) =>
     ids.map(getGame).filter((g): g is Game => !!g).map((game) => search([game], defaultFilters, offers).matches[0] ?? search([game], defaultFilters, offers).unverified[0]).filter(Boolean);
 
@@ -234,8 +279,35 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
             </button>
           </div>
 
-          <div className="mt-6 flex flex-wrap items-end justify-between gap-3">
+          {picks && shownPicks.length > 0 && (
+            <section aria-labelledby="picks-heading" className="mt-6">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h2 id="picks-heading" className="flex items-center gap-2 font-display text-2xl font-semibold">
+                    <svg aria-hidden="true" viewBox="0 0 20 20" className="h-5 w-5 text-accent">
+                      <path d="M10 2.5l1.6 4.4 4.4 1.6-4.4 1.6L10 14.5l-1.6-4.4L4 8.5l4.4-1.6z" fill="currentColor" />
+                    </svg>
+                    AI picks
+                  </h2>
+                  <p className="mt-1 text-sm text-muted">
+                    For &ldquo;{picks.request}&rdquo;. Suggestions, not verified facts: group sizes and prices on each card come from our data.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setPicks(null)}
+                  className="text-sm text-muted underline underline-offset-4 hover:text-foreground"
+                >
+                  Hide picks
+                </button>
+              </div>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{shownPicks.map(pickCard)}</div>
+            </section>
+          )}
+
+          <div className={`flex flex-wrap items-end justify-between gap-3 ${picks && shownPicks.length > 0 ? "mt-12 border-t border-line pt-8" : "mt-6"}`}>
             <h2 aria-live="polite" className="font-display text-2xl font-semibold">
+              {picks && shownPicks.length > 0 && <span className="text-muted">From our catalogue: </span>}
               {outcome.matches.length} {outcome.matches.length === 1 ? "game" : "games"}
               <span className="text-muted">{groupLabel}</span>
             </h2>

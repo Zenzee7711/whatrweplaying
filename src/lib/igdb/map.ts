@@ -12,6 +12,8 @@ export type OtherGame = {
   cheapsharkGameId: string | null;
   cheapest: number | null;
   links: { name: string; url: string }[];
+  // IGDB rating count: picks the well-known game when two share a name ("Hades" 2020 vs 1995).
+  popularity: number;
 };
 
 // IGDB website types we link to, with the hosts each one must point at.
@@ -30,6 +32,7 @@ export const igdbGameSchema = z.object({
   id: z.number().int(),
   name: z.string().min(1),
   first_release_date: z.number().optional(),
+  total_rating_count: z.number().optional(),
   cover: imageSchema.optional(),
   artworks: z.array(imageSchema).optional(),
   screenshots: z.array(imageSchema).optional(),
@@ -81,5 +84,6 @@ export function toOtherGame(game: IgdbGame): OtherGame {
     cheapsharkGameId: null,
     cheapest: null,
     links: igdbLinks(game),
+    popularity: game.total_rating_count ?? 0,
   };
 }

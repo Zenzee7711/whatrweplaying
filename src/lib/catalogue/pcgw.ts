@@ -83,10 +83,15 @@ function connection(block: string | null, prefix: string): Connection {
 function taxonomy(wikitext: string, name: string): string[] {
   const match = wikitext.match(new RegExp(`\\{\\{Infobox game/row/taxonomy/${name}\\s*\\|([^}]*)\\}\\}`));
   if (!match) return [];
-  return match[1]
+  // The values end where a "| ref=" parameter starts, and capitalisation varies between pages
+  // ("puzzle" vs "Puzzle"), so both are normalised before de-duplicating.
+  const items = match[1]
+    .split("|")[0]
     .split(",")
     .map((item) => item.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .map((item) => item.charAt(0).toUpperCase() + item.slice(1));
+  return [...new Set(items)];
 }
 
 export type PcgwFacts = {
