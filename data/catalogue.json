@@ -1634,10 +1634,13 @@
       "online": {
         "supported": true,
         "players": null,
-        "coop": null,
+        "coop": true,
         "versus": null,
         "sharedRange": false,
-        "coopPlayers": null,
+        "coopPlayers": {
+          "min": null,
+          "max": 4
+        },
         "versusPlayers": null,
         "notes": null
       },
@@ -1658,6 +1661,11 @@
           "name": "PCGamingWiki",
           "url": "https://www.pcgamingwiki.com/wiki/Helldivers_2",
           "retrieved": "2026-10-13"
+        },
+        {
+          "name": "HELLDIVERS 2 on Steam (reviewed: squads of up to four)",
+          "url": "https://store.steampowered.com/app/553850/HELLDIVERS_2/",
+          "retrieved": "2026-10-14"
         },
         {
           "name": "IGDB",
@@ -2854,7 +2862,7 @@
         "Space"
       ],
       "description": "Play with 4-15 player online or via local WiFi as you attempt to prepare your spaceship for departure, but beware as one or more random players among the Crew are Impostors bent on killing everyone!\n\nOriginally created as a party game, we recommend playing with friends at a LAN party or online using voice chat. Enjoy cross-platform play between Android, iOS, PC, and console.",
-      "ratingCount": 600,
+      "ratingCount": 599,
       "igdbId": 111469,
       "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/945360/header.jpg",
       "launcher": null,
@@ -3754,7 +3762,7 @@
         "Fantasy"
       ],
       "description": "Aion 2 is the only MMORPG built around a world where the sky is the battlefield. Choose your faction, ascend as a Daeva, and fight a faction war across a world 36 times larger than the original.",
-      "ratingCount": 35,
+      "ratingCount": 36,
       "igdbId": 117297,
       "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3393110/10aa4b096ebe6af0d1dd7882e5ba004271aef6f7/header.jpg",
       "launcher": null,
@@ -5575,7 +5583,7 @@
       ],
       "themes": [],
       "description": "Minecraft focuses on allowing the player to explore, interact with, and modify a dynamically generated map made of one-cubic-meter-sized blocks. In addition to blocks, the environment features plants, mobs, and items. Some activities in the game include mining for ore, fighting hostile mobs, and crafting new blocks and tools by gathering various resources found in the game. The game's open-ended model allows players to create structures, creations, and artwork on various multiplayer servers or their single-player maps. Other features include redstone circuits for logic computations and remo…",
-      "ratingCount": 2091,
+      "ratingCount": 2090,
       "igdbId": 121,
       "image": "https://images.igdb.com/igdb/image/upload/t_screenshot_med/ar30cw.jpg",
       "launcher": {
@@ -5728,7 +5736,7 @@
         "Sci-fi"
       ],
       "description": "Rocket League is a high-powered hybrid of arcade-style soccer and vehicular mayhem with easy-to-understand controls and fluid, physics-driven competition. Rocket League includes casual and competitive Online Matches, a fully-featured offline Season Mode, special “Mutators” that let you change the rules entirely, hockey and basketball-inspired Extra Modes, and more than 500 trillion possible cosmetic customization combinations.",
-      "ratingCount": 1241,
+      "ratingCount": 1240,
       "igdbId": 11198,
       "image": "https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/252950/3abd9ab079c8896a4762dbe34a853d89b7f704df/header_alt_assets_17.jpg",
       "launcher": {

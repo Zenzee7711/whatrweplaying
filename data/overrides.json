@@ -186,5 +186,10 @@
     "online": { "coopPlayers": { "min": null, "max": 4 } },
     "sources": [{ "name": "Co-Optimus", "url": "https://www.co-optimus.com/game/14442/playstation-5/the-crew-motorfest.html", "retrieved": "2026-10-13" }],
     "note": "crews of up to 4"
+  },
+  "helldivers-2": {
+    "online": { "coopPlayers": { "min": null, "max": 4 } },
+    "sources": [{ "name": "HELLDIVERS 2 on Steam", "url": "https://store.steampowered.com/app/553850/HELLDIVERS_2/", "retrieved": "2026-10-14" }],
+    "note": "squads of up to four"
   }
 }
