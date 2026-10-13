@@ -13,13 +13,10 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  // Game artwork is loaded from Steam's and IGDB's image servers only.
-  images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "shared.fastly.steamstatic.com", pathname: "/store_item_assets/steam/apps/**" },
-      { protocol: "https", hostname: "images.igdb.com", pathname: "/igdb/image/upload/**" },
-    ],
-  },
+  // Game artwork comes straight from Steam's and IGDB's image servers (the only image hosts the
+  // CSP in src/proxy.ts allows). It's already small, so it skips the image optimiser, which also
+  // keeps the site inside the free hosting plan's monthly image quota.
+  images: { unoptimized: true },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
