@@ -118,9 +118,9 @@ export default function FilterPanel({ filters, onChange }: FilterPanelProps) {
               type="button"
               aria-pressed={filters.pricing === option}
               onClick={() => set({ pricing: option })}
-              className={`rounded-lg py-1.5 capitalize ${filters.pricing === option ? "bg-raised font-medium" : "text-muted"}`}
+              className={`rounded-lg py-1.5 ${filters.pricing === option ? "bg-raised font-medium" : "text-muted"}`}
             >
-              {option === "free" ? "Free-to-play" : option}
+              {option === "free" ? "Free-to-play" : option === "paid" ? "Paid" : "Any"}
             </button>
           ))}
         </div>

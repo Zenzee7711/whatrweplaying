@@ -41,10 +41,14 @@ export default function Explorer({ initialFilters, sharedList }: { initialFilter
   const sheet = useRef<HTMLDialogElement>(null);
 
   // Keep the URL in step with the filters, so any search can be shared as a link.
+  // A shared shortlist stays in the link too, so refreshing doesn't lose it.
+  const sharedKey = sharedList.join(",");
   useEffect(() => {
-    const query = filtersToParams(filters).toString();
+    const params = filtersToParams(filters);
+    if (sharedKey) params.set("list", sharedKey);
+    const query = params.toString();
     window.history.replaceState(null, "", query ? `?${query}` : window.location.pathname);
-  }, [filters]);
+  }, [filters, sharedKey]);
 
   // Games whose prices matter: anything that could appear if the price filters were ignored,
   // plus saved and shared games. Free-to-play games need no lookup.
@@ -206,6 +210,14 @@ export default function Explorer({ initialFilters, sharedList }: { initialFilter
           <section aria-label="Matching games" className="mt-6">
             {outcome.matches.length > 0 ? (
               grid(outcome.matches)
+            ) : checking > 0 && outcome.priceUnconfirmed.length > 0 ? (
+              // Prices are still loading: don't claim nothing fits before they arrive.
+              <div role="status" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="h-72 rounded-2xl border border-line bg-surface motion-safe:animate-pulse" />
+                ))}
+                <span className="sr-only">Checking prices…</span>
+              </div>
             ) : (
               <div className="rounded-2xl border border-line bg-surface p-6">
                 <h2 className="font-display text-xl font-semibold">No game fits all of these filters.</h2>

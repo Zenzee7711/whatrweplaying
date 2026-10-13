@@ -45,10 +45,18 @@ export function useShortlist(isKnown: (id: string) => boolean) {
     }
   }, [raw, isKnown]);
 
-  const toggle = useCallback(
-    (id: string) => write(ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id].slice(0, 20)),
-    [ids],
-  );
+  // Reads the latest saved list at click time, not the one from the last render, so two quick
+  // clicks on different games can't overwrite each other.
+  const toggle = useCallback((id: string) => {
+    let latest: string[] = [];
+    try {
+      const parsed = JSON.parse(read() ?? "[]");
+      latest = Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === "string") : [];
+    } catch {
+      latest = [];
+    }
+    write(latest.includes(id) ? latest.filter((x) => x !== id) : [...latest, id].slice(0, 20));
+  }, []);
   const replace = useCallback((next: string[]) => write(next.slice(0, 20)), []);
   return { ids, toggle, replace };
 }

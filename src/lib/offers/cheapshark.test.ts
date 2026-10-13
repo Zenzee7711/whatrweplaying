@@ -42,7 +42,13 @@ describe("toOffers", () => {
 });
 
 describe("dealUrl", () => {
-  it("encodes the deal ID", () => {
-    expect(dealUrl("a+b/c=")).toBe("https://www.cheapshark.com/redirect?dealID=a%2Bb%2Fc%3D");
+  it("uses CheapShark's already-encoded deal ID as given, without double-encoding", () => {
+    expect(dealUrl("hz73JxyUB2xNG3rNqBY7V2XKj9UTE2dWUIZAfmTdvMk%3D")).toBe(
+      "https://www.cheapshark.com/redirect?dealID=hz73JxyUB2xNG3rNqBY7V2XKj9UTE2dWUIZAfmTdvMk%3D",
+    );
+  });
+
+  it("encodes anything outside the safe form so it can't break the link", () => {
+    expect(dealUrl("a+b/c=&x=1")).toBe("https://www.cheapshark.com/redirect?dealID=a%2Bb%2Fc%3D%26x%3D1");
   });
 });

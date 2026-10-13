@@ -27,8 +27,11 @@ export const STORES: Record<string, string> = {
   "35": "DreamGame",
 };
 
+// CheapShark returns deal IDs already URL-encoded (e.g. "...Zg%3D"), so they are used as given.
+// Anything outside that safe encoded form is encoded, so it can't break out of the link.
 export function dealUrl(dealId: string): string {
-  return `https://www.cheapshark.com/redirect?dealID=${encodeURIComponent(dealId)}`;
+  const id = /^[A-Za-z0-9%._-]+$/.test(dealId) ? dealId : encodeURIComponent(dealId);
+  return `https://www.cheapshark.com/redirect?dealID=${id}`;
 }
 
 const priceText = z.string().regex(/^\d+(\.\d+)?$/).transform(Number);
