@@ -14,6 +14,8 @@ Find a PC game your whole group can actually play together, then see where it's 
   any PC game, each with a short reason. Every pick is checked to exist before it's shown.
 - **Real group sizes.** Player counts mean how many friends can play together in one party or
   lobby, not the size of a public match. If we can't confirm it, the card says so.
+- **See what's popular right now.** By default, games are ordered by how many people are playing
+  them at the moment, with live Steam player counts on the cards.
 - **Search any game by name**, with suggestions as you type, even with typos ("monstr huntr").
 - **Compare prices** across Steam, Epic, GOG, Humble, Fanatical and more, in USD.
 - **Save a shortlist** and send it to friends as a link. No account needed.
@@ -27,6 +29,7 @@ Find a PC game your whole group can actually play together, then see where it's 
 | Group sizes, play modes, genres | [PCGamingWiki](https://www.pcgamingwiki.com), plus hand-checked party sizes with sources |
 | Descriptions, artwork, search for other games | [IGDB](https://www.igdb.com) |
 | Prices | [CheapShark](https://www.cheapshark.com), fetched live in your browser |
+| Popular right now | Steam's live player counts; IGDB for games that aren't on Steam (refreshed every 30 minutes) |
 | AI search and picks | [Groq](https://groq.com) (`openai/gpt-oss-20b`) |
 
 The catalogue has 80 games, from Steam and from other launchers like Riot and Epic.

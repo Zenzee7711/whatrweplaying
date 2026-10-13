@@ -87,6 +87,7 @@ for (const game of catalogue.games) {
     described++;
   }
   game.ratingCount = record.total_rating_count ?? 0;
+  game.igdbId = record.id;
   // Steam games keep their Steam header; the others get IGDB's wide artwork.
   if (game.image === null) game.image = igdbWideImage(record);
   game.sources = [

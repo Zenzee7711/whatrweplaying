@@ -24,7 +24,7 @@ async function accessToken(clientId: string, clientSecret: string): Promise<stri
   return token.value;
 }
 
-async function igdb(endpoint: "games", body: string): Promise<unknown> {
+async function igdb(endpoint: "games" | "popularity_primitives", body: string): Promise<unknown> {
   const config = igdbConfig();
   if (!config) throw new IgdbUnavailableError("IGDB isn't configured");
   const send = async () =>
@@ -75,4 +75,13 @@ export async function searchIgdb(query: string): Promise<OtherGame[]> {
   if (cache.size > 500) cache.delete(cache.keys().next().value!);
   cache.set(key, { at: Date.now(), games });
   return games;
+}
+
+// IGDB's daily count of people currently playing each game (popularity type 3), by IGDB id.
+// Covers games that aren't on Steam, where no live player count is published.
+export async function igdbPlaying(ids: readonly number[]): Promise<Record<number, number>> {
+  if (ids.length === 0) return {};
+  const body = `fields game_id, value; where popularity_type = 3 & game_id = (${ids.join(",")}); limit 500;`;
+  const rows = z.array(z.object({ game_id: z.number().int(), value: z.number().nonnegative() })).parse(await igdb("popularity_primitives", body));
+  return Object.fromEntries(rows.map((row) => [row.game_id, row.value]));
 }

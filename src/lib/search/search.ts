@@ -205,15 +205,17 @@ function similarity(a: Game, b: Game): { score: number; shared: string[] } {
   return { score, shared };
 }
 
-function sortResults(results: Result[], sort: Filters["sort"]): Result[] {
+// rank: how much each game is played right now (0-1); without it, the all-time IGDB rating count.
+function sortResults(results: Result[], sort: Filters["sort"], rank: Record<string, number> = {}): Result[] {
   const priceOf = (r: Result) => (r.price.kind === "free-to-play" ? 0 : r.price.kind === "offer" ? r.price.offer.price : Infinity);
   const discountOf = (r: Result) => (r.price.kind === "offer" ? r.price.offer.savings : -1);
   const byTitle = (a: Result, b: Result) => a.game.title.localeCompare(b.game.title);
   return [...results].sort((a, b) => {
     if (sort === "price") return priceOf(a) - priceOf(b) || b.score - a.score || byTitle(a, b);
     if (sort === "discount") return discountOf(b) - discountOf(a) || b.score - a.score || byTitle(a, b);
-    // Equal matches: better-known games first, not whichever happens to be free.
-    return b.score - a.score || (b.game.ratingCount ?? 0) - (a.game.ratingCount ?? 0) || byTitle(a, b);
+    // Equal matches: what's being played most right now first, not whichever happens to be free.
+    const now = (r: Result) => rank[r.game.id] ?? -1;
+    return b.score - a.score || now(b) - now(a) || (b.game.ratingCount ?? 0) - (a.game.ratingCount ?? 0) || byTitle(a, b);
   });
 }
 
@@ -244,7 +246,7 @@ function activeConstraints(filters: Filters): Constraint[] {
   return active;
 }
 
-export function search(games: readonly Game[], filters: Filters, offers: OfferMap = {}): SearchOutcome {
+export function search(games: readonly Game[], filters: Filters, offers: OfferMap = {}, rank: Record<string, number> = {}): SearchOutcome {
   const { matches, unverified, priceUnconfirmed } = run(games, filters, offers, null);
 
   // Nothing matched: work out which single requirement is blocking, without changing the search.
@@ -258,9 +260,9 @@ export function search(games: readonly Game[], filters: Filters, offers: OfferMa
   }
 
   return {
-    matches: sortResults(matches, filters.sort),
-    unverified: sortResults(unverified, filters.sort),
-    priceUnconfirmed: sortResults(priceUnconfirmed, filters.sort),
+    matches: sortResults(matches, filters.sort, rank),
+    unverified: sortResults(unverified, filters.sort, rank),
+    priceUnconfirmed: sortResults(priceUnconfirmed, filters.sort, rank),
     blocking,
   };
 }

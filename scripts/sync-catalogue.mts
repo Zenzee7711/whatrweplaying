@@ -144,6 +144,7 @@ for (const { id, steamAppId, pcgwPage: seedPage, launcher } of seed) {
       themes: facts.themes,
       description: null,
       ratingCount: null,
+      igdbId: null,
       image,
       launcher: launcher ?? null,
       sources: [

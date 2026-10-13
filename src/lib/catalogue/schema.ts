@@ -53,6 +53,8 @@ export const gameSchema = z.object({
   // How many people rated it on IGDB: a rough "how well known" signal, used only to order
   // otherwise equal matches. Null until sync:igdb runs.
   ratingCount: z.number().int().nonnegative().nullable().default(null),
+  // The matching IGDB game, set by sync:igdb; used to look up how many people play it now.
+  igdbId: z.number().int().positive().nullable().default(null),
   image: z.url().nullable(),
   // Reviewed official place to get a game the checked stores don't sell (Riot Client, Epic, ...).
   launcher: z.object({ name: z.string().min(1), url: z.url() }).nullable(),

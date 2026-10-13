@@ -12,7 +12,11 @@ type GameCardProps = {
   onToggleSave: () => void;
   // The AI's one-line reason, when the card is one of its picks.
   note?: string | null;
+  // Live player count from Steam, when known.
+  playingNow?: number;
 };
+
+const compact = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
 
 function People() {
   return (
@@ -25,7 +29,7 @@ function People() {
   );
 }
 
-export default function GameCard({ result, eager = false, offerState, saved, onOpen, onToggleSave, note }: GameCardProps) {
+export default function GameCard({ result, eager = false, offerState, saved, onOpen, onToggleSave, note, playingNow }: GameCardProps) {
   const { game, reasons, price } = result;
   // The ways of playing that matched the search come first; otherwise the game's own list.
   const lines = playLines(game).slice(0, 2);
@@ -67,6 +71,9 @@ export default function GameCard({ result, eager = false, offerState, saved, onO
           <button type="button" onClick={onOpen} className="text-left hover:text-accent">
             {game.title}
           </button>
+          {playingNow !== undefined && playingNow > 0 && (
+            <span className="mt-0.5 block text-xs font-normal text-muted">{compact.format(playingNow)} playing on Steam now</span>
+          )}
         </h3>
 
         {note && <p className="text-sm">{note}</p>}

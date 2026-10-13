@@ -12,6 +12,7 @@ import type { OtherGame } from "@/lib/igdb/map";
 import { BATCH_SIZE, fetchOffers, RateLimitedError } from "@/lib/offers/cheapshark";
 import type { OfferMap, OfferState } from "@/lib/offers/types";
 import { defaultFilters, filtersSchema, type Filters, type Sort } from "@/lib/search/filters";
+import type { Popularity } from "@/lib/search/popularity";
 import { search, type Constraint, type Result } from "@/lib/search/search";
 import { filtersToParams } from "@/lib/search/url";
 import ActiveFilters from "./ActiveFilters";
@@ -35,9 +36,17 @@ const CONSTRAINT_FIXES: Record<Constraint, { label: string; apply: (f: Filters) 
 
 const isKnown = (id: string) => getGame(id) !== undefined;
 
-type ExplorerProps = { initialFilters: Filters; sharedList: string[]; aiAvailable: boolean; allGames: boolean };
+type ExplorerProps = {
+  initialFilters: Filters;
+  sharedList: string[];
+  aiAvailable: boolean;
+  allGames: boolean;
+  // What's being played right now, from the server; null if it couldn't be read.
+  popularity: Popularity | null;
+};
 
-export default function Explorer({ initialFilters, sharedList, aiAvailable, allGames }: ExplorerProps) {
+export default function Explorer({ initialFilters, sharedList, aiAvailable, allGames, popularity }: ExplorerProps) {
+  const rank = popularity?.rank;
   const [filters, setFilters] = useState<Filters>(initialFilters);
   const [offers, setOffers] = useState<OfferMap>({});
   const [openId, setOpenId] = useState<string | null>(null);
@@ -101,7 +110,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
     return () => controller.abort();
   }, [missingKey]);
 
-  const outcome = useMemo(() => search(games, filters, offers), [filters, offers]);
+  const outcome = useMemo(() => search(games, filters, offers, rank), [filters, offers, rank]);
   const checking = candidates.filter((g) => offers[g.id] === undefined).length;
   const unavailable = candidates.filter((g) => offers[g.id]?.status === "unavailable").length;
 
@@ -193,6 +202,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
       onOpen={() => setOpenId(result.game.id)}
       onToggleSave={() => shortlist.toggle(result.game.id)}
       note={note}
+      playingNow={popularity?.playingNow[result.game.id]}
     />
   );
   const grid = (results: Result[]) => <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{results.map((r, i) => card(r, i))}</div>;
@@ -329,6 +339,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
           </div>
 
           <p className="mt-1 text-sm text-muted">
+            {rank && filters.sort === "best" && "Most played right now first · "}
             Prices in USD, checked live
             {checking > 0 && ` · checking prices for ${checking} games…`}
             {unavailable > 0 && (

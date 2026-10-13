@@ -16,7 +16,7 @@ function game(id: string, partial: Partial<Game> = {}): Game {
   return {
     id, title: id, steamAppId: 1, cheapsharkGameId: "1", platforms: ["pc"], monetization: "paid",
     singleplayer: true, local: none, lan: none, online: none, crossplayNote: null,
-    genres: [], themes: [], description: null, image: "https://example.com/a.jpg", launcher: null, ratingCount: null,
+    genres: [], themes: [], description: null, image: "https://example.com/a.jpg", launcher: null, ratingCount: null, igdbId: null,
     sources: [{ name: "Test", url: "https://example.com", retrieved: "2026-10-13" }], ...partial,
   };
 }
@@ -171,5 +171,19 @@ describe("when nothing matches", () => {
     const result = search([fourCoop], filters({ groupSize: 4, modes: ["online-coop"], exclude: ["four-coop-tag"], pricing: "free" }));
     expect(result.matches).toEqual([]);
     expect(result.blocking.map((b) => b.constraint)).toEqual(["pricing"]);
+  });
+});
+
+describe("default order", () => {
+  it("puts the game played most right now first among equal matches", () => {
+    const quiet = game("quiet", { ratingCount: 5000 });
+    const busy = game("busy", { ratingCount: 10 });
+    const order = search([quiet, busy], filters({}), {}, { quiet: 0.1, busy: 0.9 }).matches.map((r) => r.game.id);
+    expect(order).toEqual(["busy", "quiet"]);
+  });
+
+  it("falls back to the all-time rating count without live numbers", () => {
+    const order = search([game("a", { ratingCount: 1 }), game("b", { ratingCount: 9 })], filters({})).matches.map((r) => r.game.id);
+    expect(order).toEqual(["b", "a"]);
   });
 });
