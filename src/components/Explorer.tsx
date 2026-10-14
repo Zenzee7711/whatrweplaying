@@ -226,25 +226,31 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
     />
   );
   const grid = (results: Result[]) => <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{results.map((r, i) => card(r, i))}</div>;
-  // Picks from our catalogue are checked against the group and play mode with verified data;
-  // one that can't fit (e.g. a 2-player game for 4 of you) is left out. Price filters don't
-  // apply here, so a pick isn't hidden just because its price hasn't loaded yet.
+  // AI picks follow the same filters as the list below, as far as the data allows. Our own games
+  // use exactly the same rules (a price that's still loading never hides one). Other games only
+  // have IGDB's group sizes and store prices, so only those can rule them out.
+  const otherFits = (game: OtherGame) => {
+    // Stores only list what they sell, so "free" can't be confirmed for these games.
+    if (filters.pricing === "free") return false;
+    const state = otherOffers[game.key];
+    const offers = state?.status === "ok" ? state.offers : null;
+    if (filters.maxPrice !== null && offers?.length && offers[0].price > filters.maxPrice) return false;
+    if (filters.store !== null && offers && !offers.some((o) => o.storeId === filters.store)) return false;
+    const size = filters.groupSize ?? 1;
+    if (size <= 1) return true;
+    const { play = [], singleplayer = false } = game;
+    if (play.length === 0) return !singleplayer;
+    return play.some((line) => line.together === null || line.together >= size);
+  };
   const pickFits = (pick: Pick) => {
-    if (pick.kind === "other") {
-      // Games outside the catalogue only have IGDB's numbers: hide one only when those clearly
-      // rule it out (single-player only, or every listed group is smaller than yours).
-      const size = filters.groupSize ?? 1;
-      if (size <= 1) return true;
-      const { play = [], singleplayer = false } = pick.game;
-      if (play.length === 0) return !singleplayer;
-      return play.some((line) => line.together === null || line.together >= size);
-    }
+    if (pick.kind === "other") return otherFits(pick.game);
     const game = getGame(pick.id);
     if (!game) return false;
-    const fit = search([game], { ...filters, like: null, maxPrice: null, store: null, pricing: "any" }, offers);
+    const fit = search([game], { ...filters, like: null }, offers);
     return fit.matches.length + fit.unverified.length + fit.priceUnconfirmed.length > 0;
   };
   const shownPicks = picks ? picks.items.filter(pickFits) : [];
+  const hiddenPicks = picks ? picks.items.length - shownPicks.length : 0;
 
   // Playing alone: group sizes don't matter, so games outside the catalogue need no warning.
   const solo = filters.groupSize === 1 || (filters.modes.length > 0 && filters.modes.every((m) => m === "solo"));
@@ -311,7 +317,7 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
             </button>
           </div>
 
-          {picks && shownPicks.length > 0 && (
+          {picks && (
             <section aria-labelledby="picks-heading" className="mt-6">
               <div className="flex flex-wrap items-end justify-between gap-3">
                 <div>
@@ -333,13 +339,24 @@ export default function Explorer({ initialFilters, sharedList, aiAvailable, allG
                   Hide picks
                 </button>
               </div>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{shownPicks.map(pickCard)}</div>
+              {shownPicks.length > 0 ? (
+                <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{shownPicks.map(pickCard)}</div>
+              ) : (
+                <p className="mt-4 rounded-2xl bg-surface p-4 text-sm text-muted">
+                  None of the AI&apos;s picks match your current filters. Search again to get new picks.
+                </p>
+              )}
+              {shownPicks.length > 0 && hiddenPicks > 0 && (
+                <p className="mt-3 text-sm text-muted">
+                  {hiddenPicks} {hiddenPicks === 1 ? "pick" : "picks"} hidden by your filters.
+                </p>
+              )}
             </section>
           )}
 
-          <div className={`flex flex-wrap items-end justify-between gap-3 ${picks && shownPicks.length > 0 ? "mt-12 border-t border-line pt-8" : "mt-6"}`}>
+          <div className={`flex flex-wrap items-end justify-between gap-3 ${picks ? "mt-12 border-t border-line pt-8" : "mt-6"}`}>
             <h2 aria-live="polite" className="font-display text-2xl font-semibold">
-              {picks && shownPicks.length > 0 && <span className="text-muted">From our checked list: </span>}
+              {picks && <span className="text-muted">From our checked list: </span>}
               {outcome.matches.length} {outcome.matches.length === 1 ? "game" : "games"}
               <span className="text-muted">{groupLabel}</span>
             </h2>
